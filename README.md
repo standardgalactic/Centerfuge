@@ -6,7 +6,7 @@ Hyperbolation is the process of labeling and wrapping materials in layered yarn-
 
 ## Tritex
 
-![](/Images/tritex.png)
+![](tritex.png)
 
 A 3 simplex quadrilateral tetrahedron triangular pyramid
 
