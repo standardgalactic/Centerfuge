@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Web Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .slider-label {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cosmic Web Simulator</h1>
+    <h2>Blender Script Generator</h2>
+    <div>
+        <div class="slider-label">Number of Roots: <span id="numRootsValue">20</span></div>
+        <input type="range" id="numRoots" min="1" max="100" value="20" step="1" oninput="updateValues()">
+    </div>
+    <div>
+        <div class="slider-label">Spread of Roots: <span id="spreadValue">10</span></div>
+        <input type="range" id="spread" min="1" max="50" value="10" step="1" oninput="updateValues()">
+    </div>
+    <div>
+        <div class="slider-label">Depth of Recursion: <span id="maxDepthValue">4</span></div>
+        <input type="range" id="maxDepth" min="1" max="10" value="4" step="1" oninput="updateValues()">
+    </div>
+    <button onclick="generateScript()">Generate Script</button>
+    <h2>Generated Script</h2>
+    <textarea id="scriptOutput" rows="20" cols="80"></textarea>
+
+    <script>
+        function updateValues() {
+            document.getElementById('numRootsValue').textContent = document.getElementById('numRoots').value;
+            document.getElementById('spreadValue').textContent = document.getElementById('spread').value;
+            document.getElementById('maxDepthValue').textContent = document.getElementById('maxDepth').value;
+        }
+
+        function generateScript() {
+            const numRoots = document.getElementById('numRoots').value;
+            const spread = document.getElementById('spread').value;
+            const maxDepth = document.getElementById('maxDepth').value;
+
+            const script = `
+import bpy
+import random
+from mathutils import Vector
+
+def clear_scene():
+    bpy.ops.object.select_all(action='SELECT')
+    bpy.ops.object.delete()
+
+def add_branch(parent_point, curve_data, depth=0, max_depth=${maxDepth}):
+    if depth > max_depth:
+        return
+    
+    direction = Vector((random.uniform(-1, 1), random.uniform(-1, 1), random.uniform(-1, 1))).normalized()
+    length = random.uniform(1, 3)
+    child_point = parent_point + direction * length
+
+    spline = curve_data.splines.new('BEZIER')
+    spline.bezier_points.add(1)
+    p0, p1 = spline.bezier_points[0], spline.bezier_points[1]
+    p0.co = parent_point
+    p1.co = child_point
+    p0.handle_left_type = p0.handle_right_type = 'AUTO'
+    p1.handle_left_type = p1.handle_right_type = 'AUTO'
+
+    p0.handle_left = p0.co - (direction * 0.5) + Vector((random.uniform(-0.5, 0.5), random.uniform(-0.5, 0.5), random.uniform(-0.5, 0.5)))
+    p0.handle_right = p0.co + (direction * 0.5) + Vector((random.uniform(-0.5, 0.5), random.uniform(-0.5, 0.5), random.uniform(-0.5, 0.5)))
+    p1.handle_left = p1.co - (direction * 0.5) + Vector((random.uniform(-0.5, 0.5), random.uniform(-0.5, 0.5), random.uniform(-0.5, 0.5)))
+    p1.handle_right = p1.co + (direction * 0.5) + Vector((random.uniform(-0.5, 0.5), random.uniform(-0.5, 0.5), random.uniform(-0.5, 0.5)))
+
+    for _ in range(random.randint(1, 3)):
+        add_branch(child_point, curve_data, depth + 1, max_depth)
+
+def create_web_structure(name, num_roots, spread, max_depth=${maxDepth}):
+    curve_data = bpy.data.curves.new(name='WebCurve', type='CURVE')
+    curve_data.dimensions = '3D'
+    curve_data.fill_mode = 'FULL'
+    curve_data.bevel_depth = 0.02
+    curve_data.bevel_resolution = 2
+    
+    curve_obj = bpy.data.objects.new(name, curve_data)
+    bpy.context.collection.objects.link(curve_obj)
+
+    for _ in range(num_roots):
+        root_point = Vector((random.uniform(-spread, spread), random.uniform(-spread, spread), random.uniform(-spread, spread)))
+        add_branch(root_point, curve_data, 0, max_depth)
+
+clear_scene()
+create_web_structure("ComplexWeb", ${numRoots}, ${spread}, 4)
+
+bpy.ops.object.mode_set(mode='OBJECT')
+`;
+            document.getElementById('scriptOutput').value = script;
+        }
+    </script>
+<div>
+To use the generated Blender script, adjust the parameters using the sliders on the provided web page, then click "Generate Script" to display the customized Python script. <br><br>
+Copy this script and paste it into a text window in Blender's Scripting layout, then run it by pressing "Run Script" or "Alt-P".
+</div>
+</body>
+</html>
