@@ -4,6 +4,23 @@ Basically a centerfuge is a big spinning cylindrical vortex in the center of you
 
 Hyperbolation is the process of labeling and wrapping materials in layered yarn-balls (also known as gnotobiotic hyperballs or cognets). 
 
+## Tetraorthodrome
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <div style="flex: 1 1 45%;">
+    <img src="earthsphere-01.png" alt="Earthsphere 01" style="width: 100%;">
+  </div>
+  <div style="flex: 1 1 45%;">
+    <img src="earthsphere-02.png" alt="Earthsphere 02" style="width: 100%;">
+  </div>
+  <div style="flex: 1 1 45%;">
+    <img src="earthsphere-03.png" alt="Earthsphere 03" style="width: 100%;">
+  </div>
+  <div style="flex: 1 1 45%;">
+    <img src="earthsphere-04.png" alt="Earthsphere 04" style="width: 100%;">
+  </div>
+</div>
+
 ## Small World Generator
 
 ![](small-world.png)

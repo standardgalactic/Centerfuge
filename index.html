@@ -51,12 +51,22 @@
             font-family: monospace;
             font-size: 0.9em;
         }
-        img {
-            display: block;
-            max-width: 100%;
-            margin: 1em auto;
+        .image-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .image-grid img {
+            flex: 1 1 calc(50% - 20px);
+            max-width: calc(50% - 20px);
+            margin: 10px;
             border: 1px solid #ddd;
             border-radius: 8px;
+        }
+        .center {
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -252,16 +262,21 @@ bpy.context.scene.cycles.samples = 128
 bpy.context.scene.camera = bpy.data.objects["Camera"]
         </code></pre>
     </div>
+
+    <h2>Tetraorthodrome</h2>
+    <div class="image-grid">
+        <img src="earthsphere-01.png" alt="Earthsphere 01">
+        <img src="earthsphere-02.png" alt="Earthsphere 02">
+        <img src="earthsphere-03.png" alt="Earthsphere 03">
+        <img src="earthsphere-04.png" alt="Earthsphere 04">
+    </div>
 </div>
 
-<div style="text-align: center; margin-top: 20px;">
+<div class="center">
     <a href="https://github.com/standardgalactic/Centerfuge/blob/master/index.html" target="_blank" style="text-decoration: none; color: #007bff;">
         Edit this page
     </a>
 </div>
 
-
-
 </body>
 </html>
-
