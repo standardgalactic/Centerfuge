@@ -6,6 +6,8 @@ Hyperbolation is the process of labeling and wrapping materials in layered yarn-
 
 ## Tetraorthodrome
 
+![Spinning cage](spinning-cage.gif)
+
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
   <div style="flex: 1 1 45%;">
     <img src="earthsphere-01.png" alt="Earthsphere 01" style="width: 100%;">
