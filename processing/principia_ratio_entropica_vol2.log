@@ -1,0 +1,676 @@
+This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.9.22)  30 OCT 2025 20:26
+ restricted system commands enabled.
+**principia_ratio_entropica_vol2.tex
+(./principia_ratio_entropica_vol2.tex
+LaTeX2e <2025-06-01> patch level 1
+L3 programming layer <2025-09-02>
+Lua module: luaotfload 2024-12-03 v3.29 Lua based OpenType font support
+Lua module: lualibs 2023-07-13 v2.76 ConTeXt Lua standard libraries.
+Lua module: lualibs-extended 2023-07-13 v2.76 ConTeXt Lua libraries -- extended 
+collection.
+luaotfload | conf : Root cache directory is "/home/bonobo/.texlive2025/texmf-var
+/luatex-cache/generic/names".
+luaotfload | init : Loading fontloader "fontloader-2023-12-28.lua" from kpse-res
+olved path "/usr/local/texlive/2025/texmf-dist/tex/luatex/luaotfload/fontloader-
+2023-12-28.lua".
+Lua-only attribute luaotfload@noligature = 1
+luaotfload | init : Context OpenType loader version 3.134
+Inserting `luaotfload.node_processor' in `pre_linebreak_filter'.
+Inserting `luaotfload.node_processor' in `hpack_filter'.
+Inserting `luaotfload.glyph_stream' in `glyph_stream_provider'.
+Inserting `luaotfload.define_font' in `define_font'.
+Lua-only attribute luaotfload_color_attribute = 2
+luaotfload | conf : Root cache directory is "/home/bonobo/.texlive2025/texmf-var
+/luatex-cache/generic/names".
+Inserting `luaotfload.harf.strip_prefix' in `find_opentype_file'.
+Inserting `luaotfload.harf.strip_prefix' in `find_truetype_file'.
+Removing  `luaotfload.glyph_stream' from `glyph_stream_provider'.
+Inserting `luaotfload.harf.glyphstream' in `glyph_stream_provider'.
+Inserting `luaotfload.harf.finalize_vlist' in `post_linebreak_filter'.
+Inserting `luaotfload.harf.finalize_hlist' in `hpack_filter'.
+Inserting `luaotfload.cleanup_files' in `wrapup_run'.
+Inserting `luaotfload.harf.finalize_unicode' in `finish_pdffile'.
+Inserting `luaotfload.glyphinfo' in `glyph_info'.
+Lua-only attribute luaotfload.letterspace_done = 3
+Inserting `luaotfload.aux.set_sscale_dimens' in `luaotfload.patch_font'.
+Inserting `luaotfload.aux.set_font_index' in `luaotfload.patch_font'.
+Inserting `luaotfload.aux.patch_cambria_domh' in `luaotfload.patch_font'.
+Inserting `luaotfload.aux.fixup_fontdata' in `luaotfload.patch_font_unsafe'.
+Inserting `luaotfload.aux.set_capheight' in `luaotfload.patch_font'.
+Inserting `luaotfload.aux.set_xheight' in `luaotfload.patch_font'.
+Inserting `luaotfload.rewrite_fontname' in `luaotfload.patch_font'.
+Inserting `tracingstacklevels' in `input_level_string'. (/usr/local/texlive/202
+5/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2025/01/22 v1.4n Standard LaTeX document class
+(/usr/local/texlive/2025/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
+luaotfload | db : Font names database loaded from /home/bonobo/.texlive2025/texm
+f-var/luatex-cache/generic/names/luaotfload-names.luc.gz)
+\c@part=\count273
+\c@section=\count274
+\c@subsection=\count275
+\c@subsubsection=\count276
+\c@paragraph=\count277
+\c@subparagraph=\count278
+\c@figure=\count279
+\c@table=\count280
+\abovecaptionskip=\skip49
+\belowcaptionskip=\skip50
+\bibindent=\dimen147
+)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(/usr/local/texlive/2025/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
+\KV@toks@=\toks17
+)
+(/usr/local/texlive/2025/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+
+(/usr/local/texlive/2025/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2024/12/12 v1.0g TeX engine tests
+))
+\Gm@cnth=\count281
+\Gm@cntv=\count282
+\c@Gm@tempcnt=\count283
+\Gm@bindingoffset=\dimen148
+\Gm@wd@mp=\dimen149
+\Gm@odd@mp=\dimen150
+\Gm@even@mp=\dimen151
+\Gm@layoutwidth=\dimen152
+\Gm@layoutheight=\dimen153
+\Gm@layouthoffset=\dimen154
+\Gm@layoutvoffset=\dimen155
+\Gm@dimlist=\toks18
+)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/fontspec/fontspec.sty
+(/usr/local/texlive/2025/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+(/usr/local/texlive/2025/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2025-09-02 L3 programming layer (loader) 
+
+(/usr/local/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-luatex.def
+File: l3backend-luatex.def 2025-06-09 L3 backend support: PDF output (LuaTeX)
+\l__color_backend_stack_int=\count284
+Inserting `l3color' in `luaotfload.parse_color'.))
+Package: xparse 2024-08-16 L3 Experimental document command parser
+)
+Package: fontspec 2024/05/11 v2.9e Font selection for XeLaTeX and LuaLaTeX
+Lua module: fontspec 2024/05/11 v2.9e Font selection for XeLaTeX and LuaLaTeX (/usr/local/texlive/2025/texmf-dist/tex/latex/fontspec/fontspec-luatex.sty
+Package: fontspec-luatex 2024/05/11 v2.9e Font selection for XeLaTeX and LuaLaT
+eX
+\l__fontspec_script_int=\count285
+\l__fontspec_language_int=\count286
+\l__fontspec_strnum_int=\count287
+\l__fontspec_tmp_int=\count288
+\l__fontspec_tmpa_int=\count289
+\l__fontspec_tmpb_int=\count290
+\l__fontspec_tmpc_int=\count291
+\l__fontspec_em_int=\count292
+\l__fontspec_emdef_int=\count293
+\l__fontspec_strong_int=\count294
+\l__fontspec_strongdef_int=\count295
+\l__fontspec_tmpa_dim=\dimen156
+\l__fontspec_tmpb_dim=\dimen157
+\l__fontspec_tmpc_dim=\dimen158
+
+(/usr/local/texlive/2025/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2024/12/21 v2.1c Standard LaTeX package
+)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/fontspec/fontspec.cfg)))
+luaotfload | cache : Lookup cache loaded from /home/bonobo/.texlive2025/texmf-va
+r/luatex-cache/generic/names/luaotfload-lookup-cache.luc.
+
+Package fontspec Info: 
+(fontspec)             Font family 'EBGaramond(0)' created for font 'EB
+(fontspec)             Garamond' with options
+(fontspec)             [Ligatures=TeX,Ligatures=Historic,Numbers=OldStyle,RawFe
+ature={+liga;+hlig;+dlig}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.: <->"name:EB
+(fontspec)             Garamond:mode=node;script=latn;language=dflt;+tlig;+hlig
+;+onum;+liga;+hlig;+dlig;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: <->"name:EB
+(fontspec)             Garamond:mode=node;script=latn;language=dflt;+tlig;+hlig
+;+onum;+liga;+hlig;+dlig;+smcp;"
+(fontspec)             - 'bold' (b/n) with NFSS spec.: <->"name:EB
+(fontspec)             Garamond/B:mode=node;script=latn;language=dflt;+tlig;+hl
+ig;+onum;+liga;+hlig;+dlig;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.:
+(fontspec)             <->"name:EB
+(fontspec)             Garamond/B:mode=node;script=latn;language=dflt;+tlig;+hl
+ig;+onum;+liga;+hlig;+dlig;+smcp;"
+(fontspec)             - 'italic' (m/it) with NFSS spec.: <->"name:EB
+(fontspec)             Garamond/I:mode=node;script=latn;language=dflt;+tlig;+hl
+ig;+onum;+liga;+hlig;+dlig;"
+(fontspec)             - 'italic small caps'  (m/scit) with NFSS spec.:
+(fontspec)             <->"name:EB
+(fontspec)             Garamond/I:mode=node;script=latn;language=dflt;+tlig;+hl
+ig;+onum;+liga;+hlig;+dlig;+smcp;"
+(fontspec)             - 'bold italic' (b/it) with NFSS spec.: <->"name:EB
+(fontspec)             Garamond/BI:mode=node;script=latn;language=dflt;+tlig;+h
+lig;+onum;+liga;+hlig;+dlig;"
+(fontspec)             - 'bold italic small caps'  (b/scit) with NFSS spec.:
+(fontspec)             <->"name:EB
+(fontspec)             Garamond/BI:mode=node;script=latn;language=dflt;+tlig;+h
+lig;+onum;+liga;+hlig;+dlig;+smcp;"
+
+
+(/usr/local/texlive/2025/texmf-dist/tex/latex/microtype/microtype.sty
+Package: microtype 2025/07/09 v3.2b Micro-typographical refinements (RS)
+
+(/usr/local/texlive/2025/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2025/02/11 v2.5l e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count296
+)
+\MT@toks=\toks19
+\MT@tempbox=\box53
+\MT@count=\count297
+LaTeX Info: Redefining \noprotrusionifhmode on input line 1087.
+LaTeX Info: Redefining \leftprotrusion on input line 1088.
+\MT@prot@toks=\toks20
+LaTeX Info: Redefining \rightprotrusion on input line 1107.
+LaTeX Info: Redefining \textls on input line 1449.
+\MT@outer@kern=\dimen159
+LaTeX Info: Redefining \microtypecontext on input line 2053.
+LaTeX Info: Redefining \textmicrotypecontext on input line 2070.
+\MT@listname@count=\count298
+
+(/usr/local/texlive/2025/texmf-dist/tex/latex/microtype/microtype-luatex.def
+File: microtype-luatex.def 2025/07/09 v3.2b Definitions specific to luatex (RS)
+
+Lua module: microtype 2025/07/09 v3.2b microtype module.
+Module microtype Info: overwriting function `keepligature' on input line 63
+LaTeX Info: Redefining \lsstyle on input line 779.
+LaTeX Info: Redefining \lslig on input line 779.
+\MT@outer@space=\skip51
+)
+Package microtype Info: Loading configuration file microtype.cfg.
+
+(/usr/local/texlive/2025/texmf-dist/tex/latex/microtype/microtype.cfg
+File: microtype.cfg 2025/07/09 v3.2b microtype main configuration file (RS)
+)
+LaTeX Info: Redefining \microtypesetup on input line 3065.
+)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/setspace/setspace.sty
+Package: setspace 2022/12/04 v6.7b set line spacing
+)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/ragged2e/ragged2e.sty
+Package: ragged2e 2023/06/22 v3.6 ragged2e Package
+\CenteringLeftskip=\skip52
+\RaggedLeftLeftskip=\skip53
+\RaggedRightLeftskip=\skip54
+\CenteringRightskip=\skip55
+\RaggedLeftRightskip=\skip56
+\RaggedRightRightskip=\skip57
+\CenteringParfillskip=\skip58
+\RaggedLeftParfillskip=\skip59
+\RaggedRightParfillskip=\skip60
+\JustifyingParfillskip=\skip61
+\CenteringParindent=\skip62
+\RaggedLeftParindent=\skip63
+\RaggedRightParindent=\skip64
+\JustifyingParindent=\skip65
+)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/parskip/parskip.sty
+Package: parskip 2021-03-14 v2.0h non-zero parskip adjustments
+
+(/usr/local/texlive/2025/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
+
+(/usr/local/texlive/2025/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
+)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
+)))
+(/usr/local/texlive/2025/texmf-dist/tex/latex/titlesec/titlesec.sty
+Package: titlesec 2025/01/04 v2.17 Sectioning titles
+\ttl@box=\box54
+\beforetitleunit=\skip66
+\aftertitleunit=\skip67
+\ttl@plus=\dimen160
+\ttl@minus=\dimen161
+\ttl@toksa=\toks21
+\titlewidth=\dimen162
+\titlewidthlast=\dimen163
+\titlewidthfirst=\dimen164
+)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/enumitem/enumitem.sty
+Package: enumitem 2025/02/06 v3.11 Customized lists
+\labelindent=\skip68
+\enit@outerparindent=\dimen165
+\enit@toks=\toks22
+\enit@inbox=\box55
+\enit@count@id=\count299
+\enitdp@description=\count300
+)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/polyglossia/polyglossia.sty
+Package: polyglossia 2025/09/11 v2.7 Modern multilingual typesetting with XeLaT
+eX and LuaLaTeX
+Lua module: polyglossia 2013/05/11 v1.3 Polyglossia
+\l_xpg_alias_keyvals_int=\count301
+
+(/usr/local/texlive/2025/texmf-dist/tex/latex/polyglossia/gloss-latex.ldf
+File: gloss-latex.ldf polyglossia: module for default language
+)
+
+Package polyglossia Info: Setting LuaTeX font renderer to Harfbuzz
+
+)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/polyglossia/gloss-latin.ldf
+File: gloss-latin.ldf polyglossia: module for Latin
+Module polyglossia Info: Language data for latin
+(polyglossia)            hyphenation	
+(polyglossia)            lefthyphenmin	2
+(polyglossia)            loader	loadhyph-la.tex
+(polyglossia)            patterns	hyph-la.pat.txt
+(polyglossia)            righthyphenmin	2
+(polyglossia)            synonyms	 on input line 15
+Module polyglossia Info: Language latin was not yet loaded; created with id 2 on
+ input line 15
+Lua-only attribute polyglossia_punct = 4
+Inserting `polyglossia-punct.process' in `pre_shaping_filter'.
+
+Package polyglossia Info: Activating Latin language variant "modern" on line
+(polyglossia)             587.
+
+
+Package polyglossia Info: Activating hyphenation patterns for modern Latin on
+(polyglossia)             line 587.
+
+
+(/usr/local/texlive/2025/texmf-dist/tex/latex/polyglossia/babelsh.def
+File: babelsh.def 2022/06/21 Babel common definitions for shorthands
+ Taken verbatim from babel files (2022/06/06 v3.76)
+)
+Package babel Info: Making " an active character on input line 594.
+Package babel Info: Making ' an active character on input line 595.
+Package babel Info: Making ^ an active character on input line 596.
+Package babel Info: Making = an active character on input line 597.
+)
+
+Package polyglossia Info: Default language is latin
+
+
+Package fontspec Info: 
+(fontspec)             Font family 'EBGaramond(1)' created for font 'EB
+(fontspec)             Garamond' with options
+(fontspec)             [Ligatures=TeX,Ligatures=Historic,Numbers=OldStyle,RawFe
+ature={+liga;+hlig;+dlig},Language=Latin].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.: <->"name:EB
+(fontspec)             Garamond:mode=node;script=latn;language=LAT;+tlig;+hlig;
++onum;+liga;+hlig;+dlig;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: <->"name:EB
+(fontspec)             Garamond:mode=node;script=latn;language=LAT;+tlig;+hlig;
++onum;+liga;+hlig;+dlig;+smcp;"
+(fontspec)             - 'bold' (b/n) with NFSS spec.: <->"name:EB
+(fontspec)             Garamond/B:mode=node;script=latn;language=LAT;+tlig;+hli
+g;+onum;+liga;+hlig;+dlig;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.:
+(fontspec)             <->"name:EB
+(fontspec)             Garamond/B:mode=node;script=latn;language=LAT;+tlig;+hli
+g;+onum;+liga;+hlig;+dlig;+smcp;"
+(fontspec)             - 'italic' (m/it) with NFSS spec.: <->"name:EB
+(fontspec)             Garamond/I:mode=node;script=latn;language=LAT;+tlig;+hli
+g;+onum;+liga;+hlig;+dlig;"
+(fontspec)             - 'italic small caps'  (m/scit) with NFSS spec.:
+(fontspec)             <->"name:EB
+(fontspec)             Garamond/I:mode=node;script=latn;language=LAT;+tlig;+hli
+g;+onum;+liga;+hlig;+dlig;+smcp;"
+(fontspec)             - 'bold italic' (b/it) with NFSS spec.: <->"name:EB
+(fontspec)             Garamond/BI:mode=node;script=latn;language=LAT;+tlig;+hl
+ig;+onum;+liga;+hlig;+dlig;"
+(fontspec)             - 'bold italic small caps'  (b/scit) with NFSS spec.:
+(fontspec)             <->"name:EB
+(fontspec)             Garamond/BI:mode=node;script=latn;language=LAT;+tlig;+hl
+ig;+onum;+liga;+hlig;+dlig;+smcp;"
+
+
+No file principia_ratio_entropica_vol2.aux.
+
+\openout1 = principia_ratio_entropica_vol2.aux
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 39.
+LaTeX Font Info:    ... okay on input line 39.
+*geometry* driver: auto-detecting
+*geometry* detected driver: luatex
+*geometry* verbose mode - [ preamble ] result:
+* driver: luatex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(90.3375pt, 433.62001pt, 90.3375pt)
+* v-part:(T,H,B)=(90.3375pt, 614.295pt, 90.3375pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=433.62001pt
+* \textheight=614.295pt
+* \oddsidemargin=18.0675pt
+* \evensidemargin=18.0675pt
+* \topmargin=-18.9325pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=44.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+
+Package fontspec Info: 
+(fontspec)             Adjusting the maths setup (use [no-math] to avoid
+(fontspec)             this).
+
+\symlegacymaths=\mathgroup4
+LaTeX Font Info:    Overwriting symbol font `legacymaths' in version `bold'
+(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 39.
+LaTeX Font Info:    Redeclaring math accent \acute on input line 39.
+LaTeX Font Info:    Redeclaring math accent \grave on input line 39.
+LaTeX Font Info:    Redeclaring math accent \ddot on input line 39.
+LaTeX Font Info:    Redeclaring math accent \tilde on input line 39.
+LaTeX Font Info:    Redeclaring math accent \bar on input line 39.
+LaTeX Font Info:    Redeclaring math accent \breve on input line 39.
+LaTeX Font Info:    Redeclaring math accent \check on input line 39.
+LaTeX Font Info:    Redeclaring math accent \hat on input line 39.
+LaTeX Font Info:    Redeclaring math accent \dot on input line 39.
+LaTeX Font Info:    Redeclaring math accent \mathring on input line 39.
+LaTeX Font Info:    Redeclaring math symbol \colon on input line 39.
+LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 39.
+LaTeX Font Info:    Redeclaring math symbol \Delta on input line 39.
+LaTeX Font Info:    Redeclaring math symbol \Theta on input line 39.
+LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 39.
+LaTeX Font Info:    Redeclaring math symbol \Xi on input line 39.
+LaTeX Font Info:    Redeclaring math symbol \Pi on input line 39.
+LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 39.
+LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 39.
+LaTeX Font Info:    Redeclaring math symbol \Phi on input line 39.
+LaTeX Font Info:    Redeclaring math symbol \Psi on input line 39.
+LaTeX Font Info:    Redeclaring math symbol \Omega on input line 39.
+LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 39.
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 39.
+LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
+(Font)              `operators' in the math version `normal' on input line 39.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> TU/EBGaramond(0)/m/n on input line 39.
+LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
+(Font)              `operators' in the math version `bold' on input line 39.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> TU/EBGaramond(0)/m/n on input line 39.
+
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  TU/EBGaramond(0)/m/n --> TU/EBGaramond(0)/m/n on input 
+line 39.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> TU/EBGaramond(0)/m/it on input line 39
+.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> TU/EBGaramond(0)/b/n on input line 39.
+
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 39.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 39.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  TU/EBGaramond(0)/m/n --> TU/EBGaramond(0)/b/n on input 
+line 39.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> TU/EBGaramond(0)/b/it on input line 3
+9.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/cmss/bx/n --> TU/lmss/b/n on input line 39.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/b/n on input line 39.
+LaTeX Info: Redefining \microtypecontext on input line 39.
+Package microtype Info: Applying patch `item' on input line 39.
+Package microtype Info: Applying patch `toc' on input line 39.
+Package microtype Info: Applying patch `eqnum' on input line 39.
+Package microtype Info: Applying patch `footnote' on input line 39.
+Package microtype Info: Applying patch `verbatim' on input line 39.
+LaTeX Info: Redefining \microtypesetup on input line 39.
+Package microtype Info: Generating PDF output.
+Package microtype Info: Character protrusion enabled (level 2).
+Package microtype Info: Using default protrusion set `alltext'.
+Package microtype Info: Automatic font expansion enabled (level 2),
+(microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
+Package microtype Info: Using default expansion set `alltext-nott'.
+Package microtype Info: Patching command `\showhyphens'.
+Package microtype Info: No adjustment of tracking.
+Package microtype Info: No adjustment of spacing.
+Package microtype Info: No adjustment of kerning.
+(/usr/local/texlive/2025/texmf-dist/tex/latex/microtype/mt-EBGaramond.cfg
+File: mt-EBGaramond.cfg 2021/10/25 v2.0 microtype config. file: EB Garamond / A
+dobe Garamond (RS)
+)
+
+Package polyglossia Info: Activating Latin language variant "modern" on line
+(polyglossia)             39.
+
+
+Package polyglossia Info: Activating hyphenation patterns for modern Latin on
+(polyglossia)             line 39.
+
+
+Package polyglossia Info: Activating Latin language variant "modern" on line
+(polyglossia)             39.
+
+
+Package polyglossia Info: Activating hyphenation patterns for modern Latin on
+(polyglossia)             line 39.
+
+
+Package polyglossia Info: Activating Latin language variant "modern" on line
+(polyglossia)             39.
+
+
+Package polyglossia Info: Activating hyphenation patterns for modern Latin on
+(polyglossia)             line 39.
+
+Package microtype Info: Character `156' is missing
+(microtype)             in font `TU/EBGaramond(1)/m/it/12'.
+(microtype)             Ignoring protrusion settings for this character.
+
+Missing character: There is no ✶ (U+2736) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.45 \aster\\
+             [0.5em]
+? 
+Missing character: There is no ✶ (U+2736) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.47 \aster\\
+             [0.75em]
+? 
+Missing character: There is no ☿ (U+263F) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ☉ (U+2609) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ☿ (U+263F) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ☉ (U+2609) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✶ (U+2736) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.49 \aster\\
+             [0.25em]
+? 
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Package microtype Info: Character `156' is missing
+(microtype)             in font `TU/EBGaramond(1)/m/it/14.4'.
+(microtype)             Ignoring protrusion settings for this character.
+
+
+[1
+
+{/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+Missing character: There is no ✶ (U+2736) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✶ (U+2736) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ☿ (U+263F) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ☉ (U+2609) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✶ (U+2736) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+]
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+
+
+[2
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+]
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+
+
+[3
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+]
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+
+
+[4
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+]
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.229 \florale\\
+                [0.5em]
+? 
+
+
+[5
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+Missing character: There is no ✷ (U+2737) in font "name:EB Garamond:mode=node;
+script=latn;language=LAT;+tlig;+hlig;+onum;+liga;+hlig;+dlig;"!
+]
+
+[6] (./principia_ratio_entropica_vol2.aux)
+ ***********
+LaTeX2e <2025-06-01> patch level 1
+L3 programming layer <2025-09-02>
+ ***********
+)
+
+Here is how much of LuaTeX's memory you used:
+ 7824 strings out of 476291
+ 125086,794899 words of node,token memory allocated
+ 600 words of node memory still in use:
+   4 hlist, 1 vlist, 1 rule, 1 local_par, 6 glue, 5 kern, 2 penalty, 1 margin_ke
+rn, 4 glyph, 9 attribute, 66 glue_spec, 9 attribute_list, 1 write nodes
+   avail lists: 1:1,2:255,3:89,4:42,5:403,6:34,7:4829,8:3,9:117,10:12,11:653
+ 30010 multiletter control sequences out of 65536+600000
+ 45 fonts using 15550423 bytes
+ 73i,6n,92p,1218b,302s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2025/texmf-dist/fonts/opentype/public/ebgaramond/EBGaramond-
+Bold.otf></usr/local/texlive/2025/texmf-dist/fonts/opentype/public/ebgaramond/EB
+Garamond-Italic.otf></usr/local/texlive/2025/texmf-dist/fonts/opentype/public/eb
+garamond/EBGaramond-Regular.otf>
+Output written on principia_ratio_entropica_vol2.pdf (6 pages, 34424 bytes).
+
+PDF statistics: 44 PDF objects out of 1000 (max. 8388607)
+ 26 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 131072)
+ 1 words of extra memory for PDF output out of 10000 (max. 100000000)
+

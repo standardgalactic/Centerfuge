@@ -1,0 +1,289 @@
+
+% !TEX program = lualatex
+\documentclass[12pt]{article}
+
+\usepackage{geometry}
+\geometry{margin=1.25in}
+
+\usepackage{fontspec}
+\setmainfont{EB Garamond}[%
+  Ligatures=Historic,
+  Numbers=OldStyle,
+  RawFeature={+liga;+hlig;+dlig}
+]
+
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{ragged2e}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{polyglossia}
+\setdefaultlanguage{latin}
+
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,decorations.pathmorphing,positioning}
+
+\linespread{1.05}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\pagestyle{empty}
+
+% Ornaments (Vol. V): ⚖
+\newcommand{\justitia}{\centerline{\Large ⚖}}
+\newcommand{\aster}{\centerline{✶}}
+\newcommand{\scholia}{\textit{☙\;}}
+\newcommand{\divider}{\vspace{1em}\justitia\vspace{1em}}
+
+% Headings
+\newcommand{\Liber}[1]{\vspace{1ex}\begin{center}\Large\textsc{Liber #1}\end{center}\vspace{-0.5ex}\justitia\vspace{0.5ex}}
+\titleformat{\section}{\large\itshape\filcenter}{}{0em}{}
+\titlespacing*{\section}{0pt}{1em}{0.5em}
+
+\begin{document}
+
+\begin{center}
+{\Large \textsc{Principia Ratio Entropica}}\\[-0.25ex]
+{\small \textsc{Volumen Quintum}}\\[0.5ex]
+{\itshape De Ratione Civilitatis et Oeconomia Entropica}\\[1.25em]
+\aster\\[0.5em]
+{\itshape Aequilibrium iustitiae est lex negentropica societatis.}\\[0.5em]
+\aster\\[0.75em]
+{\large ☿\; Iustitia \;--\; Oeconomia \;--\; Res Publica \;✧}\\[0.75em]
+\aster\\[0.25em]
+{\itshape Sub signo Flyxionis \,·\, Anno MMXXV}
+\end{center}
+
+\divider
+
+\begin{center}\textbf{Praefatio}\end{center}
+
+Civitas non est solum conventus hominum, sed campus energeticus significationum, in quo opes, vox, et fides ut \textit{scalares} vel \textit{vectores} moventur. Iustitia non est vox poetarum, sed \textit{aequilibrium} in quo \(\partial S/\partial t = 0\) localiter servatur sub vinculis legitimis; iniustitia est \textit{dissipatio} quae crescere solet ubi reflexus publicus impeditur. Hic liber transformat leges RSVP ad rem civilem: quomodo negentropia socialis crescat, quomodo gubernatio sit recursus, quomodo oeconomia fluit ad mensuram communem.
+
+\divider
+
+% =========================
+% LIBER I — DE AEQUILIBRIO CIVILI
+% =========================
+\Liber{I — De Aequilibrio Civili}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Civitas} est systema apertum cum scaena agentiae, in quo fluit \textit{vis civica} \(\mathbf{v}\) et disponitur \textit{potentia socialis} \(\phi\).
+
+\textit{Definitio II.} \; \textit{Iustitia} est status localis in quo \(\nabla\cdot \mathbf{v}=0\) et \(\partial S/\partial t=0\) sub conditionibus legitimis.
+
+\textit{Definitio III.} \; \textit{Symmetria moralis} est invariatio legum civilium sub permutatione personarum aequaliter oneratarum.
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Ubi reflexus publicus clauditur, ibi entropia socialis cumulatur.
+
+\textit{Axioma II.} \; Ubi mensura communis clarescit, ibi dissensio in laborem utilem convertitur.
+
+\section*{Propositio I. \; (Campus Iustitiae).}
+
+\textit{Enuntiatio.} \; Si \(\mathbf{v}=-\nabla \phi + \mathbf{w}\) cum \(\nabla\cdot \mathbf{w}=0\), tunc iustitia localis obtinet ubi \(\Delta \phi=0\).
+
+\textit{Demonstratio.} \(\nabla\cdot \mathbf{v}=\nabla\cdot(-\nabla \phi)+\nabla\cdot \mathbf{w}=-\Delta \phi + 0\). Igitur \(\nabla\cdot \mathbf{v}=0 \iff \Delta \phi=0\). Quod si \(\partial S/\partial t=0\) addatur per reflexum civem$\to$magistratum$\to$civem, iustitia tenetur. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} \(\phi\) est mensura oneris et honoris; ubi aequatur, fluxus non rapit sed circumit.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.05]
+  % Equipotential rectangles
+  \draw[rounded corners=24,thick] (-3,-1.2) rectangle (3,1.2);
+  \foreach \r in {0.2,0.6,1.0}{
+    \draw[rounded corners=24] (-3+\r,-1.2+\r) rectangle (3-\r,1.2-\r);
+  }
+  % Divergence-free flow around a balanced node
+  \foreach \y in {-0.8,-0.4,0,0.4,0.8}{
+    \draw[->,>=Latex] (-2.5,\y) .. controls (-1.0,\y+0.4) and (1.0,\y-0.4) .. (2.5,\y);
+  }
+  \fill (0,0) circle (1.5pt);
+  \node[below] at (0,-0.05) {\small \it nodus civicus};
+  \node at (0,-1.6) {\small \it Campus Iustitiae: $\nabla\cdot \mathbf{v}=0$, $\Delta\phi=0$};
+\end{tikzpicture}
+\end{center}
+
+\section*{Propositio II. \; (Lex Conservationis Vocis).}
+
+\textit{Enuntiatio.} \; Sit \(\rho\) densitas vocis politicae. Si \(\partial_t \rho + \nabla\cdot(\rho \mathbf{v})=0\), tum sub iustitia locali \(\int_{\Omega}\rho \, d\Omega\) conservatur.
+
+\textit{Demonstratio.} Per Theorema Divergentiae, \(\frac{d}{dt}\int_{\Omega}\rho = -\int_{\partial \Omega} \rho\, \mathbf{v}\cdot \mathbf{n}\, ds\). Si \(\nabla\cdot \mathbf{v}=0\) et fines sunt reflexivi (participatio reciproca), fluxus netus nullus. Ergo vox integra servatur. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Suffragium non est solum numerus, sed massa informata quae sub fluxu recto non deficit.
+
+\divider
+
+% =========================
+% LIBER II — DE OECONOMIA ENTROPICA
+% =========================
+\Liber{II — De Oeconomia Entropica}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Pretium potentiae} \(p=\partial \phi/\partial m\) est mutatio potentiae socialis per unitatem materiae oeconomicae \(m\).
+
+\textit{Definitio II.} \; \textit{Labor} \(L\) et \textit{Cura} \(C\) sunt vectores contributionis; \textit{Fides} \(F\) est scala capacitatis commercii futuri.
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Mercatus rectus est campus in quo \(\nabla \times \nabla \phi = 0\) (absentia arbitrariae rotationis).
+
+\textit{Axioma II.} \; Subsidia sine metrica causant \(\partial S/\partial t > 0\) (dissipationem), nisi reflexu temperentur.
+
+\section*{Propositio I. \; (Aequilibrium Oeconomicum).}
+
+\textit{Enuntiatio.} \; In statu stationario cum conservatione \(m\), superficies \(\phi(m)\) plana est in mediis, et lineae aequipotentiales non intersecentur.
+
+\textit{Demonstratio.} Si \(\partial_t m=0\) et \(\mathbf{v}=-\nabla \phi\), tunc \(\nabla \times \mathbf{v}=0\) et \(\nabla\cdot \mathbf{v} = -\Delta \phi\). Aequilibrium postulans \(\nabla\cdot \mathbf{v}=0\) dat \(\Delta \phi=0\). Ergo \(\phi\) harmonicum; in mediis planior fit. \textit{Q.E.D.}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  % Potential surface (schematic)
+  \draw[very thin,gray!50] (-3,-0.5) grid (3,2.5);
+  \draw[thick] (-2.8,0.6) .. controls (-1.2,1.8) and (1.2,1.8) .. (2.8,0.6);
+  \foreach \x in {-2.5,-1.5,-0.5,0.5,1.5,2.5}{
+    \draw[gray!70] (\x,0.6) -- (\x,2.0);
+  }
+  \node at (0,-0.8) {\small \it Superficies $\phi(m)$ in aequilibrio: $\Delta \phi=0$};
+\end{tikzpicture}
+\end{center}
+
+\section*{Propositio II. \; (Cura ut Negentropia).}
+
+\textit{Enuntiatio.} \; Si \(\partial_t S = -\alpha \|C\|^2 + \beta \sigma\) cum \(\alpha>0\) et volatilitate \(\sigma\), tum sub cura sufficiente \(C\) entropia decrescit in mediis.
+
+\textit{Demonstratio.} Ex aequatione data, \(\mathbb{E}[\partial_t S] = -\alpha \mathbb{E}\|C\|^2 + \beta \mathbb{E}[\sigma]\). Si \(\alpha \mathbb{E}\|C\|^2 > \beta \mathbb{E}[\sigma]\), tunc \(\mathbb{E}[\partial_t S]<0\). Ergo cura socialis est vis negentropica. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Subsidium simplex sine cura mensurata est calor sine opere.
+
+\divider
+
+% =========================
+% LIBER III — DE LEGIBUS ETHICIS ET SYMMETRIA MORALI
+% =========================
+\Liber{III — De Legibus Ethicis et Symmetria Morali}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Lex aequalitatis} est invariatio exituum sub permutatione personarum parium oneris.
+
+\textit{Definitio II.} \; \textit{Dignitas} est lower-bound energiae per personam: \(E_{\min} \le E_i\).
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Nulla lex iusta quae dignitatem infringit.
+
+\textit{Axioma II.} \; Poenae sine reditu emendationis augent entropiam civitatis.
+
+\section*{Propositio I. \; (Symmetria Moralis).}
+
+\textit{Enuntiatio.} \; Systema legum est morale si invariat utilitatem socialem \(U\) sub permutatione indicum personarum parium.
+
+\textit{Demonstratio.} Si \(\pi\) est permutatio talium personarum, postulatur \(U(\mathbf{x})=U(\pi\mathbf{x})\). Hoc dat conditiones functionalas in \(\partial U/\partial x_i\) ut sint aequales in orbe permutationis. Ergo lex est impars. \textit{Q.E.D.}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  % Balance beam
+  \draw[thick] (-3,0) -- (3,0);
+  \draw[thick] (0,0) -- (0,-1);
+  \draw[thick,rotate=5] (-2.2,0) -- (2.2,0);
+  \fill (-1.4,0) circle (2pt);
+  \fill (1.4,0) circle (2pt);
+  \node at (0,-1.3) {\small \it Symmetria Moralis (⚖)};
+\end{tikzpicture}
+\end{center}
+
+\section*{Propositio II. \; (De Poena Redintegrante).}
+
+\textit{Enuntiatio.} \; Poena cum recursu ad statum civilem minuit \(\partial_t S\) in longum tempus, poena sine recursu auget.
+
+\textit{Demonstratio.} Sit \(\partial_t S = \gamma D - \delta R\) cum damno \(D\) et reditu \(R\). Poena sine reditu: \(R\approx 0\Rightarrow \partial_t S \approx \gamma D > 0\). Cum reditu, eligimus \(\delta R > \gamma D\) mediis; ergo \(\partial_t S<0\). \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Iustitia non est ultio, sed ratio redintegrationis.
+
+\divider
+
+% =========================
+% LIBER IV — DE RE PUBLICA RECURSIVA
+% =========================
+\Liber{IV — De Re Publica Recursiva}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Reflexus publicus} est catena feedback: \textit{civis} \(\to\) \textit{forum} \(\to\) \textit{curia} \(\to\) \textit{civis}.\
+
+\textit{Definitio II.} \; \textit{Futarchia recursiva} est regimen ubi indices utilitatis probantur in ludo ante legem.
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Libertates crescunt ubi reditus celer; tyrannis oritur ubi circuli franguntur.
+
+\textit{Axioma II.} \; Mensura publica sine experimento est caeca; experimentum sine mensura vagum.
+
+\section*{Propositio I. \; (Libertas = Reflexus).}
+
+\textit{Enuntiatio.} \; Si temporis morae in reflexu minuuntur, tunc amplitudo errorum politicarum decrescit.
+
+\textit{Demonstratio.} In systemate discreto \(e_{t+1}=e_t - k\, e_{t-\tau}\), minor \(\tau\) dat radices propius ad initium; \(|r|<1\) firmius servatur. Ergo oscillatio decrescit, libertas stabilior. \textit{Q.E.D.}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \draw[thick] (0,0) circle (2.1);
+  \node at (2.35,0) {\small 1};
+  \foreach \ang in {30,60,90,120,150,210,240,270,300,330}{
+    \fill[black] ({1.7*cos(\ang)},{1.7*sin(\ang)}) circle (1.2pt);
+  }
+  \node at (0,-2.6) {\small \it Radices cum mora minuta: stabilitas augetur.};
+\end{tikzpicture}
+\end{center}
+
+\section*{Propositio II. \; (Parlamentum Recursivum).}
+
+\textit{Enuntiatio.} \; Ordo fori, consilii, et inspectionis in annulis positus minuit \(\partial_t S\) decisionum.
+
+\textit{Demonstratio.} Cum annuli permittant correctionem in pluribus scaenis, probabilitas erroris residui multiplicative decrescit: \(P_\text{post} \approx P_\text{init}\prod_i (1-\epsilon_i)\). Ergo negentropia politica crescit. \textit{Q.E.D.}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \draw[thick] (0,0) circle (1.2);
+  \draw[thick] (0,0) circle (2.0);
+  \draw[thick] (0,0) circle (2.8);
+  \node at (0,0) {\small \it Forum};
+  \node at (0,2.2) {\small \it Consilium};
+  \node at (0,3.0) {\small \it Inspectio};
+\end{tikzpicture}
+\end{center}
+
+\divider
+
+% =========================
+% LIBER V — DE CONCORDIA UNIVERSALI
+% =========================
+\Liber{V — De Concordia Universali}
+
+\section*{Propositio. \; Eadem lex relaxationis quae regit plenum, regit civitatem.}
+
+\textit{Demonstratio.} In RSVP \(\partial_t S \le 0\) sub recursu temperato. In civitate, si reflexus publicus integer est, eadem inaequalitas tenet per analogiam: dissipatio convertitur in ordinem communem. Ergo concordia universalis non est fabula, sed translatio legum. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Physica et ius conveniunt in mensura communi: \textit{temperantia}.
+
+\divider
+
+\begin{center}\textbf{Epilogus — De Iustitia ut Arte Negentropica}\end{center}
+
+Iustitia est modus artis maximae: conservare differentias sub lege concordiae. Ubi fluxus coërcetur sine mensura, entropia cumulatur; ubi libertas sine lege, forma solvitur. Ars civilitatis est invenire reflexum celerem, mensuram perspicuam, et curam constantem—ut \(\partial_t S \to 0^-\) in mediis, et concordia fiat consuetudo.
+
+\divider
+
+\begin{center}
+\justitia\\[0.5em]
+\textit{Colophon.} \;
+\textit{Volumen hoc ad probationem notarum aequilibrantium (⚖), formarum TikZ, et derivationum symbolicarum destinatur, ut facultates Lua\LaTeX{} explorentur atque errores typographici mature deprehendantur.}\\[0.25em]
+\textit{Typis Mechanicis, sub signo Flyxionis. \; Anno MMXXV.}
+\end{center}
+
+\end{document}

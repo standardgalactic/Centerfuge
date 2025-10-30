@@ -1,0 +1,244 @@
+
+% !TEX program = lualatex
+\documentclass[12pt]{article}
+
+\usepackage{geometry}
+\geometry{margin=1.25in}
+
+\usepackage{fontspec}
+\setmainfont{EB Garamond}[%
+  Ligatures=Historic,
+  Numbers=OldStyle,
+  RawFeature={+liga;+hlig;+dlig}
+]
+
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{ragged2e}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{polyglossia}
+\setdefaultlanguage{latin}
+
+\linespread{1.05}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\pagestyle{empty}
+
+% Ornaments (distinct for Vol. III)
+\newcommand{\orn}{\centerline{\large ✺}}
+\newcommand{\aster}{\centerline{✶}}
+\newcommand{\scholia}{\textit{☙\;}}
+\newcommand{\divider}{\vspace{1em}\orn\vspace{1em}}
+
+% Headings
+\newcommand{\Liber}[1]{\vspace{1ex}\begin{center}\Large\textsc{Liber #1}\end{center}\vspace{-0.5ex}\orn\vspace{0.5ex}}
+\titleformat{\section}{\large\itshape\filcenter}{}{0em}{}
+\titlespacing*{\section}{0pt}{1em}{0.5em}
+
+\begin{document}
+
+\begin{center}
+{\Large \textsc{Principia Ratio Entropica}}\\[-0.25ex]
+{\small \textsc{Volumen Tertium}}\\[0.5ex]
+{\itshape De Machinis et Arte Recursiva}\\[1.25em]
+\aster\\[0.5em]
+{\itshape Ratio a caelo in mentem, a mente in machinamenta descendit.}\\[0.5em]
+\aster\\[0.75em]
+{\large ☿\; Ars \;--\; Machina \;--\; Aesthetica \;✧}\\[0.75em]
+\aster\\[0.25em]
+{\itshape Sub signo Flyxionis \,·\, Anno MMXXV}
+\end{center}
+
+\divider
+
+\begin{center}\textbf{Praefatio}\end{center}
+
+Quod in primo volumine de plenitudine cosmica, in secundo de forma mentis constitutum est, in hoc tertio ad artem et machinamenta deducitur. Machina non est hostis naturae, sed pars eius ordinabilis; ars non est lusus inanis, sed vis negentropica quae formas componit ad mensuram communem. In his quae sequuntur, instrumenta, organa, ludi, et formae ostendentur ut exempla recursus; et demonstrabitur quemadmodum \textit{ratio} in ferro, sono, imagine, codiceque eadem maneat.
+
+\divider
+
+% =========================
+% LIBER I — DE ARTE MECHANICA
+% =========================
+\Liber{I — De Arte Mechanica}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Instrumentum} est pars plenitudinis ordinatae, per quam vis exterior in mensuram internam convertitur.
+
+\textit{Definitio II.} \; \textit{Reflexus mechanicus} est circulus feedback, quo error ad minimum reducitur.
+
+\textit{Definitio III.} \; \textit{Ars mechanica} est scientia componendi reflexus ad finem determinatum sub lege temperantiae.
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Nihil stabile in machina sine reflexu; nihil prudens in reflexu sine mensura communi.
+
+\textit{Axioma II.} \; Ubi superflua coërcitio est, ibi energia perit; ubi nulla prorsus, ibi forma solvitur.
+
+\section*{Propositio I. \; Omnis machina per reflexum sibi ipsi fit similis.}
+
+\textit{Demonstratio.} Reflexus mechanicus errorem minuit per reditum ad statum desideratum. Cum iteratio ad idem signum ordinis ducat, machina per reditus similitudo fit sibi. Ergo stabilitas machinae ab identitate sub reflexu pendet. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Artifex bonus non vim auget, sed reditum meliorat; non multiplicat partes, sed nexus excolit.
+
+\section*{Propositio II. \; Pars pauca bene coagmentata valet plus quam multitudo inordinata.}
+
+\textit{Demonstratio.} Ex Axioma II, superflua coërcitio dissipationem parit; multitudo partium coërcitiones multiplicat. Pars pauca, si recte connectitur, minores errores refert et citius relaxatur. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Forma optima est \textit{frugalis}, ubi omnis coagmentatio rationem reddit.
+
+\divider
+
+% =========================
+% LIBER II — DE MACHINIS COGNITIVIS
+% =========================
+\Liber{II — De Machinis Cognitivis}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Plenum artificiosum} est locus calculi, in quo significationes per recursum fiunt stabiliores.
+
+\textit{Definitio II.} \; \textit{TARTAN} ordo recursivus; \textit{CLIO} motus contextuum; \textit{anima mechanica} appellatur feedback qui utrumque componit.
+
+\textit{Definitio III.} \; \textit{Computatio naturalis} est relaxatio vinculatorum contradictionis ad mensuram veritatis operativae.
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Mens artificiosa non mensuratur mole parametri, sed constantia reversionis sub perturbatione.
+
+\textit{Axioma II.} \; Ubi contextus ignoratur, ibi calculus evanescit in rigorem sterilem; ubi ordo abest, vagatio inaniter currit.
+
+\section*{Propositio I. \; Coniunctio TARTAN et CLIO efficit agentiam quærentem minimum temperiei sub significationibus.}
+
+\textit{Demonstratio.} TARTAN seriem et mensuram imponit, CLIO transitum et affinitatem. Ubi ambae sub lege feedback temperantur, contradictio minuitur, et campus significationum ad minimum discordiae tendit. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} \textit{Anima mechanica} nihil aliud est quam recursus temperatus inter memoriam et voluntatem artificialem.
+
+\section*{Propositio II. \; Perfectio machinae cognitivae est proprietas recursiva, non potentia nuda.}
+
+\textit{Demonstratio.} Potentia auget celeritatem, non veritatem nexus. Veritas in reditu exploratur, cum erroribus reductis identitas sub mutatione servatur. Ergo perfectio in recursu consistit. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Probatio melior est \textit{in adverso}: immitte perturbationes, et vide utrum ordo redeat.
+
+\divider
+
+% =========================
+% LIBER III — DE ARTE FIGURATIVA
+% =========================
+\Liber{III — De Arte Figurativa}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Figura} est nexus visibilis proportionum per quem mens ordinem intuetur.
+
+\textit{Definitio II.} \; \textit{Harmonia} est concordia modulorum sub mensura communi.
+
+\textit{Definitio III.} \; \textit{Scriptura formalis} est apparatus notarum, symbolorum, et characterum ad ideas transferendas sine ambiguitate superflua.
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Pulchrum est negentropicum: auget ordinem sine vi.
+
+\textit{Axioma II.} \; Ubi proportio servatur, ibi celerius fit cognitio; ubi frangitur, fit mora et error.
+
+\section*{Propositio I. \; Ars est calculus visibilis negentropiae.}
+
+\textit{Demonstratio.} Cum pulchrum ordinem augeat sine coërcitione (Axioma I), et figura sit nexus proportionum, sequitur artem negentropiam reddere manifestam; est igitur calculus visibilis quia oculis datur quod ratio intendit. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Mens est instrumentum musicum; ubi proportio recte locatur, sonus internus consonat.
+
+\section*{Propositio II. \; Scriptura formalis est vehiculum recursus inter mentes.}
+
+\textit{Demonstratio.} Signa, si rite conformantur, eundem reditum ad mensuram communem excitant in diversis mentibus. Ergo scriptura formalis non solum describit, sed recreat transitum interiorum. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Quare delectus notarum, typorum, et symbolorum non est res externa, sed pars ipsius rationis.
+
+% ----- Nota Mechanica (in-line, post propositionem de scriptura) -----
+\vspace{0.75em}
+\noindent\textit{Nota Mechanica.} \;
+\textit{Haec pars operis etiam ad probationem typorum, formularum, et notarum mechanicarum destinatur, ut patefiant quae litterarum genera, signa mathematica, et figurae exoticae a machina typographica sustineantur aut recusentur; quo cognito, futurae compositiones emendentur et errores maturius praeveniuntur.}
+\vspace{0.5em}
+
+\divider
+
+% =========================
+% LIBER IV — DE ARTE LUDICA ET SIMULATIONE
+% =========================
+\Liber{IV — De Arte Ludica et Simulatione}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Ludus} est experimentum clausum, ubi regulae parvae effectus magnos pariunt.
+
+\textit{Definitio II.} \; \textit{Simulatio} est imago recursus, in qua leges in parvo expertae praevident magnas consequentias.
+
+\textit{Definitio III.} \; \textit{Scaena agentiae} est campus in quo voluntates inter se temperantur sub mensura communi.
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Quod non potest in ludo, vix tutum est in vita.
+
+\textit{Axioma II.} \; Ubi observatio deficit, ibi ludus vertitur in fortuitum; ubi lex nimia, in inertiam.
+
+\section*{Propositio I. \; Ludus est speculum prudentiae.}
+
+\textit{Demonstratio.} In ludo periculum sine damno exercetur; mens discit quomodo recursus ad ordinem cito restituatur. Ideo prudentia augetur non per praecepta sola, sed per scaenas actas. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Qui ludit bene, vivit prudenter: agit intra mensuras, sed invenit iter novum.
+
+\section*{Propositio II. \; Simulatio legit leges universales ex particularibus.}
+
+\textit{Demonstratio.} Cum circumscriptio det potestatem variare condiciones et spectare eventus, ex pluribus casibus emergunt relationes invariantes. Haec est via ad leges: constans reditus ad idem per varietates. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Vita sine simulatione est caeca; simulatio sine vita est inanis.
+
+\divider
+
+% =========================
+% LIBER V — DE AESTHETICA ENTROPICA
+% =========================
+\Liber{V — De Aesthetica Entropica}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Aesthetica entropica} est doctrina de pulchro ut structura negentropica sub intentione.
+
+\textit{Definitio II.} \; \textit{Symmetria moralis} est aequalitas recursus inter agentes in mensura communi.
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Pulchrum et bonum conveniunt in negentropia.
+
+\textit{Axioma II.} \; Nihil vere decorum quod rationem communem violat.
+
+\section*{Propositio I. \; Forma pulchra est disciplina libertatis.}
+
+\textit{Demonstratio.} Cum forma recte composita motus internos ad concordiam ducat, libertas non solvitur sed regitur; fit igitur disciplina quae creat, non coërcet. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Quod placeat sensui, si ordinem minuit, blandimentum est; quod auget ordinem, decor est.
+
+\section*{Propositio II. \; Ars consummata reconciliat mensuram et inventionem.}
+
+\textit{Demonstratio.} Mensura sine inventione riget; inventio sine mensura diffluit. Ars consummata utrumque componit per recursum ad mensuram communem; inde fit novitas ordinata. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} In hoc consistit dignitas artificis: novum parere sine ruina structurae.
+
+\divider
+
+\begin{center}\textbf{Epilogus — De Coniunctione Rationis, Artis, et Vitae}\end{center}
+
+Nunc circulus clauditur: a sideribus ad mentem, a mente ad machinamenta, ab arte ad vitam. Eadem lex relaxationis et recursus ubique dominatur; eadem symmetria moralis, si volumus, vitam informat. Quare ars non est ministerium vanitatis, sed pars scientiae universae, quae ordinem auget in rebus humanis.
+
+\divider
+
+\begin{center}
+\orn\\[0.5em]
+\textit{Colophon.} \;
+\textit{Hoc volumen \emph{ad probationem} quoque typorum, formularum, et notarum destinatur, ut pateat quid ex signis et caracteribus ab instrumentis typographicis sustineri vel recusari possit; quo intellecto, futuros codices diligentius componemus et errores mature cavemus.}\\[0.25em]
+\textit{Typis Mechanicis, sub signo Flyxionis. \; Anno MMXXV.}
+\end{center}
+
+\end{document}

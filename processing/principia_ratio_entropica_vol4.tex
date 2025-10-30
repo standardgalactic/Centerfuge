@@ -1,0 +1,211 @@
+
+% !TEX program = lualatex
+\documentclass[12pt]{article}
+
+\usepackage{geometry}
+\geometry{margin=1.25in}
+
+\usepackage{fontspec}
+\setmainfont{EB Garamond}[%
+  Ligatures=Historic,
+  Numbers=OldStyle,
+  RawFeature={+liga;+hlig;+dlig}
+]
+\newfontfamily\ornament{Symbola}[Scale=1.1]
+
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{ragged2e}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{polyglossia}
+\setdefaultlanguage{latin}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,decorations.pathmorphing}
+
+\linespread{1.05}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\pagestyle{empty}
+
+% Ornaments (Vol. IV): DINGIR 𒀭
+\newcommand{\dingir}{\centerline{\Large \ornament{𒀭}}}
+\newcommand{\aster}{\centerline{✶}}
+\newcommand{\scholia}{\textit{☙\;}}
+\newcommand{\divider}{\vspace{1em}\dingir\vspace{1em}}
+
+% Headings
+\newcommand{\Liber}[1]{\vspace{1ex}\begin{center}\Large\textsc{Liber #1}\end{center}\vspace{-0.5ex}\dingir\vspace{0.5ex}}
+\titleformat{\section}{\large\itshape\filcenter}{}{0em}{}
+\titlespacing*{\section}{0pt}{1em}{0.5em}
+
+\begin{document}
+
+\begin{center}
+{\Large \textsc{Principia Ratio Entropica}}\\[-0.25ex]
+{\small \textsc{Volumen Quartum}}\\[0.5ex]
+{\itshape De Signis Antiquis et Figuris Mechanicis}\\[1.25em]
+\aster\\[0.5em]
+{\itshape Ratio veterum et recentium in eodem lumine conspicitur.}\\[0.5em]
+\aster\\[0.75em]
+{\large ☿\; Signum \;--\; Figura \;--\; Demonstratio \;✧}\\[0.75em]
+\aster\\[0.25em]
+{\itshape Sub signo Flyxionis \,·\, Anno MMXXV}
+\end{center}
+
+\divider
+
+\begin{center}\textbf{Praefatio}\end{center}
+
+Hic liber ad coniunctionem \textit{signorum antiquorum} et \textit{figurarum mechanicorum} pertinet. Cuneiformia Babylonia, quae olim siderum rationes, mensuras agrorum, legesque civitatis tulerunt, cum diagrammatibus recentioribus copulantur. Non quaerimus picturam sine ratione, nec rationem sine imagine: sed \textit{demonstrationem figuratam}, more Newtoniano.
+
+\divider
+
+% =========================
+% LIBER I — DE SIGNIS ANTIQUIS
+% =========================
+\Liber{I — De Signis Antiquis}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{DINGIR} (\ornament{𒀭}) dicitur signum numinis, principium lucis et ordinis.
+
+\textit{Definitio II.} \; \textit{Tabula} est dispositio signorum in campo, ad memoriam et transitum.
+
+\textit{Definitio III.} \; \textit{Lex signorum} est ratio per quam symbola invariantes relationes servant.
+
+\section*{Exemplum Cuneiforme.}
+
+\noindent \ornament{𒀭  𒂗  𒆤 \quad 𒀭  𒀸  𒋩 \quad 𒀭  𒌓  𒀭  𒊬}\\
+\textit{(lineae exemplo positae sunt ad probationem typorum et legentur ad sinistram in dextram; non afferunt sensum historicum necessarium.)}
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Ubi signum invariat relationem, ibi mens celerius transit ad intellectum.
+
+\textit{Axioma II.} \; Prolixitas sine mensura obfuscat; paucitas cum ordine illustrat.
+
+\section*{Propositio I. \; Signum \ornament{𒀭} ornamentum et mensura esse potest.}
+
+\textit{Demonstratio.} Cum \ornament{𒀭} in tabulis veteribus principium exaltatum denotet, idem hodie uti possumus ad sectiones discernendas. Ornamentum non est alienum a mensura, si transitus mentis accelerat sine ambiguitate. Ergo signum idem et decor et lex transitus est. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} \textit{DINGIR} hic adhibetur pro \textit{florilegio} sectionum; simul autem probatio est latinitatis cum notis exteris compatibilis.
+
+\divider
+
+% =========================
+% LIBER II — DE FIGURIS MECHANICIS
+% =========================
+\Liber{II — De Figuris Mechanicis}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Figura vectorialis} est schema motus quod gradientem intentionis ostendit.
+
+\textit{Definitio II.} \; \textit{Circuitus reflexus} est orbis cum sagitta reditus, ad errores minuendos.
+
+\section*{Propositio I. \; De campo intentionis et lineis fluxus.}
+
+\textit{Enuntiatio.} \; Si campus scalaris $\,\varphi(x,y)\,$ datur, et \,$\mathbf{v}=\nabla^\perp \varphi\,$, tunc lineae fluxus circum aequipotentialia currunt, et minima discrepantia in nodis confluunt.
+
+\textit{Demonstratio.} Quia $\nabla\cdot\nabla^\perp \varphi=0$, fluxus est solenoidalis; ergo lineae fluxus aequipotentialia non secant sed coronant. Quia errores ad minimos gradientis collapsus trahuntur, nodi fiunt attractoria. \textit{Q.E.D.}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.05]
+  % Potential-level ovals
+  \draw[rounded corners=24,thick] (-3,-1.2) rectangle (3,1.2);
+  \foreach \r in {0.2,0.6,1.0}{
+    \draw[rounded corners=24] (-3+\r,-1.2+\r) rectangle (3-\r,1.2-\r);
+  }
+  % Flow arrows circling
+  \foreach \y in {-0.8,-0.4,0,0.4,0.8}{
+    \draw[->,>=Latex] (-2.5,\y) .. controls (-1.0,\y+0.4) and (1.0,\y-0.4) .. (2.5,\y);
+  }
+  % Nodes
+  \fill (0,0) circle (1.5pt);
+  \node[below] at (0,-0.05) {\small \it nodus};
+\end{tikzpicture}
+\end{center}
+
+\textit{\scholia Scholium.} Figura exprimit propositionem: campi intentionales in \textit{aequalia} redeunt per circulos fluxus.
+
+\section*{Propositio II. \; De circuito reflexus temperato.}
+
+\textit{Enuntiatio.} \; Systema cum incremento $k$ et mora $\tau$ stabilitur, si \;$0<k<k^\ast(\tau)$; aliter oscillationes crescunt.
+
+\textit{Demonstratio.} Ex aequatione discreta $e_{t+1}=e_t - k\,e_{t-\tau}$, radix caracteristica $r$ satisfacit $r^{\tau+1}-r^\tau+k=0$. Stabilitas postulat $|r|<1$. Inde $k^\ast(\tau)$ excludit transgressionem unitatis. \textit{Q.E.D.}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.05]
+  % Unit circle
+  \draw[thick] (0,0) circle (2.1);
+  \node at (2.35,0) {\small 1};
+  % Roots sample
+  \foreach \ang in {40,80,120,160,200,240,280,320}{
+    \fill[black] ({2*cos(\ang)},{2*sin(\ang)}) circle (1.2pt);
+  }
+  \node at (0,-2.6) {\small \it Radices intra circulum unitatis: status stabilis.};
+\end{tikzpicture}
+\end{center}
+
+\divider
+
+% =========================
+% LIBER III — DEMONSTRATIONES CUM TIKZ
+% =========================
+\Liber{III — Demonstrationes cum TikZ}
+
+\section*{Propositio I. \; Trianguli proportiones constant sub similitudine.}
+
+\textit{Demonstratio.} Sit triangulum $ABC$ et linea parallela ad $BC$ secans $AB, AC$ in $B', C'$. Tunc $\frac{AB'}{AB}=\frac{AC'}{AC}=\frac{A B'}{A C'}\cdot\frac{C'B'}{CB}$. Ex ratione parallelarum, anguli correspondentes sunt pares, ergo figurae similes. \textit{Q.E.D.}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \coordinate (A) at (0,3);
+  \coordinate (B) at (-2,0);
+  \coordinate (C) at (2,0);
+  \draw[thick] (A)--(B)--(C)--cycle;
+  \draw[thick,densely dashed] (-1,1.5)--(1,1.5);
+  \node[left] at (A) {\small A};
+  \node[left] at (B) {\small B};
+  \node[right] at (C) {\small C};
+  \node[left] at (-1,1.5) {\small B'};
+  \node[right] at (1,1.5) {\small C'};
+\end{tikzpicture}
+\end{center}
+
+\section*{Propositio II. \; Curvatura minima dat geodesicam in plano elastico simplici.}
+
+\textit{Demonstratio (schematica).} In plano sub functione energiae $E=\int (\kappa^2 + \lambda)\,ds$, variatio $\delta E=0$ dat Euler–Lagrange $\kappa''+\tfrac12\kappa^3=\text{const.}$, unde linea recta (curvatura nulla) minimam dat. \textit{Q.E.D.}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \draw[very thin,gray!60] (-3,-0.5) grid (3,2.5);
+  \draw[thick,decorate,decoration={snake,amplitude=0.6,segment length=6pt}] (-2,0.4) -- (2,0.4);
+  \draw[thick] (-2,2) -- (2,2);
+  \node[left] at (-2,2) {\small \it geodesica};
+  \node[left] at (-2,0.4) {\small \it linea flexa};
+\end{tikzpicture}
+\end{center}
+
+\divider
+
+% =========================
+% LIBER IV — NOTA BABYLONICA
+% =========================
+\Liber{IV — Nota Babylonica}
+
+\textit{Nota.} \; \textit{Haec sectio insuper ad probationem typorum et characterum destinatur: cuneiformia (\ornament{𒀭 𒂗 𒆤 𒀭 𒌓}), numeri antiqui (ex.\ \ornament{𒑖} pro sexaginta), et figurae mixtae cum TikZ. Quae si bene imprimuntur, certiores erimus de facultatibus Lua\LaTeX{} et typorum nostrorum; si minus, emendatio in futuris codicibus diligentius parabitur.}
+
+\divider
+
+\begin{center}
+\dingir\\[0.5em]
+\textit{Colophon.} \;
+\textit{Volumen hoc, sub signo \ornament{𒀭}, ornamentum signorum veterum cum demonstrationibus recentioribus componit; ad usum simul doctrinalem et mechanicum scriptum est.}\\[0.25em]
+\textit{Typis Mechanicis, sub signo Flyxionis. \; Anno MMXXV.}
+\end{center}
+
+\end{document}

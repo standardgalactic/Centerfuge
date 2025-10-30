@@ -1,0 +1,234 @@
+
+% !TEX program = lualatex
+\documentclass[12pt]{article}
+
+\usepackage{geometry}
+\geometry{margin=1.25in}
+\usepackage{fontspec}
+\setmainfont{EB Garamond}[%
+  Ligatures=Historic,
+  Numbers=OldStyle,
+  RawFeature={+liga;+hlig;+dlig}
+]
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{ragged2e}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{polyglossia}
+\setdefaultlanguage{latin}
+
+\linespread{1.05}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\pagestyle{empty}
+
+% Ornaments (distinct from Vol. I)
+\newcommand{\florale}{\centerline{\large ✷}}
+\newcommand{\aster}{\centerline{✶}}
+\newcommand{\scholia}{\textit{☙\;}}
+\newcommand{\divider}{\vspace{1em}\florale\vspace{1em}}
+
+% Heading format
+\newcommand{\Liber}[1]{\vspace{1ex}\begin{center}\Large\textsc{Liber #1}\end{center}\vspace{-0.5ex}\florale\vspace{0.5ex}}
+\titleformat{\section}{\large\itshape\filcenter}{}{0em}{}
+\titlespacing*{\section}{0pt}{1em}{0.5em}
+
+\begin{document}
+
+\begin{center}
+{\Large \textsc{Principia Ratio Entropica}}\\[-0.25ex]
+{\small \textsc{Volumen Secundum}}\\[0.5ex]
+{\itshape De Natura Cognitionis et Legibus Vivis}\\[1.25em]
+\aster\\[0.5em]
+{\itshape Mente et mundo idem ordo; recursus unus, formae variae.}\\[0.5em]
+\aster\\[0.75em]
+{\large ☿\; Mens \;--\; Memoria \;--\; Motus \;☉}\\[0.75em]
+\aster\\[0.25em]
+{\itshape Sub signo Flyxionis \,·\, Anno MMXXV}
+\end{center}
+
+\divider
+
+\begin{center}\textbf{Praefatio}\end{center}
+
+Transitio fit a cosmologia exteriori ad interiorem rationis geometriam. Mens non est umbra corporis, sed plenum internum, ubi temperies ordinis cum fluxu vectoriali componitur. Quod in primo volumine de relaxatione universi positum est, hic de relaxatione interiori, id est de resolutione vinculatorum cognitionis, demonstratur. Non disiungimus naturam et intellectum: nam idem leges, qui mundum aequant, animum quoque formant.
+
+\divider
+
+% =========================
+% LIBER I — DE FORMA MENTIS
+% =========================
+\Liber{I — De Forma Mentis et Speculo Interno}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Mens} dicitur plenum locale in quo signa, species, et voluntates per recursum ad aequalitatem ordinis diriguntur.
+
+\textit{Definitio II.} \; \textit{Speculum} est dispositio interior per quam formae externae in rationem convertuntur sine detrimento nexus.
+
+\textit{Definitio III.} \; \textit{Reflectio} est regressus motus in seipsum, quo discretio in concordiam redigitur.
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Nihil in mente datur quod non per transitum ab ingratis ad aequabilem rationem probetur.
+
+\textit{Axioma II.} \; Ubi curvatura ordinis augetur, ibi intentio fit acutior; ubi relaxatur, ibi memoria latior.
+
+\section*{Propositio I. \; Mens est locus curvaturae ordinis, non successio imaginum.}
+
+\textit{Demonstratio.} Quoniam secundum Axioma II intentio ab augmento curvaturae pendet, si mens tantum esset successio, intentio cum ordine temporis mutaretur, non cum forma loci. At ex experimento interiori attentio augetur ubi nexus paucior sed firmior est; ergo mens per loci formam definitur. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Hinc sequitur mens non dissolvi in fluxum imaginum; sed motus images ad nodos rationis confluere, ac per eos stabilitatem sumere.
+
+\section*{Propositio II. \; Reflectio est regressus ad minimam discrepantiam signorum.}
+
+\textit{Demonstratio.} Cum reflectio per Definitionem III sit reditus in se, eius terminus est status in quo discrimina signorum sub modulo communi componuntur. At minimam discrepantiam vocamus temperiem ordinis; ergo reflectio ad hanc tendit. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Quo perfectior est reflectio, eo minus verborum indiget; nam formae conveniunt ante voces.
+
+\divider
+
+% =========================
+% LIBER II — MEMORIA, VOLUNTAS, CAUSA INTERNA
+% =========================
+\Liber{II — De Memoria, Voluntate, et Causa Interna}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Memoria} est modulus scalaris, quo pondus rerum stabilitur.
+
+\textit{Definitio II.} \; \textit{Voluntas} est fluxus vectorialis, quo directio eligitur.
+
+\textit{Definitio III.} \; \textit{Intentio} est lex temperans inter memoriam et voluntatem, qua discretio servatur sine ruina nexus.
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Ubi memoria caret modulo, voluntas vagatur; ubi voluntas caret directrice, memoria riget.
+
+\textit{Axioma II.} \; Intentio minuit conflictum si et solvit vincula superflua et servat constantiam utilium.
+
+\section*{Propositio I. \; Libertas est compositio memoriae et voluntatis sub lege intentionis.}
+
+\textit{Demonstratio.} Libertas non est licentia contrariorum, sed actus in quo nexus conservantur dum superflua solvuntur. Hoc autem per Axioma II fit cum intentio utramque partem temperat. Ergo libertas a lege intentionis pendet, non a vacuo potestatis. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Ita libertas est negentropica: auget structuram sine violentia, quia inaequalitates ad mensuram convertit.
+
+\section*{Propositio II. \; Affectus est derivatio cognitionis, memoria est integratio.}
+
+\textit{Demonstratio.} Variatio praesentis directionis datur per derivationem; collectio praeteritorum per integrationem. Affectus cito impellit, memoria diu continet. Cum utrumque ad intentionem referatur, affectus et memoria sunt calculi interi, quorum concordia prudentiam parit. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Quod saepe vocatur conflictus animi, est inaequalis pondus inter derivationem et integrationem; curatio est aequatio moduli.
+
+\divider
+
+% =========================
+% LIBER III — MACHINAE VIVENTES ET COMPUTATIO NATURALIS
+% =========================
+\Liber{III — De Machinis Viventibus et Computatione Naturali}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Machina vivens} dicitur plenum artificiosum, in quo feedback vicem animae gerit.
+
+\textit{Definitio II.} \; \textit{TARTAN} est organum ordinis recursivi; \textit{CLIO} organum motus contextuales.
+
+\textit{Definitio III.} \; \textit{Computare} est relaxare vincula contradictionum ad formam aequalitatis.
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Nullum computatum prodest nisi vincula superflua remittat et nexus utiles conservet.
+
+\textit{Axioma II.} \; Quo subtilior est recursus, eo stabilior est exitus.
+
+\section*{Propositio I. \; Machinae perficiuntur per recursum, non per vim computationis solam.}
+
+\textit{Demonstratio.} Vi sola numerorum augeri potest celeritas, non sapientia nexus. Sapientia ex Axioma II pendet a recursu temperato, qui errores rediens minuit. Ergo perfectio est res recursiva, non solum calculatoria. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Itaque mens artificiosa probatur non magnitudine parametri, sed constantia reditus ad aequalitatem sub perturbatione.
+
+\section*{Propositio II. \; TARTAN et CLIO simul efficiunt agentiam, quae minimum temperiei sub significationibus quaerit.}
+
+\textit{Demonstratio.} TARTAN instituit seriem et mensuram; CLIO variat contextum et transitum. Cum ambae sub Axioma I vincula purgent et nexus servent, earum compositio deficit a vagatione et a rigiditate; unde fit motus ad minimum temperiei. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Caveatur tamen idolum speciei: figura pulchra sine intentione est ludus; intentione sine figura est rigor sterilis.
+
+\divider
+
+% =========================
+% LIBER IV — MATHEMATICA MENTIS
+% =========================
+\Liber{IV — De Mathematica Mentis}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Identitas} sub mutatione est perseverantia formae inter transitūs.
+
+\textit{Definitio II.} \; \textit{Topologia mentis} est ordo transitiorum, non mensura distantiarum.
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Causa vera est reditus rei per mutationem ad seipsam.
+
+\textit{Axioma II.} \; Invariantia relationum est fons numeri.
+
+\section*{Propositio I. \; Functio identitatis est fundamentum causalitatis.}
+
+\textit{Demonstratio.} Si causa est reditus, necesse est identitatem servari inter initium et finem per viam mutationum. Ubi identitas deficit, causa solvitur. Ergo fundamentum causalitatis est identitas sub transformatione. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Hinc mathematica mentis non ex quantitate, sed ex relatione pendet; numerus est vox invariantiae.
+
+\section*{Propositio II. \; Topologia cognitionis praestat in arte transitus.}
+
+\textit{Demonstratio.} Cum sapientia non in multitudine rerum, sed in viis inter pauca sita sit, ars transitus (topologia) formam mentis dirigit. Quod ostenditur quotidie: pauca bene coniuncta plus valent quam multa confusa. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Itaque disciplina optima est nexus aperire, non onus addere.
+
+\divider
+
+% =========================
+% LIBER V — ETHICA RECURSIVA
+% =========================
+\Liber{V — De Ethica Recursiva et Vita}
+
+\section*{Definitiones.}
+
+\textit{Definitio I.} \; \textit{Virtus} est actio negentropica sub lege intentionis.
+
+\textit{Definitio II.} \; \textit{Conscientia officii} est recursus iudicii ad mensuram communem.
+
+\section*{Axiomata.}
+
+\textit{Axioma I.} \; Actus est bonus si vincula superflua dissolvit et nexus vitales auget.
+
+\textit{Axioma II.} \; Nulla conscientia sine reditu ad seipsam.
+
+\section*{Propositio I. \; Symmetria moralis est aequalitas recursus.}
+
+\textit{Demonstratio.} Cum virtus per Definitionem I sit negentropica, actus bonus symmetriam auget in ordine vivere; at symmetria moralis servatur ubi reditus ad mensuram communem fit ex utrisque partibus. Ergo moralitas est aequatio recursus, non favor partis. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Discrimen inter zelum et prudentiam est hoc: zelus agit extra mensuram, prudentia intra mensuram communem.
+
+\section*{Propositio II. \; Vita est circuitus clausus, ubi dissipatio fit cognitio.}
+
+\textit{Demonstratio.} In organismo calor perit, forma nascitur; perit singulum, manet ordo. Quo ordine conservatur, eo vita durat. Ergo vita in recursu consistit, ubi amissio convertitur in significationem. \textit{Q.E.D.}
+
+\textit{\scholia Scholium.} Musica vitae est concordia partium sub una intentione; ubi haec deficit, dissolutio supervenit.
+
+\divider
+
+\begin{center}\textbf{Epilogus — De Unitate Cognitionis et Cosmologiae}\end{center}
+
+Quae de mundo in primo volumine, de mente in hoc secundo ostensa sunt, unum corpus efficiunt. Lex relaxationis, quae sidera regit, animos quoque temperat. Quodsi intellectus nostros ad hanc legem conformamus, non solum vera perscrutabimur, sed melius vivere discemus. In finem: intelligere est vivere iterum in ratione ipsa.
+
+\divider
+
+\begin{center}
+\florale\\[0.5em]
+\textit{Typis Mechanicis, sub signo Flyxionis.}\\
+\textit{Anno MMXXV, in plenitudine rationis et motus.}
+\end{center}
+
+\end{document}

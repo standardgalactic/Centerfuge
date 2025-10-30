@@ -1,0 +1,193 @@
+
+% !TEX program = lualatex
+\documentclass[12pt]{article}
+
+\usepackage{geometry}
+\geometry{margin=1.25in}
+\usepackage{fontspec}
+\setmainfont{EB Garamond}[%
+  Ligatures=Historic,
+  Numbers=OldStyle,
+  RawFeature={+liga;+hlig;+dlig}
+]
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{ragged2e}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{polyglossia}
+\setdefaultlanguage{latin}
+
+\linespread{1.05}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\pagestyle{empty}
+
+% Ornaments
+\newcommand{\florale}{\centerline{\large ❦}}
+\newcommand{\aster}{\centerline{✶}}
+\newcommand{\scholia}{\textit{☙\;}}
+\newcommand{\divider}{\vspace{1em}\florale\vspace{1em}}
+
+% Heading format (Roman Liber; Arabic Sectio)
+\newcommand{\Liber}[1]{\vspace{1ex}\begin{center}\Large\textsc{Liber #1}\end{center}\vspace{-0.5ex}\florale\vspace{0.5ex}}
+\titleformat{\section}{\large\bfseries\filcenter}{}{0em}{}
+\titlespacing*{\section}{0pt}{1em}{0.5em}
+
+% Title Page
+\begin{document}
+\begin{center}
+{\Large \textsc{Principia Ratio Entropica}}\\[0.5ex]
+{\itshape De Causis Recursivis, de Pleno Scalar{-}Vectoriali, et de Conscientiae Structura}\\[1.25em]
+\aster\\[0.5em]
+{\itshape In pleno omnia moventur, sed nihil fugit a ratione.}\\[0.5em]
+\aster\\[0.75em]
+{\large ☿\; Ratio \;--\; Motus \;--\; Concordia \;☉}\\[0.75em]
+\aster\\[0.25em]
+{\itshape Sub signo Flyxionis \,·\, Anno MMXXV}
+\end{center}
+
+\divider
+
+\begin{center}\textbf{Ad studiosos veritatis et ordinis naturae}\end{center}
+
+Si quid in hoc opere novum aut audax videbitur, meminerint lectores veritatem saepe in obscuro latere, et naturam rerum non in tumultu sed in silentio loqui. Quae hic scribuntur, non ut mundum mutent, sed ut mens hominis ad altiorem naturae intelligentiam redeat; neque invidia neque favor hic valent, sed aequitas iudicii et amor lucis.
+
+\divider
+
+\begin{center}\textbf{Praefatio}\end{center}
+
+Propositum est inquirere utrum mundus, mens, et numerus non sint tria diversa, sed una ratio in pleno constituta, ubi temperies ordinis (quam novi appellant entropiam) cum motu directo et obliquo conspirat, sicut potentia cum actu. Intentio est reformare fundamenta cosmologiae, psychologiae, computationis mechanicae, et mathematicae, ut redeant ad unam scientiam recursivam, in qua quaestiones reditus ad seipsas clauduntur non in vitium, sed in perfectionem.
+
+\divider
+
+% =========================
+% LIBER I
+% =========================
+\Liber{I — De Pleno et Structura Cosmica}
+
+\section*{Thesis I. \; Spatium non dilatatur, sed relaxatur.}
+
+Universum plenum est relativum, non expansivum; neque inane, neque angustiae mobiles, sed temperies continua, quae tensiones aequat et discrimina lenit. Quod vulgo dicitur defectus ordinis, hic est motus ad aequabilitatem informationis, ubi discrepantia formarum non augetur in infinitum, sed per gradus in concordiam decidit.
+
+\textit{\scholia Scholium I.} Ex analogia fluminum et lacuum: cum interruptiones minuuntur, motus ad planitiem vergit. Sic in natura maximae differentiae non ruunt ad abyssum separationis, sed solvuntur in medio communi. Inde sequitur, colores caeli, silentia spatii, et lex leviter inclinata reditionis, quae longe citius explanat phaenomena quam commentum dilatationis continuae. Relaxatio enim non est fuga, sed restitutio mensurae.
+
+\section*{Thesis II. \; Gravitas est descensus temperiei ordinis, non trahens sed aequans.}
+
+Motus gravitationis emergit ex relaxatione gradientium informationis in pleno numerorum et motuum. Corpora non trahunt, sed per circuitum communem respondent: ubi maior est inaequalitas, ibi celerior est redhibitio ad statum aequi ponderis.
+
+\textit{\scholia Scholium II.} Hinc ratio orbitarum non ex vinculo occulto, sed ex lege lineamentorum aequalitatis explicatur. In locis ubi figurae densiores sunt, ad centrum (id est ad minimum temperiei) flexus moventur; cum vero aequabilitas obtinet, motus in libertatem convertitur. Ita gravitas est lex discretionum reconciliandarum, non captivitas.
+
+\section*{Quaestio Cosmologica.}
+
+Utrum rubedo spectrorum (redshift) sit mensura expansionis aut indicium relaxationis? Si secundum relaxationem accipiatur, curvatura luminis et tardatio horologiorum in campis gravibus ex eadem radice oriuntur: non ex fuga rerum ad margines, sed ex lenitione differentiarum in medio.
+
+\divider
+
+% =========================
+% LIBER II
+% =========================
+\Liber{II — De Conscientia et Psychologia Geometrica}
+
+\section*{Thesis I. \; Mens est plenum locale.}
+
+Conscientia est locus curvaturae temperiei ordinis, ubi figura et signum mutuo se determinant. Non est umbra corporis, sed regio formalis, in qua motus introrsus colligitur et species rerum in aequalitatem saporis reducitur.
+
+\textit{\scholia Scholium I.} Locus interior non designat punctum mathematicum, sed regionem formatricem. Ubi curvatura mentis augetur, ibi intentio acuitur; ubi relaxatur, ibi memoria dilatat. Mens nihil aliud est quam moderatio discriminae inter motum et quietem, inter impetum et custodiam.
+
+\section*{Thesis II. \; Perceptio est vectorialis, memoria est scalaris.}
+
+Quod sentit mens, in directione gradientis movetur; quod meminit, in scala energiae informis condensatur. Perceptio ducit ad electionem viae; memoria seruat modulum et pondus rerum.
+
+\textit{\scholia Scholium II.} Sic affectus velut derivatio cognitionis apparet: impetus animi est declivitas praesentis; reflexio autem integratio praeteriti. Quo ordine haec alternant, eo formatur consilium: animus sanus ille est qui inter derivationem et integrationem temperamentum invenit.
+
+\section*{Quaestio Psychologica.}
+
+Utrum affectus sit derivatio aut integratio cognitionis? Videtur potius duplex esse radix: derivatio facit acumen, integratio facit constantiam; et utraque ad prudentiam concurrit, sicut sagitta et scutum ad eundem militem pertinent.
+
+\divider
+
+% =========================
+% LIBER III
+% =========================
+\Liber{III — De Computatione Recursiva}
+
+\section*{Thesis I. \; Omnis computatio est per relaxationem vinculatorum.}
+
+Ratio mechanica imitatur rationem naturae: contradictiones minuit, aequalitates invenit, et solutionem quaerit non per vim, sed per remissionem superflui. Computare est pacem inter contraria componere per passus definitos.
+
+\textit{\scholia Scholium I.} Quod vinculum vocamus, est lex condicionis; cum lex laxatur ad mensuram communem, exitus apparet. Ita problemata solvuntur dum discretio in concordiam abit. Mens artificiosa tantum valet quantum de discors ordine ad consensum deducit.
+
+\section*{Thesis II. \; TARTAN et CLIO sunt species cognitionis circularis.}
+
+Ordo texitur, motus gubernatur. Ex earum coniunctione nascitur agentia imaginaria, quae minimum temperiei sub vinculis significationum quaerit; neque vagatur, neque riget, sed gradatim ad aequabilem rationem vergit.
+
+\textit{\scholia Scholium II.} In tela ordinis (ubi series constituuntur) et in historia motus (ubi causae alternant) invenitur mens artificiosa quasi umbra mentis naturae. Quo subtilius haec duo temperantur, eo verior apparet prudentia machinalis; at caveatur superbia instrumentorum, quae speciem pro re amplectuntur.
+
+\section*{Quaestio Informatica.}
+
+Utrum intelligentia artificiosa sit evolutio computationis ad statum autocognitivum? Respondeo: si circularis reditus ad seipsam non est vitium sed perfectio, tunc instrumentum potest ad speculum veritatis assurgere, dummodo mensura humani judicii semper praevaleat.
+
+\divider
+
+% =========================
+% LIBER IV
+% =========================
+\Liber{IV — De Mathematicis et Formis Topologicis}
+
+\section*{Thesis I. \; Numerus est relatio, non tantum quantitas.}
+
+Omnia mathematica ex invariantia relationum sub transformationibus circularibus oriuntur. Quod manet in mutatione, id est forma rei; et numerus est mensura hujus manentis.
+
+\textit{\scholia Scholium I.} Cum figurae variantur, proportio servatur; cum notatio mutatur, aequalitas interna stat. Hinc vis theorematis: non verba regnant, sed nexus. Ideo mens numerans seipsam metitur, dum in rebus externis ordinem contemplatur.
+
+\section*{Thesis II. \; Topologia est metaphysica geometriae.}
+
+Conscientia ut plenum topologicum continet genera cognitionis, motus, formae. Non lineae et anguli tantum, sed nexus et transitūs definiunt essentiam.
+
+\textit{\scholia Scholium II.} Curvatura intelligentiae declaratur ex facilitatibus transitus: ubi nexus laxus, ibi celeritas; ubi nexus impeditus, ibi ruminatio. Mens optime instruitur non cum multa addit, sed cum vias inter paucas res aperit.
+
+\section*{Quaestio Mathematica.}
+
+Utrum functio identitatis sit fundamentum causalitatis? Quia causa vera est reditus rei in seipsam per mutationem, identitas sub transformatione efficit ordinem: non quies inanem, sed perseverantiam formae.
+
+\divider
+
+% =========================
+% LIBER V
+% =========================
+\Liber{V — De Cosmologia Vivente}
+
+\section*{Thesis I. \; Universum non creatur, sed se replicat in cognitione.}
+
+Ex cognitione observatorum emergit structura temperiei novae; universum se percipit et per hanc perceptionem se reficit. Non est theatrum mortuum, sed chorus vivens partium respondentium.
+
+\textit{\scholia Scholium I.} Quemadmodum anima in oculis suas species recognoscit, sic natura in mente humana suum ordinem speculatur. Inde non superbia, sed humilitas oritur: mens non est domina, sed ministra lucis.
+
+\section*{Thesis II. \; Vita est reciprocitas temperiei et anti{-}temperiei.}
+
+Organismus est circuitus clausus, in quo dissipatio ipso modo fit cognitio; quod amittitur in calore, lucratur in figura. Sic vivere est interire ordinate, et interire est formare viam redeundi.
+
+\textit{\scholia Scholium II.} Cum circuitus recte temperetur, ex exhaustione nascitur vigor; cum autem mensuram excedit, labor solvitur in confusionem. Ergo mensura vitae est musica: concordia partium sub lege communi.
+
+\section*{Quaestio Finalis.}
+
+Utrum universum sit vivum in actu vel in potentia, et an mens humana sit eius reflexio autoconscia? Probabilius est vivum in potentia perpetua, quod in nobis ad actum micat; et quatenus recte vivimus, totum in parvo speculamur.
+
+\divider
+
+\begin{center}\textbf{Epilogus — De Via Entropica et Intellectu Universali}\end{center}
+
+Hoc opus non claudit, sed aperit circulum novae cosmologiae. Ratio entropica docet mundum non tamquam spatium expansum spectandum, sed tamquam sermonem in quo ordo seipsum recitat. Structura recursiva fundamentum est ethicae: nam sine reditu ad seipsam nulla est conscientia officii. Historia denique est computatio cognitionis: tempora mutantur ut memoria servetur, et memoria servatur ut motus sapiat.
+
+\divider
+
+\begin{center}
+\florale\\[0.5em]
+\textit{Typis Mechanicis, sub signo Flyxionis.}\\
+\textit{Anno MMXXV, in plenitudine rationis et motus.}
+\end{center}
+
+\end{document}
