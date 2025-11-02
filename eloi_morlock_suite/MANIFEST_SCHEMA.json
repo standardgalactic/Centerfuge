@@ -1,0 +1,13 @@
+{
+  "scene": "string",
+  "timestamp": "ISO8601 UTC",
+  "sha256": "hex",
+  "seed": "int",
+  "frames": "int",
+  "audio_file": "string",
+  "entropy_band": "string",
+  "size": [
+    1920,
+    1080
+  ]
+}

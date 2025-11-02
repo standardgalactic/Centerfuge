@@ -1,0 +1,28 @@
+{
+  "generated": [
+    {
+      "name": "negentropic_front",
+      "script": "out/blender_scripts/negentropic_front.py",
+      "blend": "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/out/blends/negentropic_front.blend",
+      "render": "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/out/renders/negentropic_front.png",
+      "video": null,
+      "animated": false
+    },
+    {
+      "name": "semantic_tiling",
+      "script": "out/blender_scripts/semantic_tiling.py",
+      "blend": "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/out/blends/semantic_tiling.blend",
+      "render": "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/out/renders/semantic_tiling.png",
+      "video": null,
+      "animated": false
+    },
+    {
+      "name": "entropy_coupling_lattice",
+      "script": "out/blender_scripts/entropy_coupling_lattice.py",
+      "blend": "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/out/blends/entropy_coupling_lattice.blend",
+      "render": "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/out/renders/entropy_coupling_lattice.png",
+      "video": null,
+      "animated": false
+    }
+  ]
+}

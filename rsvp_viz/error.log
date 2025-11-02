@@ -1,0 +1,32 @@
+./run_field_pipeline.sh
+./run_field_pipeline.sh: line 3: 1:  Usage: ./run_field_pipeline.sh data/lamphrodyne.yaml
+C:\> ./run_field_pipeline.sh data/lamphrodyne.yaml
+[1/4] Build model with Geometry Nodes / VDB (if enabled)
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Color management: scene view "Filmic" not found, setting default "Standard".
+Error: Node type GeometryNodeInputNamedAttribute undefined
+Traceback (most recent call last):
+  File "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/rsvp_viz/scripts/generate_field_model_nodes.py", line 306, in <module>
+    main()
+  File "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/rsvp_viz/scripts/generate_field_model_nodes.py", line 292, in main
+    _,name_phi,name_S = add_geometry_nodes(obj,cfg)
+  File "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/rsvp_viz/scripts/generate_field_model_nodes.py", line 121, in add_geometry_nodes
+    a_phi=n.new("GeometryNodeInputNamedAttribute"); a_phi.location=(-400,200)
+RuntimeError: Error: Node type GeometryNodeInputNamedAttribute undefined
+
+
+Blender quit
+[2/4] Render animation (Cycles, MP4)
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Error: Cannot read file '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/rsvp_viz/output/lamphrodyne/lamphrodyne.blend': No such file or directory
+
+Blender quit
+

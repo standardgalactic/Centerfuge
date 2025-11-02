@@ -1,0 +1,29 @@
+name: lamphrodyne
+mesh: { base: sphere, resolution: 64, radius: 1.0 }
+fields:
+  scalar_phi: { type: gaussian, amplitude: 1.0, sigma: 0.6, center: [0,0,0] }
+  vector_v: { type: swirl, strength: 0.8, axis: z }
+  entropy_S: { type: radial, scale: 1.3, bias: 0.1 }
+noise:
+  curl:
+    enabled: true
+    amplitude: 0.15
+    frequency: 1.2
+    seed: 42
+nodes:
+  displace_from_phi: {enabled: true, scale: 0.25, clamp: [-0.5, 0.5]}
+  twist_from_v:      {enabled: false, angle_scale: 1.0}
+  store_attributes:  {enabled: true, names: {phi: phi, entropy: entropy}}
+material:
+  color_ramp: inferno
+  emission_strength: 3.0
+  base_roughness: 0.25
+animation:
+  frames: 180
+  camera_orbit_degrees: 360
+  camera_radius: 3.0
+volume:
+  enabled: false
+  vdb_path: "data/phi_volume.vdb"
+  grid: "density"
+  density_scale: 1.0

@@ -1,0 +1,10 @@
+
+# Appendix F — Semantic Color Grammar (SCG)
+Eloi Zenith (+1.0)  (0.85,1.00,0.85)
+Eloi Canopy (+0.7)  (0.45,0.90,0.65)
+Eloi Sky (+0.5)     (0.55,0.95,1.00)
+Transition (0.0)    (0.25,0.35,0.45)
+Ruin Stone (-0.2)   (0.35,0.35,0.40)
+Morlock Vein (-0.5) (0.18,0.14,0.35)
+Morlock Core (-0.8) (0.10,0.05,0.20)
+Biolume (-0.9)      (0.10,1.00,0.90)

@@ -1,0 +1,2 @@
+numpy
+pyopenvdb==11.0.0 ; platform_system!="Windows"
