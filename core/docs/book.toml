@@ -1,0 +1,8 @@
+
+[book]
+title = "Flyxion Core — Scientific Monograph"
+authors = ["Flyxion"]
+language = "en"
+
+[output.html]
+default-theme = "light"

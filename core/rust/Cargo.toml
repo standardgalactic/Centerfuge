@@ -1,0 +1,45 @@
+[workspace]
+members = [
+  "crates/core_types",
+  "crates/simulation",
+  "crates/linguistics",
+  "crates/tiling",
+  "crates/semantics",
+  "crates/io",
+  "bin/rsvpctl",
+  # Project stubs
+  "projects/sga",
+  "projects/lambda_arabic",
+  "projects/earth_cube",
+  "projects/zettelkasten",
+  "projects/rsvp",
+  "projects/sith",
+  "projects/flyxion",
+  "projects/tartan",
+  "projects/crystal_plenum",
+  "projects/agora",
+  "projects/swype_hero",
+  "projects/spellpop",
+  "projects/aos",
+  "projects/bioforge",
+  "projects/geozotic",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+authors = ["Flyxion <dev@flyxion.example>"]
+
+[workspace.dependencies]
+anyhow = "1"
+thiserror = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+ndarray = { version = "0.15", features = ["serde"] }
+ndarray-stats = "0.6"
+regex = "1"
+unicode-segmentation = "1.10"
+petgraph = "0.6"
+rand = "0.8"
+clap = { version = "4", features = ["derive"] }

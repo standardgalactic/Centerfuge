@@ -1,0 +1,11 @@
+[package]
+name = "rsvp-simulation"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = { workspace = true }
+ndarray = { workspace = true }
+serde = { workspace = true }
+
+rsvp-core-types = { path = "../core_types" }

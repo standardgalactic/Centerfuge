@@ -1,0 +1,18 @@
+[package]
+name = "linguistics_py"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "linguistics_py"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.21", features = ["extension-module"] }
+numpy = "0.21"
+ndarray = { version = "0.15", features = ["serde"] }
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+
+flyxion-linguistics = { path = "../../rust/crates/linguistics" }
+rsvp-core-types = { path = "../../rust/crates/core_types" }

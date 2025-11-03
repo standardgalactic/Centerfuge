@@ -1,0 +1,129 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{apollonius200conics}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=bca7a7402df63f1afb87a43a85a6e39d}{%
+           family={Perga},
+           familyi={P\bibinitperiod},
+           given={Apollonius},
+           giveni={A\bibinitperiod},
+           prefix={of},
+           prefixi={o\bibinitperiod}}}%
+      }
+      \name{translator}{1}{}{%
+        {{hash=443b70fd0c5c38684d385ba37ce220d6}{%
+           family={Taliaferro},
+           familyi={T\bibinitperiod},
+           given={R.\bibnamedelimi Catesby},
+           giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Green Lion Press}%
+      }
+      \strng{namehash}{bca7a7402df63f1afb87a43a85a6e39d}
+      \strng{fullhash}{bca7a7402df63f1afb87a43a85a6e39d}
+      \strng{fullhashraw}{bca7a7402df63f1afb87a43a85a6e39d}
+      \strng{bibnamehash}{bca7a7402df63f1afb87a43a85a6e39d}
+      \strng{authorbibnamehash}{bca7a7402df63f1afb87a43a85a6e39d}
+      \strng{authornamehash}{bca7a7402df63f1afb87a43a85a6e39d}
+      \strng{authorfullhash}{bca7a7402df63f1afb87a43a85a6e39d}
+      \strng{authorfullhashraw}{bca7a7402df63f1afb87a43a85a6e39d}
+      \strng{translatorbibnamehash}{443b70fd0c5c38684d385ba37ce220d6}
+      \strng{translatornamehash}{443b70fd0c5c38684d385ba37ce220d6}
+      \strng{translatorfullhash}{443b70fd0c5c38684d385ba37ce220d6}
+      \strng{translatorfullhashraw}{443b70fd0c5c38684d385ba37ce220d6}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-1888009030}
+      \field{note}{Original work circa 200 BCE}
+      \field{title}{Conics: Books I--IV}
+      \field{year}{2000}
+    \endentry
+    \entry{fermat1635isagoge}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=4bde2579b84d106b6cb9072366fc2e3a}{%
+           family={Fermat},
+           familyi={F\bibinitperiod},
+           given={Pierre\bibnamedelima de},
+           giveni={P\bibinitperiod\bibinitdelim d\bibinitperiod}}}%
+      }
+      \strng{namehash}{4bde2579b84d106b6cb9072366fc2e3a}
+      \strng{fullhash}{4bde2579b84d106b6cb9072366fc2e3a}
+      \strng{fullhashraw}{4bde2579b84d106b6cb9072366fc2e3a}
+      \strng{bibnamehash}{4bde2579b84d106b6cb9072366fc2e3a}
+      \strng{authorbibnamehash}{4bde2579b84d106b6cb9072366fc2e3a}
+      \strng{authornamehash}{4bde2579b84d106b6cb9072366fc2e3a}
+      \strng{authorfullhash}{4bde2579b84d106b6cb9072366fc2e3a}
+      \strng{authorfullhashraw}{4bde2579b84d106b6cb9072366fc2e3a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Unpublished manuscript, circulated 1629--1635}
+      \field{title}{Ad locos planos et solidos isagoge}
+      \field{year}{1635}
+      \verb{urlraw}
+      \verb https://gallica.bnf.fr/ark:/12148/btv1b8626185c
+      \endverb
+      \verb{url}
+      \verb https://gallica.bnf.fr/ark:/12148/btv1b8626185c
+      \endverb
+    \endentry
+    \entry{euler1752elementa}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=f57a8c3746c4afcfc0cce86966aff75f}{%
+           family={Euler},
+           familyi={E\bibinitperiod},
+           given={Leonhard},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{f57a8c3746c4afcfc0cce86966aff75f}
+      \strng{fullhash}{f57a8c3746c4afcfc0cce86966aff75f}
+      \strng{fullhashraw}{f57a8c3746c4afcfc0cce86966aff75f}
+      \strng{bibnamehash}{f57a8c3746c4afcfc0cce86966aff75f}
+      \strng{authorbibnamehash}{f57a8c3746c4afcfc0cce86966aff75f}
+      \strng{authornamehash}{f57a8c3746c4afcfc0cce86966aff75f}
+      \strng{authorfullhash}{f57a8c3746c4afcfc0cce86966aff75f}
+      \strng{authorfullhashraw}{f57a8c3746c4afcfc0cce86966aff75f}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Novi Commentarii Academiae Scientiarum Petropolitanae}
+      \field{title}{Elementa doctrinae solidorum}
+      \field{volume}{4}
+      \field{year}{1752}
+      \field{pages}{109\bibrangedash 140}
+      \range{pages}{32}
+      \verb{urlraw}
+      \verb https://www.math.dartmouth.edu/~euler/docs/originals/E175.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.math.dartmouth.edu/~euler/docs/originals/E175.pdf
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -1,0 +1,190 @@
+# ============================================================
+# Flyxion Project Registry
+# Purpose: Canonical registry for interlinked projects spanning
+# linguistics, theoretical physics, computation, and biotech.
+# ============================================================
+
+version: 1.0
+updated: 2025-11-03
+
+projects:
+  - id: sga
+    name: Standard Galactic Alphabet (SGA) Initiatives
+    category: Linguistic and Semiotic Tools
+    description: >
+      Development of educational apps, visualization tools, and transliteration
+      systems for the SGA, emphasizing creative encoding and semiotic pedagogy.
+    stack: [Python, JavaScript]
+    dependencies: []
+    status: nearing_completion
+    repo_path: linguistics/sga_initiatives
+    tags: [encoding, education, transliteration]
+
+  - id: lambda_arabic
+    name: λ-Arabic Assembler
+    category: Linguistic and Semiotic Tools
+    description: >
+      Phonetic transliteration system converting English to Arabic script,
+      integrated with Lacanian frameworks and real-time AutoHotkey/Python tools.
+    stack: [Python, AutoHotkey]
+    dependencies: [sga]
+    status: in_progress
+    repo_path: linguistics/lambda_arabic
+    tags: [phonetics, transliteration, gui]
+
+  - id: earth_cube
+    name: Earth Cube Translator
+    category: Linguistic and Semiotic Tools
+    description: >
+      A mapping and translation tool bridging geospatial and semantic data,
+      aligning linguistic structures with environmental and ecological models.
+    stack: [Python, JavaScript, Go]
+    dependencies: []
+    status: conceptual
+    repo_path: linguistics/earth_cube_translator
+    tags: [mapping, linguistics, environment]
+
+  - id: zettelkasten
+    name: Zettelkasten Academizer
+    category: Linguistic and Semiotic Tools
+    description: >
+      Advanced note-taking and knowledge synthesis engine based on semantic
+      recursion and sheaf theory for interconnected idea emergence.
+    stack: [Python, Go, Haskell]
+    dependencies: []
+    status: in_progress
+    repo_path: linguistics/zettelkasten_academizer
+    tags: [notes, semantic-web, recursion, sheaf]
+
+  - id: rsvp
+    name: Relativistic Scalar-Vector Plenum (RSVP) Theory
+    category: Theoretical and Physics Frameworks
+    description: >
+      Cosmological model of scalar (Φ), vector (𝒗), and entropy (S) fields
+      with simulation engines and predictive roadmaps.
+    stack: [Python, C++, Rust, Haskell]
+    dependencies: []
+    status: in_progress
+    repo_path: physics/rsvp_theory
+    tags: [cosmology, entropy, simulation]
+
+  - id: sith
+    name: SITH Theory
+    category: Theoretical and Physics Frameworks
+    description: >
+      Semantic Infrastructure and Thermodynamic Heuristics (SITH) integrates
+      optimization ethics and entropy-based logistics for scalable governance
+      and resource distribution.
+    stack: [Python, R, Go]
+    dependencies: [rsvp]
+    status: conceptual
+    repo_path: physics/sith_theory
+    tags: [thermodynamics, ethics, logistics, governance]
+
+  - id: flyxion
+    name: Flyxion Narrative Framework
+    category: Theoretical and Physics Frameworks
+    description: >
+      AI-driven narrative generation system exploring polymorphic storytelling
+      and emergent semantics through RSVP-inspired field structures.
+    stack: [Python, JavaScript, Go]
+    dependencies: [rsvp, zettelkasten]
+    status: in_progress
+    repo_path: physics/flyxion_framework
+    tags: [ai, storytelling, semantics, narrative]
+
+  - id: tartan
+    name: TARTAN Framework
+    category: Theoretical and Physics Frameworks
+    description: >
+      Trajectory-Aware Recursive Tiling system for multiscale computation,
+      integrating bio-inspired neural and urban models.
+    stack: [Python, Julia, Haskell]
+    dependencies: [rsvp]
+    status: in_progress
+    repo_path: physics/tartan_framework
+    tags: [tiling, recursion, modeling, urbanism]
+
+  - id: crystal_plenum
+    name: Crystal Plenum Theory
+    category: Theoretical and Physics Frameworks
+    description: >
+      Speculative extension of RSVP focused on entropy symmetry and plenum
+      intelligence in crystallographic and cosmological regimes.
+    stack: [Julia, Python]
+    dependencies: [rsvp]
+    status: conceptual
+    repo_path: physics/crystal_plenum
+    tags: [cosmology, symmetry, entropy, crystallography]
+
+  - id: agora
+    name: Agora
+    category: Software and Interactive Systems
+    description: >
+      Adaptive code reading pacer and comprehension enhancer evolved
+      from autodoxx. Includes real-time visual rhythm and flow metrics.
+    stack: [Go, Python, TypeScript]
+    dependencies: []
+    status: in_progress
+    repo_path: software/agora
+    tags: [developer-tools, visualization, education]
+
+  - id: swype_hero
+    name: Swype Hero
+    category: Software and Interactive Systems
+    description: >
+      Gesture-based input system and typing game emphasizing mnemonic
+      keybindings and rhythmic skill acquisition.
+    stack: [JavaScript, Python, C++]
+    dependencies: []
+    status: nearing_completion
+    repo_path: software/swype_hero
+    tags: [input, gestures, game, learning]
+
+  - id: spellpop
+    name: SpellPop
+    category: Software and Interactive Systems
+    description: >
+      Typing proficiency and cognitive rhythm game with modular difficulty,
+      linked to broader Flyxion input optimization experiments.
+    stack: [Python, JavaScript]
+    dependencies: [swype_hero]
+    status: in_progress
+    repo_path: software/spellpop
+    tags: [typing, gamification, education]
+
+  - id: aos
+    name: Audio-Organized System (AOS)
+    category: Software and Interactive Systems
+    description: >
+      File management and memory retrieval system that assigns unique
+      MIDI tunes to filenames using ASCII mapping and echolocation logic.
+    stack: [Python, Rust, C++]
+    dependencies: []
+    status: conceptual
+    repo_path: software/audio_organized_system
+    tags: [audio, midi, memory, filesystem]
+
+  - id: bioforge
+    name: Bioforge Incubator
+    category: Biotechnology and Experimental Hardware
+    description: >
+      Biotech simulation platform for cellular and genetic dynamics
+      using RSVP field coupling and emergent behavior modeling.
+    stack: [Python, Java, R]
+    dependencies: [rsvp]
+    status: conceptual
+    repo_path: biotech/bioforge_incubator
+    tags: [biology, simulation, rsvp]
+
+  - id: geozotic
+    name: Geozotic Power Systems
+    category: Biotechnology and Experimental Hardware
+    description: >
+      Experimental energy-harvesting systems based on geozotic principles,
+      with cymatic and volumetric interfaces inspired by RSVP field theory.
+    stack: [C++, Python, Rust]
+    dependencies: [rsvp]
+    status: in_progress
+    repo_path: biotech/geozotic_power_systems
+    tags: [energy, cymatics, hardware, entropy]

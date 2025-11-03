@@ -1,0 +1,13 @@
+[build-system]
+requires = ["maturin>=1.5,<2"]
+build-backend = "maturin"
+
+[project]
+name = "linguistics_py"
+version = "0.1.0"
+requires-python = ">=3.8"
+description = "linguistics_py: Python bindings powered by Rust"
+classifiers = [
+  "Programming Language :: Rust",
+  "Programming Language :: Python :: 3",
+]

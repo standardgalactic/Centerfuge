@@ -1,0 +1,11 @@
+% coq.lst  – place in the same folder
+\lstdefinelanguage{Coq}{
+  morekeywords={Definition,Theorem,Proof,Qed,Record,Inductive,CoFixpoint,
+                Require,Import,Module,Section,Variable,Parameter,Let,Fixpoint,
+                Match,If,Then,Else,Return,Admitted},
+  sensitive=true,
+  comment=[l]{(*},
+  commentstyle=\color{green!60!black},
+  string=[b]",
+  morestring=[b]',
+}
