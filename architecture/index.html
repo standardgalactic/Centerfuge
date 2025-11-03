@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xylomorphic Console Index</title>
+<style>
+:root {
+  --crt-green: #0f0;
+  --crt-dark: #000;
+}
+body {
+  background: var(--crt-dark);
+  color: var(--crt-green);
+  font-family: "Courier New", monospace;
+  padding: 1rem 2rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  animation: flicker-bg 10s infinite linear alternate;
+  text-shadow: 0 0 5px var(--crt-green);
+  position: relative;
+}
+@keyframes flicker-bg {
+  0%,100% { background-color: #000; }
+  40%,60% { background-color: #001500; }
+  42%,58% { background-color: #000; }
+}
+body::before {
+  content: "";
+  position: fixed;
+  top:0;left:0;width:100%;height:100%;
+  pointer-events:none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0,255,0,0.05) 0px,
+    rgba(0,0,0,0.1) 2px
+  );
+  mix-blend-mode: screen;
+  animation: scanlines 1s linear infinite;
+}
+@keyframes scanlines {
+  from {background-position: 0 0;}
+  to {background-position: 0 2px;}
+}
+h1 {
+  font-size: 1.4rem;
+  text-shadow: 0 0 8px var(--crt-green);
+  animation: textflicker 4s infinite steps(3);
+}
+@keyframes textflicker {
+  0%,100%{opacity:1;}
+  80%,85%,90%,95%{opacity:0.7;}
+}
+a {
+  color: var(--crt-green);
+  text-decoration: none;
+  transition: all 0.1s ease-in-out;
+}
+a:hover {
+  text-shadow: 0 0 10px var(--crt-green);
+}
+.directory, .file {
+  display: block;
+  margin-left: 1rem;
+}
+.thumbnail {
+  display: inline-block;
+  margin: 0.5rem;
+  border: 1px solid #0a0;
+  background: #020;
+  box-shadow: 0 0 6px #030 inset;
+  width: 200px;
+  height: 120px;
+  overflow: hidden;
+  animation: glitch-border 3s infinite ease-in-out;
+}
+@keyframes glitch-border {
+  0%,100% {box-shadow: 0 0 6px #030 inset;}
+  45%,55% {box-shadow: 0 0 12px #0f0 inset;}
+}
+.thumbnail img {
+  width: 100%;
+  height: auto;
+  filter: grayscale(100%) brightness(80%) contrast(130%) sepia(100%) hue-rotate(90deg);
+}
+#console {
+  white-space: pre;
+  line-height: 1.5;
+}
+button {
+  background: transparent;
+  border: 1px solid var(--crt-green);
+  color: var(--crt-green);
+  padding: 0.3rem 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  text-shadow: 0 0 5px var(--crt-green);
+  transition: background 0.2s;
+}
+button:hover {
+  background: #020;
+}
+footer {
+  margin-top: 2rem;
+  color: #060;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+/* CRT glitch overlay */
+.crt::after {
+  content: "";
+  position: fixed;
+  top:0;left:0;right:0;bottom:0;
+  background: repeating-linear-gradient(
+      0deg,
+      rgba(0,255,0,0.05) 0px,
+      rgba(0,0,0,0.15) 1px
+  );
+  mix-blend-mode: overlay;
+  pointer-events:none;
+  animation: noise 0.4s infinite;
+}
+@keyframes noise {
+  0% {opacity:0.9;}
+  50% {opacity:1;}
+  100% {opacity:0.8;}
+}
+
+/* Fullscreen viewer */
+#viewer {
+  display:none;
+  position:fixed;
+  top:0;left:0;width:100%;height:100%;
+  background:#000;
+  justify-content:center;
+  align-items:center;
+  z-index:10;
+  animation: flicker-bg 10s infinite linear alternate;
+}
+#viewer img {
+  max-width:90%;
+  max-height:90%;
+  filter:brightness(120%) contrast(150%) hue-rotate(90deg);
+  animation: imageglitch 4s infinite;
+}
+@keyframes imageglitch {
+  0%,100%{transform:translate(0,0);}
+  20%{transform:translate(-2px,1px);}
+  40%{transform:translate(1px,-2px);}
+  60%{transform:translate(0.5px,0);}
+  80%{transform:translate(-1px,0.5px);}
+}
+#viewer::before {
+  content:"CLOSE [ESC]";
+  position:absolute;
+  bottom:1rem;
+  color:#0f0;
+  text-shadow:0 0 8px #0f0;
+  font-size:1rem;
+}
+</style>
+</head>
+<body class="crt">
+<h1>> Xylomorphic Architecture Archive Console</h1>
+<div id="console"></div>
+<div id="viewer"><img></div>
+<footer>Flyxion // Xylomorphic Architecture © 2025</footer>
+
+<script>
+// --- File Tree (static snapshot from your directory) ---
+const fileTree = {
+  "README.txt": "README.txt",
+  "file-tree.txt": "file-tree.txt",
+  "xylomorphic_blender_gen.py": "xylomorphic_blender_gen.py",
+  "run_xylomorphic_test.sh": "run_xylomorphic_test.sh",
+  "out": {
+    "blends": [
+      "xylomorphic_cityscape-20251103T165058Z.blend",
+      "xylomorphic_cityscape-20251103T165433Z.blend",
+      "xylomorphic_cityscape-20251103T171352Z.blend"
+    ],
+    "renders": [
+      "xylomorphic_cityscape-20251103T165058Z.png",
+      "xylomorphic_cityscape-20251103T165433Z.png",
+      "xylomorphic_cityscape-20251103T171352Z.png"
+    ],
+    "scripts": [
+      "xylomorphic_cityscape-20251103T165058Z.py",
+      "xylomorphic_cityscape-20251103T165433Z.py",
+      "xylomorphic_cityscape-20251103T171235Z.py",
+      "xylomorphic_cityscape-20251103T171352Z.py"
+    ]
+  },
+  "out_xylomorphic": {
+    "blends": [
+      "bioroof_canopy-20251103T172834Z.blend",
+      "cellulose_spires-20251103T172834Z.blend",
+      "forest_core-20251103T172834Z.blend",
+      "pulp_conduits-20251103T172834Z.blend",
+      "xylomorphic_cityscape-20251103T172834Z.blend"
+    ],
+    "renders": [
+      "bioroof_canopy-20251103T172834Z.png",
+      "cellulose_spires-20251103T172834Z.png",
+      "forest_core-20251103T172834Z.png",
+      "pulp_conduits-20251103T172834Z.png",
+      "xylomorphic_cityscape-20251103T172834Z.png"
+    ],
+    "scripts": [
+      "bioroof_canopy-20251103T172834Z.py",
+      "cellulose_spires-20251103T172834Z.py",
+      "forest_core-20251103T172834Z.py",
+      "pulp_conduits-20251103T172834Z.py",
+      "xylomorphic_cityscape-20251103T172834Z.py"
+    ]
+  }
+};
+
+let pathStack = [];
+
+function renderDir(tree, path=[]) {
+  const container = document.getElementById("console");
+  container.innerHTML = "";
+
+  if (path.length > 0) {
+    const back = document.createElement("button");
+    back.textContent = "< BACK";
+    back.onclick = () => {
+      pathStack.pop();
+      renderDir(navigate(fileTree, pathStack), pathStack);
+    };
+    container.appendChild(back);
+    container.appendChild(document.createElement("br"));
+    container.appendChild(document.createElement("br"));
+  }
+
+  for (let key in tree) {
+    if (Array.isArray(tree[key])) {
+      const dirLink = document.createElement("a");
+      dirLink.href = "#";
+      dirLink.textContent = "📁 " + key + "/";
+      dirLink.className = "directory";
+      dirLink.onclick = () => {
+        pathStack.push(key);
+        renderDir(tree[key], pathStack);
+      };
+      container.appendChild(dirLink);
+    } else if (typeof tree[key] === "object") {
+      const dirLink = document.createElement("a");
+      dirLink.href = "#";
+      dirLink.textContent = "📂 " + key + "/";
+      dirLink.className = "directory";
+      dirLink.onclick = () => {
+        pathStack.push(key);
+        renderDir(tree[key], pathStack);
+      };
+      container.appendChild(dirLink);
+    } else {
+      const fileLink = document.createElement("a");
+      fileLink.href = tree[key];
+      fileLink.textContent = "📄 " + key;
+      fileLink.className = "file";
+      container.appendChild(fileLink);
+    }
+  }
+
+  if (Array.isArray(tree)) {
+    const imgContainer = document.createElement("div");
+    for (let file of tree) {
+      if (file.endsWith(".png")) {
+        const thumb = document.createElement("div");
+        thumb.className = "thumbnail";
+        const img = document.createElement("img");
+        img.src = path.join("/") + "/" + file;
+        img.onclick = ()=>openViewer(img.src);
+        thumb.appendChild(img);
+        imgContainer.appendChild(thumb);
+      } else {
+        const link = document.createElement("a");
+        link.href = path.join("/") + "/" + file;
+        link.className = "file";
+        link.textContent = "📄 " + file;
+        imgContainer.appendChild(link);
+      }
+    }
+    container.appendChild(imgContainer);
+  }
+}
+
+function navigate(obj, path) {
+  let current = obj;
+  for (let p of path) current = current[p];
+  return current;
+}
+
+const path = {
+  join: (...parts) => parts.filter(Boolean).join("/")
+};
+
+function openViewer(src){
+  const v=document.getElementById('viewer');
+  const img=v.querySelector('img');
+  img.src=src;
+  v.style.display='flex';
+}
+document.getElementById('viewer').onclick=()=>document.getElementById('viewer').style.display='none';
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('viewer').style.display='none';});
+
+// boot flicker
+document.body.style.opacity=0;
+window.onload=()=>{
+  let o=0;const tick=()=>{o+=0.05;document.body.style.opacity=o;if(o<1)setTimeout(tick,30+Math.random()*30);}
+  tick();
+  renderDir(fileTree);
+};
+</script>
+</body>
+</html>

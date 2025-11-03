@@ -1,0 +1,3 @@
+# Vulture Capitalism
+
+Draft placeholder.

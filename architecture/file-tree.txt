@@ -1,0 +1,66 @@
+.
+├── README.txt
+├── file-tree.txt
+├── index.html
+├── out
+│   ├── blends
+│   │   ├── xylomorphic_cityscape-20251103T165058Z.blend
+│   │   ├── xylomorphic_cityscape-20251103T165433Z.blend
+│   │   └── xylomorphic_cityscape-20251103T171352Z.blend
+│   ├── renders
+│   │   ├── xylomorphic_cityscape-20251103T165058Z.png
+│   │   ├── xylomorphic_cityscape-20251103T165433Z.png
+│   │   └── xylomorphic_cityscape-20251103T171352Z.png
+│   └── scripts
+│       ├── xylomorphic_cityscape-20251103T165058Z.py
+│       ├── xylomorphic_cityscape-20251103T165433Z.py
+│       ├── xylomorphic_cityscape-20251103T171235Z.py
+│       └── xylomorphic_cityscape-20251103T171352Z.py
+├── out_xylomorphic
+│   ├── blends
+│   │   ├── bioroof_canopy-20251103T172834Z.blend
+│   │   ├── bioroof_canopy-20251103T180432Z.blend
+│   │   ├── cellulose_spires-20251103T172834Z.blend
+│   │   ├── cellulose_spires-20251103T180432Z.blend
+│   │   ├── forest_core-20251103T172834Z.blend
+│   │   ├── forest_core-20251103T180432Z.blend
+│   │   ├── pulp_conduits-20251103T172834Z.blend
+│   │   ├── pulp_conduits-20251103T180432Z.blend
+│   │   ├── xylomorphic_cityscape-20251103T172834Z.blend
+│   │   └── xylomorphic_cityscape-20251103T180432Z.blend
+│   ├── renders
+│   │   ├── bioroof_canopy-20251103T172834Z.png
+│   │   ├── bioroof_canopy-20251103T180432Z.png
+│   │   ├── cellulose_spires-20251103T172834Z.png
+│   │   ├── cellulose_spires-20251103T180432Z.png
+│   │   ├── forest_core-20251103T172834Z.png
+│   │   ├── forest_core-20251103T180432Z.png
+│   │   ├── pulp_conduits-20251103T172834Z.png
+│   │   ├── pulp_conduits-20251103T180432Z.png
+│   │   ├── xylomorphic_cityscape-20251103T172834Z.png
+│   │   └── xylomorphic_cityscape-20251103T180432Z.png
+│   └── scripts
+│       ├── bioroof_canopy-20251103T172834Z.py
+│       ├── bioroof_canopy-20251103T175145Z.py
+│       ├── bioroof_canopy-20251103T175949Z.py
+│       ├── bioroof_canopy-20251103T180432Z.py
+│       ├── cellulose_spires-20251103T172834Z.py
+│       ├── cellulose_spires-20251103T175145Z.py
+│       ├── cellulose_spires-20251103T175949Z.py
+│       ├── cellulose_spires-20251103T180432Z.py
+│       ├── forest_core-20251103T172834Z.py
+│       ├── forest_core-20251103T175145Z.py
+│       ├── forest_core-20251103T175949Z.py
+│       ├── forest_core-20251103T180432Z.py
+│       ├── pulp_conduits-20251103T172834Z.py
+│       ├── pulp_conduits-20251103T175145Z.py
+│       ├── pulp_conduits-20251103T175949Z.py
+│       ├── pulp_conduits-20251103T180432Z.py
+│       ├── xylomorphic_cityscape-20251103T172834Z.py
+│       ├── xylomorphic_cityscape-20251103T175145Z.py
+│       ├── xylomorphic_cityscape-20251103T175949Z.py
+│       └── xylomorphic_cityscape-20251103T180432Z.py
+├── run_xylomorphic_test.sh
+└── xylomorphic_blender_gen.py
+
+8 directories, 55 files

@@ -1,0 +1,129 @@
+{
+  "name": "Yarncrawler Framework (Non-RSVP Suite)",
+  "version": "0.1.0",
+  "timestamp": "2025-11-03T18:16:49Z",
+  "projects": [
+    {
+      "name": "yarncrawler",
+      "timestamp": "2025-11-03T18:16:49Z",
+      "files": [
+        {
+          "path": "yarncrawler/README.md",
+          "sha256": "3f4054cf08ea931ee02e9dcf910d4b4117cc8dbbcd659d21e5b74468ed81335a"
+        },
+        {
+          "path": "yarncrawler/yarncrawler_blender_gen.py",
+          "sha256": "71ed4630eacdd0e90fdd2fdb87030193bc00b190e4f57876e8f2f01b1ca066d6"
+        }
+      ]
+    },
+    {
+      "name": "blastoids",
+      "timestamp": "2025-11-03T18:16:49Z",
+      "files": [
+        {
+          "path": "blastoids/README.md",
+          "sha256": "d093e6e2ab2978c329f08c4e18cf4a5ba731a26ec1c3ccee9c06a21e7430b658"
+        },
+        {
+          "path": "blastoids/blastoids_game.py",
+          "sha256": "492292b65ae8bcdda609775a26302877f69260689aeeb3849e3ba5b5ad87c99c"
+        }
+      ]
+    },
+    {
+      "name": "spherepop",
+      "timestamp": "2025-11-03T18:16:49Z",
+      "files": [
+        {
+          "path": "spherepop/README.md",
+          "sha256": "2e94023362016b054f6cab08dda8abb0136c3952e4704363e610e12b91eb44e1"
+        },
+        {
+          "path": "spherepop/spherepop.py",
+          "sha256": "b030e576282b1ac70eee515b139e6c6456de2288aded8edfe958710832a407df"
+        },
+        {
+          "path": "spherepop/examples/hello_spherepop.sp",
+          "sha256": "69d59c0b71ff922445b20c8896cbcd898b7bafb1e3dc67e01ef34ccae38f796b"
+        }
+      ]
+    },
+    {
+      "name": "entropy_edge",
+      "timestamp": "2025-11-03T18:16:49Z",
+      "files": [
+        {
+          "path": "entropy_edge/README.md",
+          "sha256": "d4039762e31007b72589eb6af021fcda8199951d276bd703315eb3addaccc749"
+        },
+        {
+          "path": "entropy_edge/entropy_edge.py",
+          "sha256": "c3d0d0521db885bb69f2279bfdeb76a6e9758f1aba93c155a364c145e88fff7b"
+        }
+      ]
+    },
+    {
+      "name": "semantic_infrastructure",
+      "timestamp": "2025-11-03T18:16:49Z",
+      "files": [
+        {
+          "path": "semantic_infrastructure/README.md",
+          "sha256": "db6bde0fc567cfb97b5f1d283cbfb04712ace78f7c9f0d9cdfdaafcc11e043c6"
+        },
+        {
+          "path": "semantic_infrastructure/semantic_merge.py",
+          "sha256": "afada711c410d151f0757ab818221c1d8fb22a81a7fac016895ff0d96422046a"
+        },
+        {
+          "path": "semantic_infrastructure/left.json",
+          "sha256": "245ab79ce6eacdb9d0a70a22dafa1961e325abafd0aee213159ebd0cee03d4d0"
+        },
+        {
+          "path": "semantic_infrastructure/right.json",
+          "sha256": "138eb75e431463e63ae68d51b85b8e6c2ab26914fc21a399fcf0b177fc5fad07"
+        }
+      ]
+    },
+    {
+      "name": "music",
+      "timestamp": "2025-11-03T18:16:49Z",
+      "files": [
+        {
+          "path": "music/README.md",
+          "sha256": "259e39009ae5b783d31c8b7e3a26635fbe201a81d35b1f726f12ba18063c4243"
+        },
+        {
+          "path": "music/tracks.json",
+          "sha256": "bd619c90c2f164da2683acd4d3b65226e52007556af734df1182e9ffe96529a7"
+        },
+        {
+          "path": "music/glitch_audio_player.py",
+          "sha256": "3863efad7e890061f8af6497cb09fee157a3b234ced2b80288739c3938d769f8"
+        }
+      ]
+    },
+    {
+      "name": "essays",
+      "timestamp": "2025-11-03T18:16:49Z",
+      "files": [
+        {
+          "path": "essays/README.md",
+          "sha256": "a7235d0f8b9b969b236bfa9876ba0926a5389ba1f884f91f79a6a5e9e2b02ccc"
+        },
+        {
+          "path": "essays/the_con.md",
+          "sha256": "f79e450bba52957bf16c35630b293db141fe9d98ffdf0fded186b18068192bee"
+        },
+        {
+          "path": "essays/vulture_capitalism.md",
+          "sha256": "ebf858a85ac04c5f68e18d8b71d5a71412eb0f9d8741120fa8374694e64d8456"
+        },
+        {
+          "path": "essays/decelerationist_agenda.md",
+          "sha256": "04eb09e5f5ac934d26ac0476a1da5f88c6a0e1e1763fe8c5a857df52911e3b06"
+        }
+      ]
+    }
+  ]
+}
