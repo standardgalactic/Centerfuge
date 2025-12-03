@@ -1,0 +1,33 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "rsvp_field_sheet.blend"
+[Helper_v3.3] Scene initialized.
+[RunManager_v3.3] Loading script: rsvp_field_sheet
+[v3.3] RSVP field sheet created.
+[RunManager_v3.3] Finished executing: rsvp_field_sheet
+[RunManager_v3.3] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/rsvp_field_sheet.blend
+Info: Saved "rsvp_field_sheet.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/rsvp_field_sheet.blend
+Fra:1 Mem:41.79M (Peak 42.46M) | Time:00:01.11 | Syncing FlyxionCam_v3_3
+Fra:1 Mem:41.80M (Peak 42.46M) | Time:00:01.12 | Syncing KeyLight_v3_3
+Fra:1 Mem:41.80M (Peak 42.46M) | Time:00:01.12 | Syncing FillLight_v3_3
+Fra:1 Mem:41.80M (Peak 42.46M) | Time:00:01.12 | Syncing RimLight_v3_3
+Fra:1 Mem:41.80M (Peak 42.46M) | Time:00:01.12 | Syncing RSVP_FieldSheet
+Fra:1 Mem:42.21M (Peak 42.51M) | Time:00:01.23 | Rendering 1 / 32 samples
+Fra:1 Mem:42.17M (Peak 42.51M) | Time:00:09.20 | Rendering 26 / 32 samples
+Fra:1 Mem:42.17M (Peak 42.51M) | Time:00:10.54 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/rsvp_field_sheet_0001.png'
+ Time: 00:11.13 (Saving: 00:00.29)
+
+
+Blender quit

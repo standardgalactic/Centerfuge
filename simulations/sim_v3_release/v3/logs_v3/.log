@@ -1,0 +1,9 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+OSError: Python file "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_release/v3/v3/helpers/storage_helper_v3.py" could not be opened: No such file or directory
+OSError: Python file "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_release/v3/v3/helpers/run_manager_v3.py" could not be opened: No such file or directory
+
+Blender quit

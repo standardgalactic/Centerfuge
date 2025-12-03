@@ -1,0 +1,37 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "entropic_vortex_coil.blend"
+[Helper_v3.3] Scene initialized.
+[RunManager_v3.3] Loading script: entropic_vortex_coil
+[v3.3] Entropic vortex coil created.
+[RunManager_v3.3] Finished executing: entropic_vortex_coil
+[RunManager_v3.3] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/entropic_vortex_coil.blend
+Info: Saved "entropic_vortex_coil.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/entropic_vortex_coil.blend
+Fra:1 Mem:43.17M (Peak 43.84M) | Time:00:00.99 | Syncing Vortex_Core
+Fra:1 Mem:43.55M (Peak 43.89M) | Time:00:01.03 | Syncing FlyxionCam_v3_3
+Fra:1 Mem:43.55M (Peak 43.89M) | Time:00:01.03 | Syncing KeyLight_v3_3
+Fra:1 Mem:43.55M (Peak 43.89M) | Time:00:01.03 | Syncing FillLight_v3_3
+Fra:1 Mem:43.55M (Peak 43.89M) | Time:00:01.03 | Syncing RimLight_v3_3
+Fra:1 Mem:43.55M (Peak 43.89M) | Time:00:01.04 | Syncing VortexRibbon_0
+Fra:1 Mem:43.56M (Peak 43.89M) | Time:00:01.04 | Syncing VortexRibbon_1
+Fra:1 Mem:43.56M (Peak 43.89M) | Time:00:01.04 | Syncing VortexRibbon_2
+Fra:1 Mem:43.57M (Peak 43.89M) | Time:00:01.04 | Syncing VortexRibbon_3
+Fra:1 Mem:43.90M (Peak 44.01M) | Time:00:01.11 | Rendering 1 / 32 samples
+Fra:1 Mem:43.60M (Peak 44.01M) | Time:00:09.84 | Rendering 26 / 32 samples
+Fra:1 Mem:43.60M (Peak 44.01M) | Time:00:11.55 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/entropic_vortex_coil_0001.png'
+ Time: 00:12.18 (Saving: 00:00.26)
+
+
+Blender quit

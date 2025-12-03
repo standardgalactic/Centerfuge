@@ -1,0 +1,41 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "hydra_crown.blend"
+[Helper_v3.3] Scene initialized.
+[RunManager_v3.3] Loading script: hydra_crown
+[v3.3] HYDRA crown created.
+[RunManager_v3.3] Finished executing: hydra_crown
+[RunManager_v3.3] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/hydra_crown.blend
+Info: Saved "hydra_crown.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/hydra_crown.blend
+Fra:1 Mem:43.04M (Peak 43.71M) | Time:00:01.15 | Syncing HYDRA_Crown_Core
+Fra:1 Mem:43.48M (Peak 43.76M) | Time:00:01.19 | Syncing HC_Seer_Spike
+Fra:1 Mem:43.49M (Peak 43.76M) | Time:00:01.19 | Syncing HC_Engineer_Spike
+Fra:1 Mem:43.50M (Peak 43.76M) | Time:00:01.19 | Syncing HC_Archivist_Spike
+Fra:1 Mem:43.51M (Peak 43.76M) | Time:00:01.20 | Syncing HC_Trickster_Spike
+Fra:1 Mem:43.52M (Peak 43.76M) | Time:00:01.20 | Syncing FlyxionCam_v3_3
+Fra:1 Mem:43.52M (Peak 43.76M) | Time:00:01.20 | Syncing KeyLight_v3_3
+Fra:1 Mem:43.52M (Peak 43.76M) | Time:00:01.20 | Syncing FillLight_v3_3
+Fra:1 Mem:43.52M (Peak 43.76M) | Time:00:01.20 | Syncing RimLight_v3_3
+Fra:1 Mem:43.52M (Peak 43.76M) | Time:00:01.20 | Syncing HC_Link_Seer
+Fra:1 Mem:43.52M (Peak 43.76M) | Time:00:01.20 | Syncing HC_Link_Engineer
+Fra:1 Mem:43.53M (Peak 43.76M) | Time:00:01.20 | Syncing HC_Link_Archivist
+Fra:1 Mem:43.53M (Peak 43.76M) | Time:00:01.20 | Syncing HC_Link_Trickster
+Fra:1 Mem:43.58M (Peak 43.76M) | Time:00:01.30 | Rendering 1 / 32 samples
+Fra:1 Mem:43.47M (Peak 43.76M) | Time:00:05.30 | Rendering 26 / 32 samples
+Fra:1 Mem:43.47M (Peak 43.76M) | Time:00:05.95 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/hydra_crown_0001.png'
+ Time: 00:05.09 (Saving: 00:00.28)
+
+
+Blender quit

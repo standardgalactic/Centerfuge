@@ -1,0 +1,194 @@
+.
+├── README.md
+├── file-tree.txt
+├── rsvp_hypercell.png
+├── sim_pack_v2
+│   ├── helpers
+│   │   ├── run_manager.py
+│   │   └── storage_helper.py
+│   ├── run_all_simulations.sh
+│   └── scripts
+│       ├── clio_feedback_graph.py
+│       ├── magi_geodesic_tracer_v2.py
+│       ├── rsvp_lattice_fields_v2.py
+│       ├── rsvp_pde_update_v2.py
+│       ├── semantic_sheaf_layers.py
+│       └── tartan_recursive_aura_v2.py
+├── sim_release
+│   ├── CHANGELOG.md
+│   ├── v1
+│   │   ├── helpers
+│   │   │   └── helper1.py
+│   │   └── scripts
+│   │       ├── script1.py
+│   │       └── script2.py
+│   └── v2
+│       ├── helpers
+│       │   ├── run_manager.py
+│       │   └── storage_helper.py
+│       └── scripts
+│           ├── clio_feedback_graph.py
+│           ├── magi_geodesic_tracer_v2.py
+│           ├── rsvp_lattice_fields_v2.py
+│           ├── rsvp_pde_update_v2.py
+│           ├── semantic_sheaf_layers.py
+│           └── tartan_recursive_aura_v2.py
+├── sim_v3_1_release
+│   └── v3_1
+│       ├── docs
+│       │   └── README_v3_1.md
+│       ├── helpers
+│       │   ├── run_manager_v3_1.py
+│       │   └── storage_helper_v3_1.py
+│       ├── logs_v3_1
+│       │   ├── delta_sigma_static.log
+│       │   ├── hydra_persona_field.log
+│       │   ├── semantic_merge_static.log
+│       │   └── xylomorphic_city_static.log
+│       ├── manifest_v3_1.json
+│       ├── output_v3_1
+│       │   ├── delta_sigma_static.blend
+│       │   ├── delta_sigma_static.blend1
+│       │   ├── delta_sigma_static.png
+│       │   ├── hydra_persona_field.blend
+│       │   ├── hydra_persona_field.blend1
+│       │   ├── hydra_persona_field.png
+│       │   ├── semantic_merge_static.blend
+│       │   ├── semantic_merge_static.blend1
+│       │   ├── semantic_merge_static.png
+│       │   ├── xylomorphic_city_static.blend
+│       │   ├── xylomorphic_city_static.blend1
+│       │   └── xylomorphic_city_static.png
+│       ├── render_stills_v3_1.sh
+│       └── scripts
+│           ├── delta_sigma_static.py
+│           ├── hydra_persona_field.py
+│           ├── semantic_merge_static.py
+│           └── xylomorphic_city_static.py
+├── sim_v3_2_release
+│   └── v3_2
+│       ├── docs
+│       │   └── README_v3_2.md
+│       ├── helpers
+│       │   ├── run_manager_v3_2.py
+│       │   └── storage_helper_v3_2.py
+│       ├── logs_v3_2
+│       │   ├── delta_sigma_tower.log
+│       │   ├── hydra_persona_glyphs.log
+│       │   ├── rsvp_plenum_cell.log
+│       │   ├── rsvp_three_cell_lattice.log
+│       │   ├── semantic_merge_hicat.log
+│       │   └── xylomorphic_organ_cluster_v2.log
+│       ├── manifest_v3_2.json
+│       ├── output_v3_2
+│       │   ├── delta_sigma_tower.blend
+│       │   ├── delta_sigma_tower.png
+│       │   ├── hydra_persona_glyphs.blend
+│       │   ├── hydra_persona_glyphs.png
+│       │   ├── rsvp_plenum_cell.blend
+│       │   ├── rsvp_plenum_cell.png
+│       │   ├── rsvp_three_cell_lattice.blend
+│       │   ├── rsvp_three_cell_lattice.png
+│       │   ├── semantic_merge_hicat.blend
+│       │   ├── semantic_merge_hicat.png
+│       │   ├── xylomorphic_organ_cluster_v2.blend
+│       │   └── xylomorphic_organ_cluster_v2.png
+│       ├── render_stills_v3_2.sh
+│       └── scripts
+│           ├── delta_sigma_tower.py
+│           ├── hydra_persona_glyphs.py
+│           ├── rsvp_plenum_cell.py
+│           ├── rsvp_three_cell_lattice.py
+│           ├── semantic_merge_hicat.py
+│           └── xylomorphic_organ_cluster_v2.py
+├── sim_v3_3_release
+│   └── v3_3
+│       ├── docs
+│       │   └── README_v3_3.md
+│       ├── helpers
+│       │   ├── run_manager_v3_3.py
+│       │   └── storage_helper_v3_3.py
+│       ├── logs_v3_3
+│       │   ├── categorical_pushout_sculpture.log
+│       │   ├── cognitive_phase_portrait.log
+│       │   ├── entropic_vortex_coil.log
+│       │   ├── hydra_crown.log
+│       │   ├── hydra_persona_dyad.log
+│       │   ├── rsvp_field_sheet.log
+│       │   ├── rsvp_hypercell.log
+│       │   ├── semantic_operator_orbit.log
+│       │   ├── tartan_recursive_tile.log
+│       │   └── xylomorphic_root_brain.log
+│       ├── manifest_v3_3.json
+│       ├── output_v3_3
+│       │   ├── categorical_pushout_sculpture.blend
+│       │   ├── categorical_pushout_sculpture.png
+│       │   ├── cognitive_phase_portrait.blend
+│       │   ├── cognitive_phase_portrait.png
+│       │   ├── entropic_vortex_coil.blend
+│       │   ├── entropic_vortex_coil.png
+│       │   ├── hydra_crown.blend
+│       │   ├── hydra_crown.png
+│       │   ├── hydra_persona_dyad.blend
+│       │   ├── hydra_persona_dyad.png
+│       │   ├── rsvp_field_sheet.blend
+│       │   ├── rsvp_field_sheet.png
+│       │   ├── rsvp_hypercell.blend
+│       │   ├── rsvp_hypercell.png
+│       │   ├── semantic_operator_orbit.blend
+│       │   ├── semantic_operator_orbit.png
+│       │   ├── tartan_recursive_tile.blend
+│       │   ├── tartan_recursive_tile.png
+│       │   ├── xylomorphic_root_brain.blend
+│       │   └── xylomorphic_root_brain.png
+│       ├── render_stills_v3_3.sh
+│       └── scripts
+│           ├── categorical_pushout_sculpture.py
+│           ├── cognitive_phase_portrait.py
+│           ├── entropic_vortex_coil.py
+│           ├── hydra_crown.py
+│           ├── hydra_persona_dyad.py
+│           ├── rsvp_field_sheet.py
+│           ├── rsvp_hypercell.py
+│           ├── semantic_operator_orbit.py
+│           ├── tartan_recursive_tile.py
+│           └── xylomorphic_root_brain.py
+└── sim_v3_release
+    └── v3
+        ├── docs
+        │   ├── README_v3.md
+        │   └── ROADMAP_v3.md
+        ├── helpers
+        │   ├── run_manager_v3.py
+        │   └── storage_helper_v3.py
+        ├── logs_v3
+        │   ├── *.log
+        │   ├── delta_sigma_cognitive_modulators.log
+        │   ├── hydra_persona_field.log
+        │   ├── semantic_merge_operators_anim.log
+        │   └── xylomorphic_city_generator.log
+        ├── manifest_v3.json
+        ├── output_v3
+        │   ├── delta_sigma_cognitive_modulators.blend
+        │   ├── hydra_persona_field.blend
+        │   ├── renders
+        │   │   ├── delta_sigma_cognitive_modulators_0001.png
+        │   │   ├── delta_sigma_cognitive_modulators_0002.png
+        │   │   ├── delta_sigma_cognitive_modulators_0003.png
+        │   │   ├── hydra_persona_field_0001.png
+        │   │   └── semantic_merge_operators_anim_0001.png
+        │   ├── semantic_merge_operators_anim.blend
+        │   ├── videos
+        │   │   ├── delta_sigma_cognitive_modulators.mp4
+        │   │   ├── hydra_persona_field.mp4
+        │   │   └── semantic_merge_operators_anim.mp4
+        │   └── xylomorphic_city_generator.blend
+        ├── render_all_v3.sh
+        ├── run_all_simulations_v3.sh
+        └── scripts
+            ├── delta_sigma_cognitive_modulators.py
+            ├── hydra_persona_field.py
+            ├── semantic_merge_operators_anim.py
+            └── xylomorphic_city_generator.py
+
+40 directories, 151 files

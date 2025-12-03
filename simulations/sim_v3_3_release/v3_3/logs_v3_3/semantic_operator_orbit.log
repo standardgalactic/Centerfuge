@@ -1,0 +1,37 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "semantic_operator_orbit.blend"
+[Helper_v3.3] Scene initialized.
+[RunManager_v3.3] Loading script: semantic_operator_orbit
+[v3.3] Semantic operator orbit created.
+[RunManager_v3.3] Finished executing: semantic_operator_orbit
+[RunManager_v3.3] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/semantic_operator_orbit.blend
+Info: Saved "semantic_operator_orbit.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/semantic_operator_orbit.blend
+Fra:1 Mem:42.82M (Peak 43.48M) | Time:00:00.86 | Syncing Semantic_Core
+Fra:1 Mem:43.26M (Peak 43.53M) | Time:00:00.90 | Syncing Op_MonoidalPlus
+Fra:1 Mem:43.26M (Peak 43.53M) | Time:00:00.90 | Syncing Op_TensorLoop
+Fra:1 Mem:43.34M (Peak 43.53M) | Time:00:00.90 | Syncing Op_Implies
+Fra:1 Mem:43.35M (Peak 43.55M) | Time:00:00.90 | Syncing Op_Mu
+Fra:1 Mem:43.42M (Peak 43.56M) | Time:00:00.90 | Syncing FlyxionCam_v3_3
+Fra:1 Mem:43.42M (Peak 43.56M) | Time:00:00.90 | Syncing KeyLight_v3_3
+Fra:1 Mem:43.42M (Peak 43.56M) | Time:00:00.90 | Syncing FillLight_v3_3
+Fra:1 Mem:43.42M (Peak 43.56M) | Time:00:00.90 | Syncing RimLight_v3_3
+Fra:1 Mem:43.37M (Peak 43.56M) | Time:00:00.97 | Rendering 1 / 32 samples
+Fra:1 Mem:43.21M (Peak 43.56M) | Time:00:04.84 | Rendering 26 / 32 samples
+Fra:1 Mem:43.21M (Peak 43.56M) | Time:00:05.52 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/semantic_operator_orbit_0001.png'
+ Time: 00:06.04 (Saving: 00:00.29)
+
+
+Blender quit

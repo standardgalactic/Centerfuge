@@ -1,0 +1,36 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "delta_sigma_static.blend"
+[Helper_v3.1] Scene initialized.
+[RunManager_v3.1] Loading script: delta_sigma_static
+[v3.1] Delta–sigma static arcs created.
+[RunManager_v3.1] Finished executing: delta_sigma_static
+[RunManager_v3.1] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_1_release/v3_1/output_v3_1/delta_sigma_static.blend
+Info: Saved "delta_sigma_static.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_1_release/v3_1/output_v3_1/delta_sigma_static.blend
+Fra:1 Mem:42.02M (Peak 42.69M) | Time:00:01.03 | Syncing FlyxionCam_v3_1
+Fra:1 Mem:42.03M (Peak 42.69M) | Time:00:01.03 | Syncing KeyLight_v3_1
+Fra:1 Mem:42.03M (Peak 42.69M) | Time:00:01.04 | Syncing FillLight_v3_1
+Fra:1 Mem:42.03M (Peak 42.69M) | Time:00:01.04 | Syncing RimLight_v3_1
+Fra:1 Mem:42.03M (Peak 42.69M) | Time:00:01.04 | Syncing DS_Arc_0
+Fra:1 Mem:42.40M (Peak 42.74M) | Time:00:01.08 | Syncing DS_Arc_1
+Fra:1 Mem:42.40M (Peak 42.74M) | Time:00:01.08 | Syncing DS_Arc_2
+Fra:1 Mem:42.41M (Peak 42.74M) | Time:00:01.08 | Syncing DS_Arc_3
+Fra:1 Mem:42.42M (Peak 42.74M) | Time:00:01.15 | Rendering 1 / 32 samples
+Fra:1 Mem:42.42M (Peak 42.74M) | Time:00:05.28 | Rendering 26 / 32 samples
+Fra:1 Mem:42.42M (Peak 42.74M) | Time:00:05.92 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_1_release/v3_1/output_v3_1/delta_sigma_static_0001.png'
+ Time: 00:06.39 (Saving: 00:00.28)
+
+
+Blender quit

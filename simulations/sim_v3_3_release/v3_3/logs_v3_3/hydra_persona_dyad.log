@@ -1,0 +1,75 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "hydra_persona_dyad.blend"
+[Helper_v3.3] Scene initialized.
+[RunManager_v3.3] Loading script: hydra_persona_dyad
+[v3.3] HYDRA persona dyad created.
+[RunManager_v3.3] Finished executing: hydra_persona_dyad
+[RunManager_v3.3] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/hydra_persona_dyad.blend
+Info: Saved "hydra_persona_dyad.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/hydra_persona_dyad.blend
+Fra:1 Mem:47.84M (Peak 48.50M) | Time:00:01.08 | Syncing Dyad_Seer_Glyph
+Fra:1 Mem:48.21M (Peak 48.55M) | Time:00:01.12 | Syncing Dyad_Engineer_Glyph
+Fra:1 Mem:48.22M (Peak 48.55M) | Time:00:01.12 | Syncing Dyad_Entropy_0
+Fra:1 Mem:48.23M (Peak 48.55M) | Time:00:01.12 | Syncing Dyad_Entropy_1
+Fra:1 Mem:48.24M (Peak 48.55M) | Time:00:01.12 | Syncing Dyad_Entropy_2
+Fra:1 Mem:48.25M (Peak 48.55M) | Time:00:01.12 | Syncing Dyad_Entropy_3
+Fra:1 Mem:48.27M (Peak 48.55M) | Time:00:01.12 | Syncing Dyad_Entropy_4
+Fra:1 Mem:48.28M (Peak 48.55M) | Time:00:01.13 | Syncing Dyad_Entropy_5
+Fra:1 Mem:48.29M (Peak 48.55M) | Time:00:01.13 | Syncing Dyad_Entropy_6
+Fra:1 Mem:48.30M (Peak 48.55M) | Time:00:01.13 | Syncing Dyad_Entropy_7
+Fra:1 Mem:48.32M (Peak 48.55M) | Time:00:01.13 | Syncing Dyad_Entropy_8
+Fra:1 Mem:48.33M (Peak 48.55M) | Time:00:01.13 | Syncing Dyad_Entropy_9
+Fra:1 Mem:48.34M (Peak 48.55M) | Time:00:01.13 | Syncing Dyad_Entropy_10
+Fra:1 Mem:48.35M (Peak 48.55M) | Time:00:01.13 | Syncing Dyad_Entropy_11
+Fra:1 Mem:48.37M (Peak 48.56M) | Time:00:01.13 | Syncing Dyad_Entropy_12
+Fra:1 Mem:48.38M (Peak 48.58M) | Time:00:01.13 | Syncing Dyad_Entropy_13
+Fra:1 Mem:48.39M (Peak 48.59M) | Time:00:01.13 | Syncing Dyad_Entropy_14
+Fra:1 Mem:48.40M (Peak 48.60M) | Time:00:01.13 | Syncing Dyad_Entropy_15
+Fra:1 Mem:48.42M (Peak 48.61M) | Time:00:01.13 | Syncing Dyad_Entropy_16
+Fra:1 Mem:48.43M (Peak 48.63M) | Time:00:01.14 | Syncing Dyad_Entropy_17
+Fra:1 Mem:48.44M (Peak 48.64M) | Time:00:01.14 | Syncing Dyad_Entropy_18
+Fra:1 Mem:48.45M (Peak 48.65M) | Time:00:01.14 | Syncing Dyad_Entropy_19
+Fra:1 Mem:48.47M (Peak 48.66M) | Time:00:01.14 | Syncing Dyad_Entropy_20
+Fra:1 Mem:48.48M (Peak 48.68M) | Time:00:01.14 | Syncing Dyad_Entropy_21
+Fra:1 Mem:48.49M (Peak 48.69M) | Time:00:01.14 | Syncing Dyad_Entropy_22
+Fra:1 Mem:48.50M (Peak 48.70M) | Time:00:01.14 | Syncing Dyad_Entropy_23
+Fra:1 Mem:48.51M (Peak 48.71M) | Time:00:01.14 | Syncing Dyad_Entropy_24
+Fra:1 Mem:48.53M (Peak 48.73M) | Time:00:01.14 | Syncing Dyad_Entropy_25
+Fra:1 Mem:48.54M (Peak 48.74M) | Time:00:01.14 | Syncing Dyad_Entropy_26
+Fra:1 Mem:48.55M (Peak 48.75M) | Time:00:01.14 | Syncing Dyad_Entropy_27
+Fra:1 Mem:48.56M (Peak 48.76M) | Time:00:01.14 | Syncing Dyad_Entropy_28
+Fra:1 Mem:48.58M (Peak 48.77M) | Time:00:01.14 | Syncing Dyad_Entropy_29
+Fra:1 Mem:48.59M (Peak 48.79M) | Time:00:01.15 | Syncing Dyad_Entropy_30
+Fra:1 Mem:48.60M (Peak 48.80M) | Time:00:01.15 | Syncing Dyad_Entropy_31
+Fra:1 Mem:48.61M (Peak 48.81M) | Time:00:01.15 | Syncing Dyad_Entropy_32
+Fra:1 Mem:48.63M (Peak 48.82M) | Time:00:01.15 | Syncing Dyad_Entropy_33
+Fra:1 Mem:48.64M (Peak 48.84M) | Time:00:01.15 | Syncing Dyad_Entropy_34
+Fra:1 Mem:48.65M (Peak 48.85M) | Time:00:01.15 | Syncing Dyad_Entropy_35
+Fra:1 Mem:48.70M (Peak 48.89M) | Time:00:01.15 | Syncing Dyad_Entropy_36
+Fra:1 Mem:48.71M (Peak 48.91M) | Time:00:01.15 | Syncing Dyad_Entropy_37
+Fra:1 Mem:48.72M (Peak 48.92M) | Time:00:01.15 | Syncing Dyad_Entropy_38
+Fra:1 Mem:48.73M (Peak 48.93M) | Time:00:01.15 | Syncing Dyad_Entropy_39
+Fra:1 Mem:48.74M (Peak 48.94M) | Time:00:01.15 | Syncing FlyxionCam_v3_3
+Fra:1 Mem:48.74M (Peak 48.94M) | Time:00:01.15 | Syncing KeyLight_v3_3
+Fra:1 Mem:48.74M (Peak 48.94M) | Time:00:01.15 | Syncing FillLight_v3_3
+Fra:1 Mem:48.74M (Peak 48.94M) | Time:00:01.15 | Syncing RimLight_v3_3
+Fra:1 Mem:48.74M (Peak 48.94M) | Time:00:01.15 | Syncing Dyad_Bond
+Fra:1 Mem:48.72M (Peak 48.96M) | Time:00:01.22 | Rendering 1 / 32 samples
+Fra:1 Mem:48.47M (Peak 48.96M) | Time:00:04.64 | Rendering 26 / 32 samples
+Fra:1 Mem:48.47M (Peak 48.96M) | Time:00:05.18 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/hydra_persona_dyad_0001.png'
+ Time: 00:05.66 (Saving: 00:00.29)
+
+
+Blender quit

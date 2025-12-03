@@ -1,0 +1,39 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "delta_sigma_tower.blend"
+[Helper_v3.2] Scene initialized.
+[RunManager_v3.2] Loading script: delta_sigma_tower
+[v3.2] Delta-sigma tower created.
+[RunManager_v3.2] Finished executing: delta_sigma_tower
+[RunManager_v3.2] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/delta_sigma_tower.blend
+Info: Saved "delta_sigma_tower.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/delta_sigma_tower.blend
+Fra:1 Mem:43.85M (Peak 44.51M) | Time:00:01.70 | Syncing DS_Ring_0
+Fra:1 Mem:44.30M (Peak 44.57M) | Time:00:01.75 | Syncing DS_Ring_1
+Fra:1 Mem:44.38M (Peak 44.57M) | Time:00:01.75 | Syncing DS_Ring_2
+Fra:1 Mem:44.46M (Peak 44.59M) | Time:00:01.75 | Syncing DS_Ring_3
+Fra:1 Mem:44.54M (Peak 44.67M) | Time:00:01.75 | Syncing DS_Ring_4
+Fra:1 Mem:44.62M (Peak 44.75M) | Time:00:01.75 | Syncing DS_Ring_5
+Fra:1 Mem:44.70M (Peak 44.83M) | Time:00:01.75 | Syncing DS_Base
+Fra:1 Mem:44.71M (Peak 44.91M) | Time:00:01.75 | Syncing FlyxionCam_v3_2
+Fra:1 Mem:44.71M (Peak 44.91M) | Time:00:01.75 | Syncing KeyLight_v3_2
+Fra:1 Mem:44.71M (Peak 44.91M) | Time:00:01.75 | Syncing FillLight_v3_2
+Fra:1 Mem:44.71M (Peak 44.91M) | Time:00:01.75 | Syncing RimLight_v3_2
+Fra:1 Mem:44.60M (Peak 44.91M) | Time:00:01.83 | Rendering 1 / 32 samples
+Fra:1 Mem:44.25M (Peak 44.91M) | Time:00:09.19 | Rendering 26 / 32 samples
+Fra:1 Mem:44.25M (Peak 44.91M) | Time:00:10.77 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/delta_sigma_tower_0001.png'
+ Time: 00:11.40 (Saving: 00:00.28)
+
+
+Blender quit

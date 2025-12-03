@@ -1,0 +1,41 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "hydra_persona_glyphs.blend"
+[Helper_v3.2] Scene initialized.
+[RunManager_v3.2] Loading script: hydra_persona_glyphs
+[v3.2] HYDRA persona glyphs created.
+[RunManager_v3.2] Finished executing: hydra_persona_glyphs
+[RunManager_v3.2] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/hydra_persona_glyphs.blend
+Info: Saved "hydra_persona_glyphs.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/hydra_persona_glyphs.blend
+Fra:1 Mem:42.83M (Peak 43.49M) | Time:00:00.91 | Syncing HYDRA_Field_Node
+Fra:1 Mem:43.26M (Peak 43.54M) | Time:00:00.95 | Syncing Glyph_Seer
+Fra:1 Mem:43.27M (Peak 43.54M) | Time:00:00.95 | Syncing Glyph_Engineer
+Fra:1 Mem:43.28M (Peak 43.54M) | Time:00:00.95 | Syncing Glyph_Archivist
+Fra:1 Mem:43.28M (Peak 43.54M) | Time:00:00.95 | Syncing Glyph_Trickster
+Fra:1 Mem:43.29M (Peak 43.54M) | Time:00:00.95 | Syncing FlyxionCam_v3_2
+Fra:1 Mem:43.29M (Peak 43.54M) | Time:00:00.96 | Syncing KeyLight_v3_2
+Fra:1 Mem:43.29M (Peak 43.54M) | Time:00:00.96 | Syncing FillLight_v3_2
+Fra:1 Mem:43.29M (Peak 43.54M) | Time:00:00.96 | Syncing RimLight_v3_2
+Fra:1 Mem:43.29M (Peak 43.54M) | Time:00:00.96 | Syncing PersonaLink_Seer
+Fra:1 Mem:43.30M (Peak 43.54M) | Time:00:00.96 | Syncing PersonaLink_Engineer
+Fra:1 Mem:43.30M (Peak 43.54M) | Time:00:00.96 | Syncing PersonaLink_Archivist
+Fra:1 Mem:43.30M (Peak 43.54M) | Time:00:00.96 | Syncing PersonaLink_Trickster
+Fra:1 Mem:43.30M (Peak 43.54M) | Time:00:01.03 | Rendering 1 / 32 samples
+Fra:1 Mem:43.24M (Peak 43.54M) | Time:00:04.92 | Rendering 26 / 32 samples
+Fra:1 Mem:43.24M (Peak 43.54M) | Time:00:05.56 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/hydra_persona_glyphs_0001.png'
+ Time: 00:05.99 (Saving: 00:00.26)
+
+
+Blender quit

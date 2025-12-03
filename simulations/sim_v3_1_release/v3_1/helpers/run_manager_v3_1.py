@@ -1,0 +1,52 @@
+import bpy
+import sys
+import importlib.util
+import os
+
+# Simple excepthook so errors show up in logs
+def _excepthook(exc_type, exc, tb):
+    print("[RunManager_v3.1][ERROR]", exc_type.__name__, ":", exc)
+sys.excepthook = _excepthook
+
+def run_script(path):
+    name = os.path.splitext(os.path.basename(path))[0]
+    print(f"[RunManager_v3.1] Loading script: {name}")
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    print(f"[RunManager_v3.1] Finished executing: {name}")
+
+
+def main(argv):
+    script_path = None
+    blend_out = None
+
+    if "--script" in argv:
+        i = argv.index("--script")
+        if i + 1 < len(argv):
+            script_path = argv[i + 1]
+
+    if "--output" in argv:
+        i = argv.index("--output")
+        if i + 1 < len(argv):
+            blend_out = argv[i + 1]
+
+    if not script_path:
+        print("[RunManager_v3.1] No --script provided, nothing to run.")
+        return
+
+    run_script(script_path)
+
+    if blend_out:
+        print(f"[RunManager_v3.1] Saving blend to: {blend_out}")
+        bpy.ops.wm.save_mainfile(filepath=blend_out)
+
+
+if __name__ == "__main__":
+    if "--" in sys.argv:
+        idx = sys.argv.index("--")
+        user_argv = sys.argv[idx + 1:]
+    else:
+        user_argv = []
+    main(user_argv)

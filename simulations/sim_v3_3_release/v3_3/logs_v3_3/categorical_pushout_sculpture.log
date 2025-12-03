@@ -1,0 +1,44 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "categorical_pushout_sculpture.blend"
+[Helper_v3.3] Scene initialized.
+[RunManager_v3.3] Loading script: categorical_pushout_sculpture
+[v3.3] Categorical pushout sculpture created.
+[RunManager_v3.3] Finished executing: categorical_pushout_sculpture
+[RunManager_v3.3] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/categorical_pushout_sculpture.blend
+Info: Saved "categorical_pushout_sculpture.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/categorical_pushout_sculpture.blend
+Fra:1 Mem:43.16M (Peak 43.82M) | Time:00:01.02 | Syncing Obj_A
+Fra:1 Mem:43.53M (Peak 43.87M) | Time:00:01.07 | Syncing Obj_B
+Fra:1 Mem:43.54M (Peak 43.87M) | Time:00:01.07 | Syncing Obj_C
+Fra:1 Mem:43.54M (Peak 43.87M) | Time:00:01.07 | Syncing Obj_D
+Fra:1 Mem:43.55M (Peak 43.87M) | Time:00:01.07 | Syncing f_Cylinder
+Fra:1 Mem:43.56M (Peak 43.87M) | Time:00:01.07 | Syncing f_Cone
+Fra:1 Mem:43.57M (Peak 43.87M) | Time:00:01.07 | Syncing g_Cylinder
+Fra:1 Mem:43.59M (Peak 43.87M) | Time:00:01.07 | Syncing g_Cone
+Fra:1 Mem:43.60M (Peak 43.87M) | Time:00:01.07 | Syncing h_Cylinder
+Fra:1 Mem:43.61M (Peak 43.87M) | Time:00:01.08 | Syncing h_Cone
+Fra:1 Mem:43.62M (Peak 43.87M) | Time:00:01.08 | Syncing p_Cylinder
+Fra:1 Mem:43.63M (Peak 43.87M) | Time:00:01.08 | Syncing p_Cone
+Fra:1 Mem:43.64M (Peak 43.87M) | Time:00:01.08 | Syncing FlyxionCam_v3_3
+Fra:1 Mem:43.64M (Peak 43.87M) | Time:00:01.08 | Syncing KeyLight_v3_3
+Fra:1 Mem:43.64M (Peak 43.87M) | Time:00:01.08 | Syncing FillLight_v3_3
+Fra:1 Mem:43.64M (Peak 43.87M) | Time:00:01.08 | Syncing RimLight_v3_3
+Fra:1 Mem:43.62M (Peak 43.87M) | Time:00:01.17 | Rendering 1 / 32 samples
+Fra:1 Mem:43.59M (Peak 43.87M) | Time:00:05.36 | Rendering 26 / 32 samples
+Fra:1 Mem:43.59M (Peak 43.87M) | Time:00:06.07 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/categorical_pushout_sculpture_0001.png'
+ Time: 00:06.54 (Saving: 00:00.26)
+
+
+Blender quit

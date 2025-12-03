@@ -1,0 +1,41 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "semantic_merge_hicat.blend"
+[Helper_v3.2] Scene initialized.
+[RunManager_v3.2] Loading script: semantic_merge_hicat
+[v3.2] Higher-category semantic merge diagram created.
+[RunManager_v3.2] Finished executing: semantic_merge_hicat
+[RunManager_v3.2] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/semantic_merge_hicat.blend
+Info: Saved "semantic_merge_hicat.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/semantic_merge_hicat.blend
+Fra:1 Mem:42.76M (Peak 43.42M) | Time:00:00.87 | Syncing Obj_A
+Fra:1 Mem:43.13M (Peak 43.47M) | Time:00:00.90 | Syncing Obj_B
+Fra:1 Mem:43.13M (Peak 43.47M) | Time:00:00.90 | Syncing Obj_M
+Fra:1 Mem:43.14M (Peak 43.47M) | Time:00:00.91 | Syncing Arrow_M_to_A_shaft
+Fra:1 Mem:43.15M (Peak 43.47M) | Time:00:00.91 | Syncing Arrow_M_to_A_head
+Fra:1 Mem:43.16M (Peak 43.47M) | Time:00:00.91 | Syncing Arrow_M_to_B_shaft
+Fra:1 Mem:43.18M (Peak 43.47M) | Time:00:00.91 | Syncing Arrow_M_to_B_head
+Fra:1 Mem:43.19M (Peak 43.47M) | Time:00:00.91 | Syncing Arrow_Colimit_shaft
+Fra:1 Mem:43.20M (Peak 43.47M) | Time:00:00.91 | Syncing Arrow_Colimit_head
+Fra:1 Mem:43.21M (Peak 43.47M) | Time:00:00.91 | Syncing FlyxionCam_v3_2
+Fra:1 Mem:43.21M (Peak 43.47M) | Time:00:00.91 | Syncing KeyLight_v3_2
+Fra:1 Mem:43.21M (Peak 43.47M) | Time:00:00.91 | Syncing FillLight_v3_2
+Fra:1 Mem:43.21M (Peak 43.47M) | Time:00:00.91 | Syncing RimLight_v3_2
+Fra:1 Mem:43.19M (Peak 43.47M) | Time:00:00.97 | Rendering 1 / 32 samples
+Fra:1 Mem:43.17M (Peak 43.47M) | Time:00:05.64 | Rendering 26 / 32 samples
+Fra:1 Mem:43.17M (Peak 43.47M) | Time:00:06.46 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/semantic_merge_hicat_0001.png'
+ Time: 00:06.94 (Saving: 00:00.28)
+
+
+Blender quit

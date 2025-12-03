@@ -1,0 +1,35 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "semantic_merge_static.blend"
+[Helper_v3.1] Scene initialized.
+[RunManager_v3.1] Loading script: semantic_merge_static
+[v3.1] Semantic merge blobs created.
+[RunManager_v3.1] Finished executing: semantic_merge_static
+[RunManager_v3.1] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_1_release/v3_1/output_v3_1/semantic_merge_static.blend
+Info: Saved "semantic_merge_static.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_1_release/v3_1/output_v3_1/semantic_merge_static.blend
+Fra:1 Mem:42.53M (Peak 43.20M) | Time:00:01.16 | Syncing Module_A
+Fra:1 Mem:42.97M (Peak 43.25M) | Time:00:01.26 | Syncing Module_B
+Fra:1 Mem:43.04M (Peak 43.25M) | Time:00:01.26 | Syncing Merge_M
+Fra:1 Mem:43.11M (Peak 43.25M) | Time:00:01.26 | Syncing FlyxionCam_v3_1
+Fra:1 Mem:43.11M (Peak 43.25M) | Time:00:01.27 | Syncing KeyLight_v3_1
+Fra:1 Mem:43.11M (Peak 43.25M) | Time:00:01.27 | Syncing FillLight_v3_1
+Fra:1 Mem:43.11M (Peak 43.25M) | Time:00:01.27 | Syncing RimLight_v3_1
+Fra:1 Mem:43.06M (Peak 43.25M) | Time:00:01.38 | Rendering 1 / 32 samples
+Fra:1 Mem:42.92M (Peak 43.25M) | Time:00:06.05 | Rendering 26 / 32 samples
+Fra:1 Mem:42.92M (Peak 43.25M) | Time:00:07.70 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_1_release/v3_1/output_v3_1/semantic_merge_static_0001.png'
+ Time: 00:08.52 (Saving: 00:00.29)
+
+
+Blender quit

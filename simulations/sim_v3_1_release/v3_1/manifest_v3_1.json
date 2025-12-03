@@ -1,0 +1,15 @@
+{
+  "version": "3.1.0",
+  "mode": "static_stills",
+  "scripts": [
+    "hydra_persona_field.py",
+    "semantic_merge_static.py",
+    "xylomorphic_city_static.py",
+    "delta_sigma_static.py"
+  ],
+  "helpers": [
+    "storage_helper_v3_1.py",
+    "run_manager_v3_1.py"
+  ],
+  "entrypoint": "v3_1/render_stills_v3_1.sh"
+}

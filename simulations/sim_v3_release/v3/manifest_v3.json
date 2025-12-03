@@ -1,0 +1,17 @@
+{
+  "version": "3.0.0",
+  "modules": [
+    "hydra_persona_field",
+    "xylomorphic_city_generator",
+    "semantic_merge_operators_anim",
+    "delta_sigma_cognitive_modulators"
+  ],
+  "helpers": [
+    "storage_helper_v3",
+    "run_manager_v3"
+  ],
+  "scripts": {
+    "run_all": "v3/run_all_simulations_v3.sh",
+    "render_all": "v3/render_all_v3.sh"
+  }
+}

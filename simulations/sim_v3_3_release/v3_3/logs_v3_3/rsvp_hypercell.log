@@ -1,0 +1,116 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "rsvp_hypercell.blend"
+[Helper_v3.3] Scene initialized.
+[RunManager_v3.3] Loading script: rsvp_hypercell
+[v3.3] RSVP Hypercell created.
+[RunManager_v3.3] Finished executing: rsvp_hypercell
+[RunManager_v3.3] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/rsvp_hypercell.blend
+Info: Saved "rsvp_hypercell.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/rsvp_hypercell.blend
+Fra:1 Mem:54.48M (Peak 55.15M) | Time:00:00.99 | Syncing Hypercell_Phi_Core
+Fra:1 Mem:54.92M (Peak 55.20M) | Time:00:01.03 | Syncing Hypercell_Vector_Shell
+Fra:1 Mem:55.17M (Peak 55.45M) | Time:00:01.49 | Syncing Hypercell_Coherence_Shell
+Fra:1 Mem:55.24M (Peak 55.45M) | Time:00:01.49 | Syncing Hyper_Entropy_Spark_0
+Fra:1 Mem:55.25M (Peak 55.45M) | Time:00:01.50 | Syncing Hyper_Entropy_Spark_1
+Fra:1 Mem:55.26M (Peak 55.46M) | Time:00:01.50 | Syncing Hyper_Entropy_Spark_2
+Fra:1 Mem:55.28M (Peak 55.47M) | Time:00:01.50 | Syncing Hyper_Entropy_Spark_3
+Fra:1 Mem:55.29M (Peak 55.49M) | Time:00:01.50 | Syncing Hyper_Entropy_Spark_4
+Fra:1 Mem:55.30M (Peak 55.50M) | Time:00:01.50 | Syncing Hyper_Entropy_Spark_5
+Fra:1 Mem:55.31M (Peak 55.51M) | Time:00:01.50 | Syncing Hyper_Entropy_Spark_6
+Fra:1 Mem:55.33M (Peak 55.52M) | Time:00:01.50 | Syncing Hyper_Entropy_Spark_7
+Fra:1 Mem:55.34M (Peak 55.54M) | Time:00:01.50 | Syncing Hyper_Entropy_Spark_8
+Fra:1 Mem:55.35M (Peak 55.55M) | Time:00:01.50 | Syncing Hyper_Entropy_Spark_9
+Fra:1 Mem:55.36M (Peak 55.56M) | Time:00:01.50 | Syncing Hyper_Entropy_Spark_10
+Fra:1 Mem:55.38M (Peak 55.57M) | Time:00:01.50 | Syncing Hyper_Entropy_Spark_11
+Fra:1 Mem:55.39M (Peak 55.59M) | Time:00:01.50 | Syncing Hyper_Entropy_Spark_12
+Fra:1 Mem:55.40M (Peak 55.60M) | Time:00:01.50 | Syncing Hyper_Entropy_Spark_13
+Fra:1 Mem:55.41M (Peak 55.61M) | Time:00:01.50 | Syncing Hyper_Entropy_Spark_14
+Fra:1 Mem:55.43M (Peak 55.62M) | Time:00:01.51 | Syncing Hyper_Entropy_Spark_15
+Fra:1 Mem:55.44M (Peak 55.64M) | Time:00:01.51 | Syncing Hyper_Entropy_Spark_16
+Fra:1 Mem:55.45M (Peak 55.65M) | Time:00:01.51 | Syncing Hyper_Entropy_Spark_17
+Fra:1 Mem:55.46M (Peak 55.66M) | Time:00:01.51 | Syncing Hyper_Entropy_Spark_18
+Fra:1 Mem:55.47M (Peak 55.67M) | Time:00:01.51 | Syncing Hyper_Entropy_Spark_19
+Fra:1 Mem:55.49M (Peak 55.69M) | Time:00:01.51 | Syncing Hyper_Entropy_Spark_20
+Fra:1 Mem:55.50M (Peak 55.70M) | Time:00:01.51 | Syncing Hyper_Entropy_Spark_21
+Fra:1 Mem:55.51M (Peak 55.71M) | Time:00:01.51 | Syncing Hyper_Entropy_Spark_22
+Fra:1 Mem:55.52M (Peak 55.72M) | Time:00:01.51 | Syncing Hyper_Entropy_Spark_23
+Fra:1 Mem:55.54M (Peak 55.73M) | Time:00:01.51 | Syncing Hyper_Entropy_Spark_24
+Fra:1 Mem:55.55M (Peak 55.75M) | Time:00:01.51 | Syncing Hyper_Entropy_Spark_25
+Fra:1 Mem:55.56M (Peak 55.76M) | Time:00:01.51 | Syncing Hyper_Entropy_Spark_26
+Fra:1 Mem:55.57M (Peak 55.77M) | Time:00:01.51 | Syncing Hyper_Entropy_Spark_27
+Fra:1 Mem:55.59M (Peak 55.78M) | Time:00:01.51 | Syncing Hyper_Entropy_Spark_28
+Fra:1 Mem:55.60M (Peak 55.80M) | Time:00:01.52 | Syncing Hyper_Entropy_Spark_29
+Fra:1 Mem:55.61M (Peak 55.81M) | Time:00:01.52 | Syncing Hyper_Entropy_Spark_30
+Fra:1 Mem:55.62M (Peak 55.82M) | Time:00:01.52 | Syncing Hyper_Entropy_Spark_31
+Fra:1 Mem:55.64M (Peak 55.83M) | Time:00:01.52 | Syncing Hyper_Entropy_Spark_32
+Fra:1 Mem:55.65M (Peak 55.85M) | Time:00:01.52 | Syncing Hyper_Entropy_Spark_33
+Fra:1 Mem:55.69M (Peak 55.86M) | Time:00:01.52 | Syncing Hyper_Entropy_Spark_34
+Fra:1 Mem:55.70M (Peak 55.90M) | Time:00:01.52 | Syncing Hyper_Entropy_Spark_35
+Fra:1 Mem:55.72M (Peak 55.92M) | Time:00:01.52 | Syncing Hyper_Entropy_Spark_36
+Fra:1 Mem:55.73M (Peak 55.93M) | Time:00:01.52 | Syncing Hyper_Entropy_Spark_37
+Fra:1 Mem:55.74M (Peak 55.94M) | Time:00:01.52 | Syncing Hyper_Entropy_Spark_38
+Fra:1 Mem:55.75M (Peak 55.95M) | Time:00:01.52 | Syncing Hyper_Entropy_Spark_39
+Fra:1 Mem:55.77M (Peak 55.96M) | Time:00:01.52 | Syncing Hyper_Entropy_Spark_40
+Fra:1 Mem:55.78M (Peak 55.98M) | Time:00:01.52 | Syncing Hyper_Entropy_Spark_41
+Fra:1 Mem:55.79M (Peak 55.99M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_42
+Fra:1 Mem:55.80M (Peak 56.00M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_43
+Fra:1 Mem:55.82M (Peak 56.01M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_44
+Fra:1 Mem:55.83M (Peak 56.03M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_45
+Fra:1 Mem:55.84M (Peak 56.04M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_46
+Fra:1 Mem:55.88M (Peak 56.05M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_47
+Fra:1 Mem:55.90M (Peak 56.10M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_48
+Fra:1 Mem:55.91M (Peak 56.11M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_49
+Fra:1 Mem:55.92M (Peak 56.12M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_50
+Fra:1 Mem:55.93M (Peak 56.13M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_51
+Fra:1 Mem:55.95M (Peak 56.14M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_52
+Fra:1 Mem:55.96M (Peak 56.16M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_53
+Fra:1 Mem:55.97M (Peak 56.17M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_54
+Fra:1 Mem:55.98M (Peak 56.18M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_55
+Fra:1 Mem:56.00M (Peak 56.19M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_56
+Fra:1 Mem:56.01M (Peak 56.21M) | Time:00:01.53 | Syncing Hyper_Entropy_Spark_57
+Fra:1 Mem:56.02M (Peak 56.22M) | Time:00:01.54 | Syncing Hyper_Entropy_Spark_58
+Fra:1 Mem:56.03M (Peak 56.23M) | Time:00:01.54 | Syncing Hyper_Entropy_Spark_59
+Fra:1 Mem:56.05M (Peak 56.24M) | Time:00:01.54 | Syncing Hyper_Entropy_Spark_60
+Fra:1 Mem:56.06M (Peak 56.26M) | Time:00:01.54 | Syncing Hyper_Entropy_Spark_61
+Fra:1 Mem:56.07M (Peak 56.27M) | Time:00:01.54 | Syncing Hyper_Entropy_Spark_62
+Fra:1 Mem:56.08M (Peak 56.28M) | Time:00:01.54 | Syncing Hyper_Entropy_Spark_63
+Fra:1 Mem:56.10M (Peak 56.29M) | Time:00:01.54 | Syncing Hyper_Entropy_Spark_64
+Fra:1 Mem:56.11M (Peak 56.31M) | Time:00:01.54 | Syncing Hyper_Entropy_Spark_65
+Fra:1 Mem:56.12M (Peak 56.32M) | Time:00:01.54 | Syncing Hyper_Entropy_Spark_66
+Fra:1 Mem:56.13M (Peak 56.33M) | Time:00:01.54 | Syncing Hyper_Entropy_Spark_67
+Fra:1 Mem:56.15M (Peak 56.34M) | Time:00:01.54 | Syncing Hyper_Entropy_Spark_68
+Fra:1 Mem:56.16M (Peak 56.36M) | Time:00:01.54 | Syncing Hyper_Entropy_Spark_69
+Fra:1 Mem:56.17M (Peak 56.37M) | Time:00:01.54 | Syncing Hyper_Entropy_Spark_70
+Fra:1 Mem:56.18M (Peak 56.38M) | Time:00:01.54 | Syncing Hyper_Entropy_Spark_71
+Fra:1 Mem:56.20M (Peak 56.39M) | Time:00:01.55 | Syncing Hyper_Entropy_Spark_72
+Fra:1 Mem:56.21M (Peak 56.41M) | Time:00:01.55 | Syncing Hyper_Entropy_Spark_73
+Fra:1 Mem:56.22M (Peak 56.42M) | Time:00:01.55 | Syncing Hyper_Entropy_Spark_74
+Fra:1 Mem:56.23M (Peak 56.43M) | Time:00:01.55 | Syncing Hyper_Entropy_Spark_75
+Fra:1 Mem:56.24M (Peak 56.44M) | Time:00:01.55 | Syncing Hyper_Entropy_Spark_76
+Fra:1 Mem:56.29M (Peak 56.49M) | Time:00:01.55 | Syncing Hyper_Entropy_Spark_77
+Fra:1 Mem:56.30M (Peak 56.50M) | Time:00:01.55 | Syncing Hyper_Entropy_Spark_78
+Fra:1 Mem:56.31M (Peak 56.51M) | Time:00:01.55 | Syncing Hyper_Entropy_Spark_79
+Fra:1 Mem:56.33M (Peak 56.53M) | Time:00:01.55 | Syncing Hypercell_Constraint_Cage
+Fra:1 Mem:56.39M (Peak 56.54M) | Time:00:01.55 | Syncing FlyxionCam_v3_3
+Fra:1 Mem:56.39M (Peak 56.54M) | Time:00:01.55 | Syncing KeyLight_v3_3
+Fra:1 Mem:56.39M (Peak 56.54M) | Time:00:01.55 | Syncing FillLight_v3_3
+Fra:1 Mem:56.39M (Peak 56.54M) | Time:00:01.55 | Syncing RimLight_v3_3
+Fra:1 Mem:56.21M (Peak 56.54M) | Time:00:01.63 | Rendering 1 / 32 samples
+Fra:1 Mem:55.57M (Peak 56.54M) | Time:00:06.72 | Rendering 26 / 32 samples
+Fra:1 Mem:55.57M (Peak 56.54M) | Time:00:07.82 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/rsvp_hypercell_0001.png'
+ Time: 00:08.42 (Saving: 00:00.31)
+
+
+Blender quit

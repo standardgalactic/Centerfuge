@@ -1,0 +1,196 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "cognitive_phase_portrait.blend"
+[Helper_v3.3] Scene initialized.
+[RunManager_v3.3] Loading script: cognitive_phase_portrait
+[v3.3] Cognitive phase portrait created.
+[RunManager_v3.3] Finished executing: cognitive_phase_portrait
+[RunManager_v3.3] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/cognitive_phase_portrait.blend
+Info: Saved "cognitive_phase_portrait.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/cognitive_phase_portrait.blend
+Fra:1 Mem:64.91M (Peak 65.58M) | Time:00:01.09 | Syncing Attractor_0
+Fra:1 Mem:65.35M (Peak 65.63M) | Time:00:01.14 | Syncing Attractor_1
+Fra:1 Mem:65.42M (Peak 65.63M) | Time:00:01.14 | Syncing Attractor_2
+Fra:1 Mem:65.49M (Peak 65.63M) | Time:00:01.14 | Syncing Attractor_3
+Fra:1 Mem:65.56M (Peak 65.70M) | Time:00:01.14 | Syncing FlowArrow
+Fra:1 Mem:65.57M (Peak 65.77M) | Time:00:01.14 | Syncing FlowArrow.001
+Fra:1 Mem:65.58M (Peak 65.78M) | Time:00:01.14 | Syncing FlowArrow.002
+Fra:1 Mem:65.59M (Peak 65.79M) | Time:00:01.14 | Syncing FlowArrow.003
+Fra:1 Mem:65.60M (Peak 65.80M) | Time:00:01.14 | Syncing FlowArrow.004
+Fra:1 Mem:65.61M (Peak 65.81M) | Time:00:01.14 | Syncing FlowArrow.005
+Fra:1 Mem:65.62M (Peak 65.82M) | Time:00:01.15 | Syncing FlowArrow.006
+Fra:1 Mem:65.64M (Peak 65.83M) | Time:00:01.15 | Syncing FlowArrow.007
+Fra:1 Mem:65.65M (Peak 65.85M) | Time:00:01.15 | Syncing FlowArrow.008
+Fra:1 Mem:65.66M (Peak 65.86M) | Time:00:01.15 | Syncing FlowArrow.009
+Fra:1 Mem:65.67M (Peak 65.87M) | Time:00:01.15 | Syncing FlowArrow.010
+Fra:1 Mem:65.68M (Peak 65.88M) | Time:00:01.15 | Syncing FlowArrow.011
+Fra:1 Mem:65.69M (Peak 65.89M) | Time:00:01.15 | Syncing FlowArrow.012
+Fra:1 Mem:65.70M (Peak 65.90M) | Time:00:01.15 | Syncing FlowArrow.013
+Fra:1 Mem:65.71M (Peak 65.91M) | Time:00:01.15 | Syncing FlowArrow.014
+Fra:1 Mem:65.73M (Peak 65.92M) | Time:00:01.15 | Syncing FlowArrow.015
+Fra:1 Mem:65.74M (Peak 65.94M) | Time:00:01.15 | Syncing FlowArrow.016
+Fra:1 Mem:65.75M (Peak 65.95M) | Time:00:01.15 | Syncing FlowArrow.017
+Fra:1 Mem:65.76M (Peak 65.96M) | Time:00:01.15 | Syncing FlowArrow.018
+Fra:1 Mem:65.77M (Peak 65.97M) | Time:00:01.16 | Syncing FlowArrow.019
+Fra:1 Mem:65.78M (Peak 65.98M) | Time:00:01.16 | Syncing FlowArrow.020
+Fra:1 Mem:65.79M (Peak 65.99M) | Time:00:01.16 | Syncing FlowArrow.021
+Fra:1 Mem:65.80M (Peak 66.00M) | Time:00:01.16 | Syncing FlowArrow.022
+Fra:1 Mem:65.82M (Peak 66.01M) | Time:00:01.16 | Syncing FlowArrow.023
+Fra:1 Mem:65.83M (Peak 66.03M) | Time:00:01.16 | Syncing FlowArrow.024
+Fra:1 Mem:65.84M (Peak 66.04M) | Time:00:01.16 | Syncing FlowArrow.025
+Fra:1 Mem:65.85M (Peak 66.05M) | Time:00:01.16 | Syncing FlowArrow.026
+Fra:1 Mem:65.86M (Peak 66.06M) | Time:00:01.16 | Syncing FlowArrow.027
+Fra:1 Mem:65.87M (Peak 66.07M) | Time:00:01.16 | Syncing FlowArrow.028
+Fra:1 Mem:65.88M (Peak 66.08M) | Time:00:01.16 | Syncing FlowArrow.029
+Fra:1 Mem:65.89M (Peak 66.09M) | Time:00:01.16 | Syncing FlowArrow.030
+Fra:1 Mem:65.91M (Peak 66.10M) | Time:00:01.16 | Syncing FlowArrow.031
+Fra:1 Mem:65.92M (Peak 66.12M) | Time:00:01.16 | Syncing FlowArrow.032
+Fra:1 Mem:65.93M (Peak 66.13M) | Time:00:01.17 | Syncing FlowArrow.033
+Fra:1 Mem:65.97M (Peak 66.17M) | Time:00:01.17 | Syncing FlowArrow.034
+Fra:1 Mem:65.98M (Peak 66.18M) | Time:00:01.17 | Syncing FlowArrow.035
+Fra:1 Mem:65.99M (Peak 66.19M) | Time:00:01.17 | Syncing FlowArrow.036
+Fra:1 Mem:66.00M (Peak 66.20M) | Time:00:01.17 | Syncing FlowArrow.037
+Fra:1 Mem:66.01M (Peak 66.21M) | Time:00:01.17 | Syncing FlowArrow.038
+Fra:1 Mem:66.03M (Peak 66.22M) | Time:00:01.17 | Syncing FlowArrow.039
+Fra:1 Mem:66.04M (Peak 66.24M) | Time:00:01.17 | Syncing FlowArrow.040
+Fra:1 Mem:66.05M (Peak 66.25M) | Time:00:01.17 | Syncing FlowArrow.041
+Fra:1 Mem:66.06M (Peak 66.26M) | Time:00:01.17 | Syncing FlowArrow.042
+Fra:1 Mem:66.07M (Peak 66.27M) | Time:00:01.17 | Syncing FlowArrow.043
+Fra:1 Mem:66.08M (Peak 66.28M) | Time:00:01.17 | Syncing FlowArrow.044
+Fra:1 Mem:66.09M (Peak 66.29M) | Time:00:01.17 | Syncing FlowArrow.045
+Fra:1 Mem:66.14M (Peak 66.30M) | Time:00:01.17 | Syncing FlowArrow.046
+Fra:1 Mem:66.15M (Peak 66.35M) | Time:00:01.17 | Syncing FlowArrow.047
+Fra:1 Mem:66.16M (Peak 66.36M) | Time:00:01.18 | Syncing FlowArrow.048
+Fra:1 Mem:66.17M (Peak 66.37M) | Time:00:01.18 | Syncing FlowArrow.049
+Fra:1 Mem:66.18M (Peak 66.38M) | Time:00:01.18 | Syncing FlowArrow.050
+Fra:1 Mem:66.19M (Peak 66.39M) | Time:00:01.18 | Syncing FlowArrow.051
+Fra:1 Mem:66.20M (Peak 66.40M) | Time:00:01.18 | Syncing FlowArrow.052
+Fra:1 Mem:66.21M (Peak 66.41M) | Time:00:01.18 | Syncing FlowArrow.053
+Fra:1 Mem:66.22M (Peak 66.43M) | Time:00:01.18 | Syncing FlowArrow.054
+Fra:1 Mem:66.24M (Peak 66.43M) | Time:00:01.18 | Syncing FlowArrow.055
+Fra:1 Mem:66.25M (Peak 66.45M) | Time:00:01.18 | Syncing FlowArrow.056
+Fra:1 Mem:66.26M (Peak 66.46M) | Time:00:01.18 | Syncing FlowArrow.057
+Fra:1 Mem:66.27M (Peak 66.47M) | Time:00:01.18 | Syncing FlowArrow.058
+Fra:1 Mem:66.28M (Peak 66.48M) | Time:00:01.18 | Syncing FlowArrow.059
+Fra:1 Mem:66.29M (Peak 66.49M) | Time:00:01.18 | Syncing FlowArrow.060
+Fra:1 Mem:66.31M (Peak 66.50M) | Time:00:01.18 | Syncing FlowArrow.061
+Fra:1 Mem:66.32M (Peak 66.52M) | Time:00:01.18 | Syncing FlowArrow.062
+Fra:1 Mem:66.33M (Peak 66.53M) | Time:00:01.19 | Syncing FlowArrow.063
+Fra:1 Mem:66.34M (Peak 66.54M) | Time:00:01.19 | Syncing FlowArrow.064
+Fra:1 Mem:66.35M (Peak 66.55M) | Time:00:01.19 | Syncing FlowArrow.065
+Fra:1 Mem:66.36M (Peak 66.56M) | Time:00:01.19 | Syncing FlowArrow.066
+Fra:1 Mem:66.37M (Peak 66.57M) | Time:00:01.19 | Syncing FlowArrow.067
+Fra:1 Mem:66.38M (Peak 66.58M) | Time:00:01.19 | Syncing FlowArrow.068
+Fra:1 Mem:66.40M (Peak 66.59M) | Time:00:01.19 | Syncing FlowArrow.069
+Fra:1 Mem:66.40M (Peak 66.61M) | Time:00:01.19 | Syncing FlowArrow.070
+Fra:1 Mem:66.42M (Peak 66.62M) | Time:00:01.19 | Syncing FlowArrow.071
+Fra:1 Mem:66.43M (Peak 66.63M) | Time:00:01.19 | Syncing FlowArrow.072
+Fra:1 Mem:66.44M (Peak 66.64M) | Time:00:01.19 | Syncing FlowArrow.073
+Fra:1 Mem:66.45M (Peak 66.65M) | Time:00:01.19 | Syncing FlowArrow.074
+Fra:1 Mem:66.46M (Peak 66.66M) | Time:00:01.19 | Syncing FlowArrow.075
+Fra:1 Mem:66.47M (Peak 66.67M) | Time:00:01.19 | Syncing FlowArrow.076
+Fra:1 Mem:66.52M (Peak 66.71M) | Time:00:01.20 | Syncing FlowArrow.077
+Fra:1 Mem:66.53M (Peak 66.73M) | Time:00:01.20 | Syncing FlowArrow.078
+Fra:1 Mem:66.54M (Peak 66.74M) | Time:00:01.20 | Syncing FlowArrow.079
+Fra:1 Mem:66.55M (Peak 66.75M) | Time:00:01.20 | Syncing FlowArrow.080
+Fra:1 Mem:66.56M (Peak 66.76M) | Time:00:01.20 | Syncing FlowArrow.081
+Fra:1 Mem:66.57M (Peak 66.77M) | Time:00:01.20 | Syncing FlowArrow.082
+Fra:1 Mem:66.58M (Peak 66.78M) | Time:00:01.20 | Syncing FlowArrow.083
+Fra:1 Mem:66.59M (Peak 66.80M) | Time:00:01.20 | Syncing FlowArrow.084
+Fra:1 Mem:66.61M (Peak 66.81M) | Time:00:01.20 | Syncing FlowArrow.085
+Fra:1 Mem:66.62M (Peak 66.82M) | Time:00:01.20 | Syncing FlowArrow.086
+Fra:1 Mem:66.63M (Peak 66.83M) | Time:00:01.20 | Syncing FlowArrow.087
+Fra:1 Mem:66.64M (Peak 66.84M) | Time:00:01.20 | Syncing FlowArrow.088
+Fra:1 Mem:66.65M (Peak 66.85M) | Time:00:01.20 | Syncing FlowArrow.089
+Fra:1 Mem:66.66M (Peak 66.86M) | Time:00:01.20 | Syncing FlowArrow.090
+Fra:1 Mem:66.67M (Peak 66.87M) | Time:00:01.20 | Syncing FlowArrow.091
+Fra:1 Mem:66.69M (Peak 66.89M) | Time:00:01.21 | Syncing FlowArrow.092
+Fra:1 Mem:66.70M (Peak 66.90M) | Time:00:01.21 | Syncing FlowArrow.093
+Fra:1 Mem:66.71M (Peak 66.91M) | Time:00:01.21 | Syncing FlowArrow.094
+Fra:1 Mem:66.72M (Peak 66.92M) | Time:00:01.21 | Syncing FlowArrow.095
+Fra:1 Mem:66.73M (Peak 66.93M) | Time:00:01.21 | Syncing FlowArrow.096
+Fra:1 Mem:66.74M (Peak 66.94M) | Time:00:01.21 | Syncing FlowArrow.097
+Fra:1 Mem:66.78M (Peak 66.95M) | Time:00:01.21 | Syncing FlowArrow.098
+Fra:1 Mem:66.80M (Peak 66.99M) | Time:00:01.21 | Syncing FlowArrow.099
+Fra:1 Mem:66.81M (Peak 67.01M) | Time:00:01.21 | Syncing FlowArrow.100
+Fra:1 Mem:66.82M (Peak 67.02M) | Time:00:01.21 | Syncing FlowArrow.101
+Fra:1 Mem:66.83M (Peak 67.03M) | Time:00:01.21 | Syncing FlowArrow.102
+Fra:1 Mem:66.84M (Peak 67.04M) | Time:00:01.21 | Syncing FlowArrow.103
+Fra:1 Mem:66.85M (Peak 67.05M) | Time:00:01.21 | Syncing FlowArrow.104
+Fra:1 Mem:66.86M (Peak 67.06M) | Time:00:01.22 | Syncing FlowArrow.105
+Fra:1 Mem:66.87M (Peak 67.07M) | Time:00:01.22 | Syncing FlowArrow.106
+Fra:1 Mem:66.89M (Peak 67.08M) | Time:00:01.22 | Syncing FlowArrow.107
+Fra:1 Mem:66.90M (Peak 67.10M) | Time:00:01.22 | Syncing FlowArrow.108
+Fra:1 Mem:66.91M (Peak 67.11M) | Time:00:01.22 | Syncing FlowArrow.109
+Fra:1 Mem:66.92M (Peak 67.12M) | Time:00:01.22 | Syncing FlowArrow.110
+Fra:1 Mem:66.93M (Peak 67.13M) | Time:00:01.22 | Syncing FlowArrow.111
+Fra:1 Mem:66.94M (Peak 67.14M) | Time:00:01.22 | Syncing FlowArrow.112
+Fra:1 Mem:66.95M (Peak 67.15M) | Time:00:01.22 | Syncing FlowArrow.113
+Fra:1 Mem:66.96M (Peak 67.16M) | Time:00:01.22 | Syncing FlowArrow.114
+Fra:1 Mem:66.97M (Peak 67.17M) | Time:00:01.22 | Syncing FlowArrow.115
+Fra:1 Mem:66.98M (Peak 67.19M) | Time:00:01.22 | Syncing FlowArrow.116
+Fra:1 Mem:67.00M (Peak 67.20M) | Time:00:01.22 | Syncing FlowArrow.117
+Fra:1 Mem:67.01M (Peak 67.21M) | Time:00:01.23 | Syncing FlowArrow.118
+Fra:1 Mem:67.05M (Peak 67.22M) | Time:00:01.23 | Syncing FlowArrow.119
+Fra:1 Mem:67.06M (Peak 67.26M) | Time:00:01.23 | Syncing FlowArrow.120
+Fra:1 Mem:67.07M (Peak 67.27M) | Time:00:01.23 | Syncing FlowArrow.121
+Fra:1 Mem:67.08M (Peak 67.28M) | Time:00:01.23 | Syncing FlowArrow.122
+Fra:1 Mem:67.10M (Peak 67.29M) | Time:00:01.23 | Syncing FlowArrow.123
+Fra:1 Mem:67.11M (Peak 67.31M) | Time:00:01.23 | Syncing FlowArrow.124
+Fra:1 Mem:67.12M (Peak 67.32M) | Time:00:01.23 | Syncing FlowArrow.125
+Fra:1 Mem:67.13M (Peak 67.33M) | Time:00:01.23 | Syncing FlowArrow.126
+Fra:1 Mem:67.14M (Peak 67.34M) | Time:00:01.23 | Syncing FlowArrow.127
+Fra:1 Mem:67.15M (Peak 67.35M) | Time:00:01.23 | Syncing FlowArrow.128
+Fra:1 Mem:67.17M (Peak 67.36M) | Time:00:01.23 | Syncing FlowArrow.129
+Fra:1 Mem:67.18M (Peak 67.38M) | Time:00:01.23 | Syncing FlowArrow.130
+Fra:1 Mem:67.19M (Peak 67.39M) | Time:00:01.23 | Syncing FlowArrow.131
+Fra:1 Mem:67.20M (Peak 67.40M) | Time:00:01.24 | Syncing FlowArrow.132
+Fra:1 Mem:67.21M (Peak 67.41M) | Time:00:01.24 | Syncing FlowArrow.133
+Fra:1 Mem:67.22M (Peak 67.42M) | Time:00:01.24 | Syncing FlowArrow.134
+Fra:1 Mem:67.23M (Peak 67.43M) | Time:00:01.24 | Syncing FlowArrow.135
+Fra:1 Mem:67.24M (Peak 67.44M) | Time:00:01.24 | Syncing FlowArrow.136
+Fra:1 Mem:67.26M (Peak 67.45M) | Time:00:01.24 | Syncing FlowArrow.137
+Fra:1 Mem:67.26M (Peak 67.47M) | Time:00:01.24 | Syncing FlowArrow.138
+Fra:1 Mem:67.28M (Peak 67.48M) | Time:00:01.24 | Syncing FlowArrow.139
+Fra:1 Mem:67.29M (Peak 67.49M) | Time:00:01.24 | Syncing FlowArrow.140
+Fra:1 Mem:67.30M (Peak 67.50M) | Time:00:01.24 | Syncing FlowArrow.141
+Fra:1 Mem:67.31M (Peak 67.51M) | Time:00:01.24 | Syncing FlowArrow.142
+Fra:1 Mem:67.32M (Peak 67.52M) | Time:00:01.24 | Syncing FlowArrow.143
+Fra:1 Mem:67.33M (Peak 67.53M) | Time:00:01.24 | Syncing FlowArrow.144
+Fra:1 Mem:67.34M (Peak 67.54M) | Time:00:01.25 | Syncing FlowArrow.145
+Fra:1 Mem:67.35M (Peak 67.55M) | Time:00:01.25 | Syncing FlowArrow.146
+Fra:1 Mem:67.37M (Peak 67.56M) | Time:00:01.25 | Syncing FlowArrow.147
+Fra:1 Mem:67.38M (Peak 67.58M) | Time:00:01.25 | Syncing FlowArrow.148
+Fra:1 Mem:67.39M (Peak 67.59M) | Time:00:01.25 | Syncing FlowArrow.149
+Fra:1 Mem:67.43M (Peak 67.60M) | Time:00:01.25 | Syncing FlowArrow.150
+Fra:1 Mem:67.44M (Peak 67.64M) | Time:00:01.25 | Syncing FlowArrow.151
+Fra:1 Mem:67.45M (Peak 67.65M) | Time:00:01.25 | Syncing FlowArrow.152
+Fra:1 Mem:67.47M (Peak 67.66M) | Time:00:01.25 | Syncing FlowArrow.153
+Fra:1 Mem:67.48M (Peak 67.68M) | Time:00:01.25 | Syncing FlowArrow.154
+Fra:1 Mem:67.49M (Peak 67.69M) | Time:00:01.25 | Syncing FlowArrow.155
+Fra:1 Mem:67.50M (Peak 67.70M) | Time:00:01.25 | Syncing FlowArrow.156
+Fra:1 Mem:67.51M (Peak 67.71M) | Time:00:01.25 | Syncing FlowArrow.157
+Fra:1 Mem:67.52M (Peak 67.72M) | Time:00:01.25 | Syncing FlowArrow.158
+Fra:1 Mem:67.53M (Peak 67.73M) | Time:00:01.26 | Syncing FlowArrow.159
+Fra:1 Mem:67.54M (Peak 67.74M) | Time:00:01.26 | Syncing FlyxionCam_v3_3
+Fra:1 Mem:67.54M (Peak 67.74M) | Time:00:01.26 | Syncing KeyLight_v3_3
+Fra:1 Mem:67.54M (Peak 67.74M) | Time:00:01.26 | Syncing FillLight_v3_3
+Fra:1 Mem:67.54M (Peak 67.74M) | Time:00:01.26 | Syncing RimLight_v3_3
+Fra:1 Mem:67.20M (Peak 67.74M) | Time:00:01.33 | Rendering 1 / 32 samples
+Fra:1 Mem:66.33M (Peak 67.74M) | Time:00:09.02 | Rendering 26 / 32 samples
+Fra:1 Mem:66.33M (Peak 67.74M) | Time:00:11.72 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/cognitive_phase_portrait_0001.png'
+ Time: 00:12.40 (Saving: 00:00.29)
+
+
+Blender quit

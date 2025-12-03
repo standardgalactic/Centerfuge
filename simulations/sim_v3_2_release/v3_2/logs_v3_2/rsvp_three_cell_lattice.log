@@ -1,0 +1,98 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "rsvp_three_cell_lattice.blend"
+[Helper_v3.2] Scene initialized.
+[RunManager_v3.2] Loading script: rsvp_three_cell_lattice
+[v3.2] Three-cell RSVP lattice created.
+[RunManager_v3.2] Finished executing: rsvp_three_cell_lattice
+[RunManager_v3.2] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/rsvp_three_cell_lattice.blend
+Info: Saved "rsvp_three_cell_lattice.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/rsvp_three_cell_lattice.blend
+Fra:1 Mem:51.65M (Peak 52.31M) | Time:00:00.94 | Syncing Cell0_Phi
+Fra:1 Mem:52.08M (Peak 52.36M) | Time:00:00.99 | Syncing Cell0_halo_0
+Fra:1 Mem:52.10M (Peak 52.36M) | Time:00:00.99 | Syncing Cell0_halo_1
+Fra:1 Mem:52.11M (Peak 52.36M) | Time:00:00.99 | Syncing Cell0_halo_2
+Fra:1 Mem:52.12M (Peak 52.36M) | Time:00:00.99 | Syncing Cell0_halo_3
+Fra:1 Mem:52.13M (Peak 52.36M) | Time:00:00.99 | Syncing Cell0_halo_4
+Fra:1 Mem:52.15M (Peak 52.36M) | Time:00:00.99 | Syncing Cell0_halo_5
+Fra:1 Mem:52.16M (Peak 52.36M) | Time:00:00.99 | Syncing Cell0_halo_6
+Fra:1 Mem:52.17M (Peak 52.37M) | Time:00:00.99 | Syncing Cell0_halo_7
+Fra:1 Mem:52.18M (Peak 52.38M) | Time:00:01.00 | Syncing Cell0_halo_8
+Fra:1 Mem:52.20M (Peak 52.39M) | Time:00:01.00 | Syncing Cell0_halo_9
+Fra:1 Mem:52.21M (Peak 52.41M) | Time:00:01.00 | Syncing Cell0_halo_10
+Fra:1 Mem:52.22M (Peak 52.42M) | Time:00:01.00 | Syncing Cell0_halo_11
+Fra:1 Mem:52.23M (Peak 52.43M) | Time:00:01.00 | Syncing Cell0_halo_12
+Fra:1 Mem:52.25M (Peak 52.44M) | Time:00:01.00 | Syncing Cell0_halo_13
+Fra:1 Mem:52.26M (Peak 52.46M) | Time:00:01.00 | Syncing Cell0_halo_14
+Fra:1 Mem:52.27M (Peak 52.47M) | Time:00:01.00 | Syncing Cell0_halo_15
+Fra:1 Mem:52.28M (Peak 52.48M) | Time:00:01.00 | Syncing Cell0_halo_16
+Fra:1 Mem:52.29M (Peak 52.49M) | Time:00:01.00 | Syncing Cell0_halo_17
+Fra:1 Mem:52.31M (Peak 52.51M) | Time:00:01.00 | Syncing Cell0_halo_18
+Fra:1 Mem:52.32M (Peak 52.52M) | Time:00:01.00 | Syncing Cell0_halo_19
+Fra:1 Mem:52.33M (Peak 52.53M) | Time:00:01.00 | Syncing Cell1_Phi
+Fra:1 Mem:52.40M (Peak 52.54M) | Time:00:01.01 | Syncing Cell1_halo_0
+Fra:1 Mem:52.41M (Peak 52.61M) | Time:00:01.01 | Syncing Cell1_halo_1
+Fra:1 Mem:52.43M (Peak 52.62M) | Time:00:01.01 | Syncing Cell1_halo_2
+Fra:1 Mem:52.44M (Peak 52.64M) | Time:00:01.01 | Syncing Cell1_halo_3
+Fra:1 Mem:52.45M (Peak 52.65M) | Time:00:01.01 | Syncing Cell1_halo_4
+Fra:1 Mem:52.46M (Peak 52.66M) | Time:00:01.01 | Syncing Cell1_halo_5
+Fra:1 Mem:52.48M (Peak 52.67M) | Time:00:01.01 | Syncing Cell1_halo_6
+Fra:1 Mem:52.49M (Peak 52.69M) | Time:00:01.01 | Syncing Cell1_halo_7
+Fra:1 Mem:52.50M (Peak 52.70M) | Time:00:01.01 | Syncing Cell1_halo_8
+Fra:1 Mem:52.51M (Peak 52.71M) | Time:00:01.01 | Syncing Cell1_halo_9
+Fra:1 Mem:52.52M (Peak 52.72M) | Time:00:01.01 | Syncing Cell1_halo_10
+Fra:1 Mem:52.54M (Peak 52.74M) | Time:00:01.01 | Syncing Cell1_halo_11
+Fra:1 Mem:52.55M (Peak 52.75M) | Time:00:01.01 | Syncing Cell1_halo_12
+Fra:1 Mem:52.56M (Peak 52.76M) | Time:00:01.01 | Syncing Cell1_halo_13
+Fra:1 Mem:52.58M (Peak 52.77M) | Time:00:01.01 | Syncing Cell1_halo_14
+Fra:1 Mem:52.59M (Peak 52.79M) | Time:00:01.01 | Syncing Cell1_halo_15
+Fra:1 Mem:52.63M (Peak 52.83M) | Time:00:01.02 | Syncing Cell1_halo_16
+Fra:1 Mem:52.64M (Peak 52.84M) | Time:00:01.02 | Syncing Cell1_halo_17
+Fra:1 Mem:52.66M (Peak 52.85M) | Time:00:01.02 | Syncing Cell1_halo_18
+Fra:1 Mem:52.67M (Peak 52.87M) | Time:00:01.02 | Syncing Cell1_halo_19
+Fra:1 Mem:52.68M (Peak 52.88M) | Time:00:01.02 | Syncing Cell2_Phi
+Fra:1 Mem:52.75M (Peak 52.89M) | Time:00:01.02 | Syncing Cell2_halo_0
+Fra:1 Mem:52.76M (Peak 52.96M) | Time:00:01.02 | Syncing Cell2_halo_1
+Fra:1 Mem:52.77M (Peak 52.97M) | Time:00:01.02 | Syncing Cell2_halo_2
+Fra:1 Mem:52.79M (Peak 52.98M) | Time:00:01.02 | Syncing Cell2_halo_3
+Fra:1 Mem:52.80M (Peak 53.00M) | Time:00:01.02 | Syncing Cell2_halo_4
+Fra:1 Mem:52.81M (Peak 53.01M) | Time:00:01.02 | Syncing Cell2_halo_5
+Fra:1 Mem:52.82M (Peak 53.02M) | Time:00:01.02 | Syncing Cell2_halo_6
+Fra:1 Mem:52.87M (Peak 53.03M) | Time:00:01.02 | Syncing Cell2_halo_7
+Fra:1 Mem:52.88M (Peak 53.08M) | Time:00:01.02 | Syncing Cell2_halo_8
+Fra:1 Mem:52.89M (Peak 53.09M) | Time:00:01.02 | Syncing Cell2_halo_9
+Fra:1 Mem:52.91M (Peak 53.10M) | Time:00:01.03 | Syncing Cell2_halo_10
+Fra:1 Mem:52.92M (Peak 53.12M) | Time:00:01.03 | Syncing Cell2_halo_11
+Fra:1 Mem:52.93M (Peak 53.13M) | Time:00:01.03 | Syncing Cell2_halo_12
+Fra:1 Mem:52.94M (Peak 53.14M) | Time:00:01.03 | Syncing Cell2_halo_13
+Fra:1 Mem:52.95M (Peak 53.15M) | Time:00:01.03 | Syncing Cell2_halo_14
+Fra:1 Mem:52.97M (Peak 53.16M) | Time:00:01.03 | Syncing Cell2_halo_15
+Fra:1 Mem:52.98M (Peak 53.18M) | Time:00:01.03 | Syncing Cell2_halo_16
+Fra:1 Mem:52.99M (Peak 53.19M) | Time:00:01.03 | Syncing Cell2_halo_17
+Fra:1 Mem:53.00M (Peak 53.20M) | Time:00:01.03 | Syncing Cell2_halo_18
+Fra:1 Mem:53.02M (Peak 53.21M) | Time:00:01.03 | Syncing Cell2_halo_19
+Fra:1 Mem:53.03M (Peak 53.23M) | Time:00:01.03 | Syncing FlyxionCam_v3_2
+Fra:1 Mem:53.03M (Peak 53.23M) | Time:00:01.03 | Syncing KeyLight_v3_2
+Fra:1 Mem:53.03M (Peak 53.23M) | Time:00:01.03 | Syncing FillLight_v3_2
+Fra:1 Mem:53.03M (Peak 53.23M) | Time:00:01.03 | Syncing RimLight_v3_2
+Fra:1 Mem:53.03M (Peak 53.23M) | Time:00:01.04 | Syncing Link_0
+Fra:1 Mem:53.03M (Peak 53.24M) | Time:00:01.04 | Syncing Link_1
+Fra:1 Mem:53.04M (Peak 53.25M) | Time:00:01.04 | Syncing Link_2
+Fra:1 Mem:52.91M (Peak 53.25M) | Time:00:01.11 | Rendering 1 / 32 samples
+Fra:1 Mem:52.43M (Peak 53.25M) | Time:00:07.24 | Rendering 26 / 32 samples
+Fra:1 Mem:52.43M (Peak 53.25M) | Time:00:08.53 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/rsvp_three_cell_lattice_0001.png'
+ Time: 00:09.10 (Saving: 00:00.30)
+
+
+Blender quit

@@ -1,0 +1,21 @@
+{
+  "version": "3.3.0",
+  "mode": "static_stills",
+  "scripts": [
+    "rsvp_hypercell.py",
+    "tartan_recursive_tile.py",
+    "semantic_operator_orbit.py",
+    "hydra_persona_dyad.py",
+    "xylomorphic_root_brain.py",
+    "entropic_vortex_coil.py",
+    "categorical_pushout_sculpture.py",
+    "rsvp_field_sheet.py",
+    "cognitive_phase_portrait.py",
+    "hydra_crown.py"
+  ],
+  "helpers": [
+    "storage_helper_v3_3.py",
+    "run_manager_v3_3.py"
+  ],
+  "entrypoint": "v3_3/render_stills_v3_3.sh"
+}

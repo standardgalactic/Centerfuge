@@ -1,0 +1,68 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "tartan_recursive_tile.blend"
+[Helper_v3.3] Scene initialized.
+[RunManager_v3.3] Loading script: tartan_recursive_tile
+[v3.3] TARTAN recursive tile created.
+[RunManager_v3.3] Finished executing: tartan_recursive_tile
+[RunManager_v3.3] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/tartan_recursive_tile.blend
+Info: Saved "tartan_recursive_tile.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/tartan_recursive_tile.blend
+Fra:1 Mem:47.62M (Peak 48.29M) | Time:00:00.87 | Syncing TARTAN_BaseCube
+Fra:1 Mem:48.00M (Peak 48.34M) | Time:00:00.91 | Syncing TARTAN_Tile_0_-1_-1
+Fra:1 Mem:48.00M (Peak 48.34M) | Time:00:00.91 | Syncing TARTAN_Tile_0_-1_0
+Fra:1 Mem:48.01M (Peak 48.34M) | Time:00:00.91 | Syncing TARTAN_Tile_0_-1_1
+Fra:1 Mem:48.02M (Peak 48.34M) | Time:00:00.91 | Syncing TARTAN_Tile_0_0_-1
+Fra:1 Mem:48.02M (Peak 48.34M) | Time:00:00.91 | Syncing TARTAN_Tile_0_0_0
+Fra:1 Mem:48.03M (Peak 48.34M) | Time:00:00.91 | Syncing TARTAN_Tile_0_0_1
+Fra:1 Mem:48.04M (Peak 48.34M) | Time:00:00.91 | Syncing TARTAN_Tile_0_1_-1
+Fra:1 Mem:48.04M (Peak 48.34M) | Time:00:00.91 | Syncing TARTAN_Tile_0_1_0
+Fra:1 Mem:48.05M (Peak 48.34M) | Time:00:00.91 | Syncing TARTAN_Tile_0_1_1
+Fra:1 Mem:48.06M (Peak 48.34M) | Time:00:00.91 | Syncing TARTAN_Tile_1_-1_-1
+Fra:1 Mem:48.06M (Peak 48.34M) | Time:00:00.92 | Syncing TARTAN_Tile_1_-1_0
+Fra:1 Mem:48.07M (Peak 48.34M) | Time:00:00.92 | Syncing TARTAN_Tile_1_-1_1
+Fra:1 Mem:48.07M (Peak 48.34M) | Time:00:00.92 | Syncing TARTAN_Tile_1_0_-1
+Fra:1 Mem:48.08M (Peak 48.34M) | Time:00:00.92 | Syncing TARTAN_Tile_1_0_0
+Fra:1 Mem:48.09M (Peak 48.34M) | Time:00:00.92 | Syncing TARTAN_Tile_1_0_1
+Fra:1 Mem:48.09M (Peak 48.34M) | Time:00:00.92 | Syncing TARTAN_Tile_1_1_-1
+Fra:1 Mem:48.10M (Peak 48.34M) | Time:00:00.92 | Syncing TARTAN_Tile_1_1_0
+Fra:1 Mem:48.11M (Peak 48.34M) | Time:00:00.92 | Syncing TARTAN_Tile_1_1_1
+Fra:1 Mem:48.11M (Peak 48.34M) | Time:00:00.92 | Syncing TARTAN_Tile_2_-1_-1
+Fra:1 Mem:48.12M (Peak 48.34M) | Time:00:00.92 | Syncing TARTAN_Tile_2_-1_0
+Fra:1 Mem:48.13M (Peak 48.34M) | Time:00:00.92 | Syncing TARTAN_Tile_2_-1_1
+Fra:1 Mem:48.13M (Peak 48.34M) | Time:00:00.92 | Syncing TARTAN_Tile_2_0_-1
+Fra:1 Mem:48.14M (Peak 48.34M) | Time:00:00.92 | Syncing TARTAN_Tile_2_0_0
+Fra:1 Mem:48.15M (Peak 48.35M) | Time:00:00.92 | Syncing TARTAN_Tile_2_0_1
+Fra:1 Mem:48.15M (Peak 48.36M) | Time:00:00.92 | Syncing TARTAN_Tile_2_1_-1
+Fra:1 Mem:48.16M (Peak 48.36M) | Time:00:00.93 | Syncing TARTAN_Tile_2_1_0
+Fra:1 Mem:48.16M (Peak 48.37M) | Time:00:00.93 | Syncing TARTAN_Tile_2_1_1
+Fra:1 Mem:48.17M (Peak 48.38M) | Time:00:00.93 | Syncing TARTAN_Corner_-1_-1_-1
+Fra:1 Mem:48.24M (Peak 48.38M) | Time:00:00.93 | Syncing TARTAN_Corner_-1_-1_1
+Fra:1 Mem:48.31M (Peak 48.45M) | Time:00:00.93 | Syncing TARTAN_Corner_-1_1_-1
+Fra:1 Mem:48.38M (Peak 48.52M) | Time:00:00.93 | Syncing TARTAN_Corner_-1_1_1
+Fra:1 Mem:48.45M (Peak 48.59M) | Time:00:00.93 | Syncing TARTAN_Corner_1_-1_-1
+Fra:1 Mem:48.52M (Peak 48.66M) | Time:00:00.93 | Syncing TARTAN_Corner_1_-1_1
+Fra:1 Mem:48.59M (Peak 48.73M) | Time:00:00.93 | Syncing TARTAN_Corner_1_1_-1
+Fra:1 Mem:48.66M (Peak 48.80M) | Time:00:00.93 | Syncing TARTAN_Corner_1_1_1
+Fra:1 Mem:48.72M (Peak 48.87M) | Time:00:00.93 | Syncing FlyxionCam_v3_3
+Fra:1 Mem:48.72M (Peak 48.87M) | Time:00:00.93 | Syncing KeyLight_v3_3
+Fra:1 Mem:48.72M (Peak 48.87M) | Time:00:00.93 | Syncing FillLight_v3_3
+Fra:1 Mem:48.72M (Peak 48.87M) | Time:00:00.94 | Syncing RimLight_v3_3
+Fra:1 Mem:48.59M (Peak 48.87M) | Time:00:01.00 | Rendering 1 / 32 samples
+Fra:1 Mem:48.18M (Peak 48.87M) | Time:00:06.24 | Rendering 26 / 32 samples
+Fra:1 Mem:48.18M (Peak 48.87M) | Time:00:07.18 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_3_release/v3_3/output_v3_3/tartan_recursive_tile_0001.png'
+ Time: 00:07.69 (Saving: 00:00.28)
+
+
+Blender quit

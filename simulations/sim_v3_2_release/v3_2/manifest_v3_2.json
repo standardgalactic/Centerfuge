@@ -1,0 +1,17 @@
+{
+  "version": "3.2.0",
+  "mode": "static_stills",
+  "scripts": [
+    "rsvp_plenum_cell.py",
+    "rsvp_three_cell_lattice.py",
+    "hydra_persona_glyphs.py",
+    "xylomorphic_organ_cluster_v2.py",
+    "semantic_merge_hicat.py",
+    "delta_sigma_tower.py"
+  ],
+  "helpers": [
+    "storage_helper_v3_2.py",
+    "run_manager_v3_2.py"
+  ],
+  "entrypoint": "v3_2/render_stills_v3_2.sh"
+}

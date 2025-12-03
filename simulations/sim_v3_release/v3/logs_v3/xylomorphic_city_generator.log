@@ -1,0 +1,13 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "xylomorphic_city_generator.blend"
+[Helper_v3] Scene initialized.
+[RunManager_v3] Loading script: xylomorphic_city_generator
+[RunManager_v3] Finished executing: xylomorphic_city_generator
+[RunManager_v3] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_release/v3/output_v3/xylomorphic_city_generator.blend
+Info: Saved "xylomorphic_city_generator.blend"
+
+Blender quit

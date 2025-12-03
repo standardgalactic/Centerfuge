@@ -1,0 +1,56 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "xylomorphic_city_static.blend"
+[Helper_v3.1] Scene initialized.
+[RunManager_v3.1] Loading script: xylomorphic_city_static
+[v3.1] Xylomorphic city (static) created.
+[RunManager_v3.1] Finished executing: xylomorphic_city_static
+[RunManager_v3.1] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_1_release/v3_1/output_v3_1/xylomorphic_city_static.blend
+Info: Saved "xylomorphic_city_static.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_1_release/v3_1/output_v3_1/xylomorphic_city_static.blend
+Fra:1 Mem:48.27M (Peak 48.93M) | Time:00:00.89 | Syncing Xylo_Trunk
+Fra:1 Mem:48.65M (Peak 48.98M) | Time:00:00.93 | Syncing Xylo_Hub
+Fra:1 Mem:48.72M (Peak 48.98M) | Time:00:00.94 | Syncing Xylo_Hub.001
+Fra:1 Mem:48.79M (Peak 48.98M) | Time:00:00.94 | Syncing Xylo_Hub.002
+Fra:1 Mem:48.86M (Peak 49.00M) | Time:00:00.94 | Syncing Xylo_Trunk.001
+Fra:1 Mem:48.87M (Peak 49.07M) | Time:00:00.94 | Syncing Xylo_Hub.003
+Fra:1 Mem:48.94M (Peak 49.08M) | Time:00:00.94 | Syncing Xylo_Hub.004
+Fra:1 Mem:49.01M (Peak 49.15M) | Time:00:00.94 | Syncing Xylo_Hub.005
+Fra:1 Mem:49.08M (Peak 49.22M) | Time:00:00.94 | Syncing Xylo_Trunk.002
+Fra:1 Mem:49.09M (Peak 49.29M) | Time:00:00.94 | Syncing Xylo_Hub.006
+Fra:1 Mem:49.16M (Peak 49.30M) | Time:00:00.94 | Syncing Xylo_Hub.007
+Fra:1 Mem:49.23M (Peak 49.37M) | Time:00:00.94 | Syncing Xylo_Hub.008
+Fra:1 Mem:49.30M (Peak 49.44M) | Time:00:00.94 | Syncing Xylo_Trunk.003
+Fra:1 Mem:49.31M (Peak 49.51M) | Time:00:00.94 | Syncing Xylo_Hub.009
+Fra:1 Mem:49.38M (Peak 49.52M) | Time:00:00.94 | Syncing Xylo_Hub.010
+Fra:1 Mem:49.45M (Peak 49.59M) | Time:00:00.95 | Syncing Xylo_Hub.011
+Fra:1 Mem:49.52M (Peak 49.66M) | Time:00:00.95 | Syncing Xylo_Trunk.004
+Fra:1 Mem:49.53M (Peak 49.73M) | Time:00:00.95 | Syncing Xylo_Hub.012
+Fra:1 Mem:49.60M (Peak 49.74M) | Time:00:00.95 | Syncing Xylo_Hub.013
+Fra:1 Mem:49.67M (Peak 49.81M) | Time:00:00.95 | Syncing Xylo_Hub.014
+Fra:1 Mem:49.74M (Peak 49.88M) | Time:00:00.95 | Syncing Xylo_Trunk.005
+Fra:1 Mem:49.75M (Peak 49.95M) | Time:00:00.95 | Syncing Xylo_Hub.015
+Fra:1 Mem:49.82M (Peak 49.96M) | Time:00:00.95 | Syncing Xylo_Hub.016
+Fra:1 Mem:49.89M (Peak 50.03M) | Time:00:00.95 | Syncing Xylo_Hub.017
+Fra:1 Mem:49.95M (Peak 50.10M) | Time:00:00.95 | Syncing FlyxionCam_v3_1
+Fra:1 Mem:49.95M (Peak 50.10M) | Time:00:00.95 | Syncing KeyLight_v3_1
+Fra:1 Mem:49.95M (Peak 50.10M) | Time:00:00.95 | Syncing FillLight_v3_1
+Fra:1 Mem:49.95M (Peak 50.10M) | Time:00:00.95 | Syncing RimLight_v3_1
+Fra:1 Mem:49.67M (Peak 50.10M) | Time:00:01.03 | Rendering 1 / 32 samples
+Fra:1 Mem:48.76M (Peak 50.10M) | Time:00:10.26 | Rendering 26 / 32 samples
+Fra:1 Mem:48.76M (Peak 50.10M) | Time:00:12.17 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_1_release/v3_1/output_v3_1/xylomorphic_city_static_0001.png'
+ Time: 00:12.91 (Saving: 00:00.35)
+
+
+Blender quit

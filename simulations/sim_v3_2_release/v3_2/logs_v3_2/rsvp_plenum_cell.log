@@ -1,0 +1,99 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "rsvp_plenum_cell.blend"
+[Helper_v3.2] Scene initialized.
+[RunManager_v3.2] Loading script: rsvp_plenum_cell
+[v3.2] RSVP Plenum Cell created.
+[RunManager_v3.2] Finished executing: rsvp_plenum_cell
+[RunManager_v3.2] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/rsvp_plenum_cell.blend
+Info: Saved "rsvp_plenum_cell.blend"
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/rsvp_plenum_cell.blend
+Fra:1 Mem:52.15M (Peak 52.82M) | Time:00:01.11 | Syncing RSVP_Phi_Core
+Fra:1 Mem:52.59M (Peak 52.87M) | Time:00:01.15 | Syncing RSVP_Vector_Field
+Fra:1 Mem:52.66M (Peak 52.87M) | Time:00:01.15 | Syncing Entropy_Spark_0
+Fra:1 Mem:52.67M (Peak 52.87M) | Time:00:01.15 | Syncing Entropy_Spark_1
+Fra:1 Mem:52.68M (Peak 52.88M) | Time:00:01.15 | Syncing Entropy_Spark_2
+Fra:1 Mem:52.69M (Peak 52.89M) | Time:00:01.15 | Syncing Entropy_Spark_3
+Fra:1 Mem:52.71M (Peak 52.90M) | Time:00:01.15 | Syncing Entropy_Spark_4
+Fra:1 Mem:52.72M (Peak 52.92M) | Time:00:01.16 | Syncing Entropy_Spark_5
+Fra:1 Mem:52.73M (Peak 52.93M) | Time:00:01.16 | Syncing Entropy_Spark_6
+Fra:1 Mem:52.74M (Peak 52.94M) | Time:00:01.16 | Syncing Entropy_Spark_7
+Fra:1 Mem:52.75M (Peak 52.95M) | Time:00:01.16 | Syncing Entropy_Spark_8
+Fra:1 Mem:52.77M (Peak 52.97M) | Time:00:01.16 | Syncing Entropy_Spark_9
+Fra:1 Mem:52.78M (Peak 52.98M) | Time:00:01.16 | Syncing Entropy_Spark_10
+Fra:1 Mem:52.79M (Peak 52.99M) | Time:00:01.16 | Syncing Entropy_Spark_11
+Fra:1 Mem:52.80M (Peak 53.00M) | Time:00:01.16 | Syncing Entropy_Spark_12
+Fra:1 Mem:52.82M (Peak 53.01M) | Time:00:01.16 | Syncing Entropy_Spark_13
+Fra:1 Mem:52.83M (Peak 53.03M) | Time:00:01.16 | Syncing Entropy_Spark_14
+Fra:1 Mem:52.84M (Peak 53.04M) | Time:00:01.16 | Syncing Entropy_Spark_15
+Fra:1 Mem:52.85M (Peak 53.05M) | Time:00:01.16 | Syncing Entropy_Spark_16
+Fra:1 Mem:52.87M (Peak 53.06M) | Time:00:01.17 | Syncing Entropy_Spark_17
+Fra:1 Mem:52.88M (Peak 53.08M) | Time:00:01.17 | Syncing Entropy_Spark_18
+Fra:1 Mem:52.89M (Peak 53.09M) | Time:00:01.17 | Syncing Entropy_Spark_19
+Fra:1 Mem:52.90M (Peak 53.10M) | Time:00:01.17 | Syncing Entropy_Spark_20
+Fra:1 Mem:52.92M (Peak 53.11M) | Time:00:01.17 | Syncing Entropy_Spark_21
+Fra:1 Mem:52.93M (Peak 53.13M) | Time:00:01.17 | Syncing Entropy_Spark_22
+Fra:1 Mem:52.94M (Peak 53.14M) | Time:00:01.17 | Syncing Entropy_Spark_23
+Fra:1 Mem:52.95M (Peak 53.15M) | Time:00:01.17 | Syncing Entropy_Spark_24
+Fra:1 Mem:52.97M (Peak 53.16M) | Time:00:01.17 | Syncing Entropy_Spark_25
+Fra:1 Mem:52.98M (Peak 53.18M) | Time:00:01.17 | Syncing Entropy_Spark_26
+Fra:1 Mem:52.99M (Peak 53.19M) | Time:00:01.17 | Syncing Entropy_Spark_27
+Fra:1 Mem:53.00M (Peak 53.20M) | Time:00:01.17 | Syncing Entropy_Spark_28
+Fra:1 Mem:53.01M (Peak 53.21M) | Time:00:01.17 | Syncing Entropy_Spark_29
+Fra:1 Mem:53.03M (Peak 53.22M) | Time:00:01.17 | Syncing Entropy_Spark_30
+Fra:1 Mem:53.04M (Peak 53.24M) | Time:00:01.17 | Syncing Entropy_Spark_31
+Fra:1 Mem:53.05M (Peak 53.25M) | Time:00:01.18 | Syncing Entropy_Spark_32
+Fra:1 Mem:53.06M (Peak 53.26M) | Time:00:01.18 | Syncing Entropy_Spark_33
+Fra:1 Mem:53.08M (Peak 53.28M) | Time:00:01.18 | Syncing Entropy_Spark_34
+Fra:1 Mem:53.09M (Peak 53.29M) | Time:00:01.18 | Syncing Entropy_Spark_35
+Fra:1 Mem:53.13M (Peak 53.33M) | Time:00:01.18 | Syncing Entropy_Spark_36
+Fra:1 Mem:53.15M (Peak 53.34M) | Time:00:01.18 | Syncing Entropy_Spark_37
+Fra:1 Mem:53.16M (Peak 53.36M) | Time:00:01.18 | Syncing Entropy_Spark_38
+Fra:1 Mem:53.17M (Peak 53.37M) | Time:00:01.18 | Syncing Entropy_Spark_39
+Fra:1 Mem:53.18M (Peak 53.38M) | Time:00:01.18 | Syncing Entropy_Spark_40
+Fra:1 Mem:53.19M (Peak 53.39M) | Time:00:01.18 | Syncing Entropy_Spark_41
+Fra:1 Mem:53.21M (Peak 53.41M) | Time:00:01.18 | Syncing Entropy_Spark_42
+Fra:1 Mem:53.22M (Peak 53.42M) | Time:00:01.18 | Syncing Entropy_Spark_43
+Fra:1 Mem:53.23M (Peak 53.43M) | Time:00:01.18 | Syncing Entropy_Spark_44
+Fra:1 Mem:53.24M (Peak 53.44M) | Time:00:01.18 | Syncing Entropy_Spark_45
+Fra:1 Mem:53.26M (Peak 53.46M) | Time:00:01.18 | Syncing Entropy_Spark_46
+Fra:1 Mem:53.27M (Peak 53.47M) | Time:00:01.18 | Syncing Entropy_Spark_47
+Fra:1 Mem:53.31M (Peak 53.48M) | Time:00:01.19 | Syncing Entropy_Spark_48
+Fra:1 Mem:53.33M (Peak 53.52M) | Time:00:01.19 | Syncing Entropy_Spark_49
+Fra:1 Mem:53.34M (Peak 53.54M) | Time:00:01.19 | Syncing Entropy_Spark_50
+Fra:1 Mem:53.35M (Peak 53.55M) | Time:00:01.19 | Syncing Entropy_Spark_51
+Fra:1 Mem:53.36M (Peak 53.56M) | Time:00:01.19 | Syncing Entropy_Spark_52
+Fra:1 Mem:53.37M (Peak 53.57M) | Time:00:01.19 | Syncing Entropy_Spark_53
+Fra:1 Mem:53.39M (Peak 53.59M) | Time:00:01.19 | Syncing Entropy_Spark_54
+Fra:1 Mem:53.40M (Peak 53.60M) | Time:00:01.19 | Syncing Entropy_Spark_55
+Fra:1 Mem:53.41M (Peak 53.61M) | Time:00:01.19 | Syncing Entropy_Spark_56
+Fra:1 Mem:53.42M (Peak 53.62M) | Time:00:01.19 | Syncing Entropy_Spark_57
+Fra:1 Mem:53.44M (Peak 53.63M) | Time:00:01.19 | Syncing Entropy_Spark_58
+Fra:1 Mem:53.45M (Peak 53.65M) | Time:00:01.19 | Syncing Entropy_Spark_59
+Fra:1 Mem:53.46M (Peak 53.66M) | Time:00:01.19 | Syncing FlyxionCam_v3_2
+Fra:1 Mem:53.46M (Peak 53.66M) | Time:00:01.20 | Syncing KeyLight_v3_2
+Fra:1 Mem:53.46M (Peak 53.66M) | Time:00:01.20 | Syncing FillLight_v3_2
+Fra:1 Mem:53.46M (Peak 53.66M) | Time:00:01.20 | Syncing RimLight_v3_2
+Fra:1 Mem:53.46M (Peak 53.66M) | Time:00:01.20 | Syncing FlowRibbon_0
+Fra:1 Mem:53.47M (Peak 53.67M) | Time:00:01.20 | Syncing FlowRibbon_1
+Fra:1 Mem:53.47M (Peak 53.68M) | Time:00:01.20 | Syncing FlowRibbon_2
+Fra:1 Mem:53.48M (Peak 53.68M) | Time:00:01.20 | Syncing FlowRibbon_3
+Fra:1 Mem:53.48M (Peak 53.69M) | Time:00:01.20 | Syncing FlowRibbon_4
+Fra:1 Mem:53.57M (Peak 53.76M) | Time:00:01.34 | Rendering 1 / 32 samples
+Fra:1 Mem:52.96M (Peak 53.76M) | Time:00:05.38 | Rendering 26 / 32 samples
+Fra:1 Mem:52.96M (Peak 53.76M) | Time:00:06.27 | Rendering 32 / 32 samples
+Saved: '/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_2_release/v3_2/output_v3_2/rsvp_plenum_cell_0001.png'
+ Time: 00:06.80 (Saving: 00:00.29)
+
+
+Blender quit

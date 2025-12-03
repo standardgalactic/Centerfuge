@@ -1,0 +1,13 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Saved "hydra_persona_field.blend"
+[Helper_v3] Scene initialized.
+[RunManager_v3] Loading script: hydra_persona_field
+[RunManager_v3] Finished executing: hydra_persona_field
+[RunManager_v3] Saving blend to: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/simulations/sim_v3_release/v3/output_v3/hydra_persona_field.blend
+Info: Saved "hydra_persona_field.blend"
+
+Blender quit
