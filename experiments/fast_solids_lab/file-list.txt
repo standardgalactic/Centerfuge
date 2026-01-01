@@ -1,0 +1,41 @@
+.
+├── common.py
+├── file-list.txt
+├── index.html
+├── out
+│   ├── fractal_tree
+│   │   ├── render.png
+│   │   └── scene.blend
+│   ├── interlocking
+│   │   ├── render.png
+│   │   └── scene.blend
+│   ├── many_lobed
+│   │   ├── render.png
+│   │   └── scene.blend
+│   ├── scalar
+│   │   ├── render.png
+│   │   ├── scene.blend
+│   │   └── scene.blend1
+│   ├── star_convex
+│   │   ├── render.png
+│   │   └── scene.blend
+│   ├── superquadric
+│   │   ├── render.png
+│   │   └── scene.blend
+│   ├── torsion
+│   │   ├── render.png
+│   │   └── scene.blend
+│   └── twisted_torus
+│       ├── render.png
+│       └── scene.blend
+└── tests
+    ├── test_000_scalar.py
+    ├── test_001_torsion.py
+    ├── test_002_superquadric.py
+    ├── test_003_twisted_torus.py
+    ├── test_004_star_convex.py
+    ├── test_005_fractal_tree.py
+    ├── test_006_many_lobed.py
+    └── test_007_interlocking_fields.py
+
+10 directories, 28 files

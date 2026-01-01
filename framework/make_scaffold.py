@@ -3,7 +3,7 @@
 import zipfile
 from pathlib import Path
 
-root = Path("/mnt/data/rsvp_sim_package")
+root = Path("rsvp_sim_package")
 (root / "sim").mkdir(parents=True, exist_ok=True)
 (root / "sim/fields").mkdir(parents=True, exist_ok=True)
 (root / "blender").mkdir(parents=True, exist_ok=True)
@@ -123,7 +123,7 @@ if __name__ == "__main__":
 """.strip())
 
 # Zip it
-zip_path = Path("/mnt/data/RSVP_Simulation_Blender_Package.zip")
+zip_path = Path("RSVP_Simulation_Blender_Package.zip")
 with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
     for file in root.rglob("*"):
         z.write(file, file.relative_to(root))

@@ -1,0 +1,197 @@
+.
+├── Irreversibility as Structure.pdf
+├── Irreversibility as Structure.tex
+├── README.md
+├── RSVP_Simulation_Blender_Package
+│   ├── blender
+│   │   ├── common.py
+│   │   └── render_field.py
+│   ├── out
+│   │   ├── meshes
+│   │   └── renders
+│   └── sim
+│       ├── fields
+│       ├── rsvp_core.py
+│       └── run_sim.py
+├── RSVP_Simulation_Blender_Package.zip
+├── RSVP_Simulation_Lab
+│   ├── blender
+│   │   └── common.py
+│   └── sim
+│       ├── rsvp_core.py
+│       └── run_sim.py
+├── RSVP_Simulation_Lab.zip
+├── RSVP_parameters.md
+├── RSVP_simulation_bundle
+│   ├── blender
+│   │   ├── common.py
+│   │   └── render_field.py
+│   ├── out
+│   └── sim
+│       ├── rsvp_core.py
+│       └── run_sim.py
+├── RSVP_simulation_bundle.zip
+├── blender
+│   ├── common.py
+│   └── render_field.py
+├── build_registry.py
+├── file-list.txt
+├── lattice_adapter.py
+├── make_scaffold.py
+├── mathematical_formulation.md
+├── out
+│   ├── meshes
+│   └── renders
+├── output
+│   ├── biotech
+│   │   ├── bioforge_incubator
+│   │   │   └── README.md
+│   │   └── geozotic_power_systems
+│   │       └── README.md
+│   ├── linguistics
+│   │   ├── earth_cube_translator
+│   │   │   └── README.md
+│   │   ├── lambda_arabic
+│   │   │   └── README.md
+│   │   ├── sga_initiatives
+│   │   │   └── README.md
+│   │   └── zettelkasten_academizer
+│   │       └── README.md
+│   ├── physics
+│   │   ├── crystal_plenum
+│   │   │   └── README.md
+│   │   ├── flyxion_framework
+│   │   │   └── README.md
+│   │   ├── rsvp_theory
+│   │   │   └── README.md
+│   │   ├── sith_theory
+│   │   │   └── README.md
+│   │   └── tartan_framework
+│   │       └── README.md
+│   └── software
+│       ├── agora
+│       │   └── README.md
+│       ├── audio_organized_system
+│       │   └── README.md
+│       ├── spellpop
+│       │   └── README.md
+│       └── swype_hero
+│           └── README.md
+├── plot_diagnostics.py
+├── project_registry.yml
+├── reference_card.md
+├── render_animation.py
+├── render_diagnostics.py
+├── render_geonodes.py
+├── render_vectors.py
+├── rsvp_blender_lab
+│   ├── common.py
+│   └── tests
+│       ├── test_000_field_spheres.py
+│       ├── test_001_vortex_torsion.py
+│       └── test_002_entropy_lattice.py
+├── rsvp_blender_lab.zip
+├── rsvp_core.py
+├── rsvp_sim_package
+│   ├── blender
+│   │   ├── common.py
+│   │   └── render_field.py
+│   ├── out
+│   │   ├── meshes
+│   │   └── renders
+│   └── sim
+│       ├── fields
+│       ├── rsvp_core.py
+│       └── run_sim.py
+├── run_sim.py
+└── sim
+    ├── fields
+    │   ├── config.json
+    │   ├── diagnostics.npz
+    │   ├── t000.npz
+    │   ├── t001.npz
+    │   ├── t002.npz
+    │   ├── t003.npz
+    │   ├── t004.npz
+    │   ├── t005.npz
+    │   ├── t006.npz
+    │   ├── t007.npz
+    │   ├── t008.npz
+    │   ├── t009.npz
+    │   ├── t010.npz
+    │   ├── t011.npz
+    │   ├── t012.npz
+    │   ├── t013.npz
+    │   ├── t014.npz
+    │   ├── t015.npz
+    │   ├── t016.npz
+    │   ├── t017.npz
+    │   ├── t018.npz
+    │   ├── t019.npz
+    │   ├── t020.npz
+    │   ├── t021.npz
+    │   ├── t022.npz
+    │   ├── t023.npz
+    │   ├── t024.npz
+    │   ├── t025.npz
+    │   ├── t026.npz
+    │   ├── t027.npz
+    │   ├── t028.npz
+    │   ├── t029.npz
+    │   ├── t030.npz
+    │   ├── t031.npz
+    │   ├── t032.npz
+    │   ├── t033.npz
+    │   ├── t034.npz
+    │   ├── t035.npz
+    │   ├── t036.npz
+    │   ├── t037.npz
+    │   ├── t038.npz
+    │   ├── t039.npz
+    │   ├── t040.npz
+    │   ├── t041.npz
+    │   ├── t042.npz
+    │   ├── t043.npz
+    │   ├── t044.npz
+    │   ├── t045.npz
+    │   ├── t046.npz
+    │   ├── t047.npz
+    │   ├── t048.npz
+    │   ├── t049.npz
+    │   └── t050.npz
+    ├── rsvp_core.py
+    ├── run_sim.py
+    └── sim
+        └── fields
+            ├── t000.npz
+            ├── t001.npz
+            ├── t002.npz
+            ├── t003.npz
+            ├── t004.npz
+            ├── t005.npz
+            ├── t006.npz
+            ├── t007.npz
+            ├── t008.npz
+            ├── t009.npz
+            ├── t010.npz
+            ├── t011.npz
+            ├── t012.npz
+            ├── t013.npz
+            ├── t014.npz
+            ├── t015.npz
+            ├── t016.npz
+            ├── t017.npz
+            ├── t018.npz
+            ├── t019.npz
+            ├── t020.npz
+            ├── t021.npz
+            ├── t022.npz
+            ├── t023.npz
+            ├── t024.npz
+            ├── t025.npz
+            ├── t026.npz
+            ├── t027.npz
+            ├── t028.npz
+            └── t029.npz
+
+51 directories, 143 files

@@ -4,6 +4,8 @@ Basically a centerfuge is a big spinning cylindrical vortex in the center of you
 
 Hyperbolation is the process of labeling and wrapping materials in layered yarn-balls (also known as gnotobiotic hyperballs or cognets). 
 
+[Fast Solids Lab](https://standardgalactic.github.io/Centerfuge/experiments/fast_solids_lab/)
+
 ## Tetraorthodrome
 
 ![Spinning cage](spinning-cage.gif)
