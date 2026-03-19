@@ -1,0 +1,999 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spherepop Starfield Vector</title>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pyodide.js"></script>
+<style>
+  :root{
+    --bg:#000000;
+    --panel:#041008;
+    --line:#0b5a2c;
+    --text:#8dff9a;
+    --muted:#54b86a;
+    --accent:#7dff8d;
+    --bright:#caffcf;
+  }
+  *{box-sizing:border-box}
+  html,body{
+    height:100%;
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Consolas,Menlo,monospace;
+    overflow:hidden;
+  }
+  #app{
+    display:grid;
+    grid-template-columns:1fr 360px;
+    height:100%;
+  }
+  #viewWrap{
+    position:relative;
+    height:100%;
+    min-width:0;
+    background:#000;
+  }
+  #game{
+    display:block;
+    width:100%;
+    height:100%;
+    background:#000;
+  }
+  #hud{
+    position:absolute;
+    left:12px;
+    top:12px;
+    z-index:5;
+    background:rgba(0,12,0,.72);
+    border:1px solid rgba(125,255,141,.34);
+    border-radius:10px;
+    padding:10px 12px;
+    box-shadow:0 0 12px rgba(0,255,100,.08), inset 0 0 10px rgba(0,255,100,.05);
+    text-shadow:0 0 6px rgba(125,255,141,.35);
+  }
+  #hud .row{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+  }
+  #hud strong{
+    color:var(--bright);
+    font-weight:700;
+  }
+  #crosshair{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:26px;
+    height:26px;
+    transform:translate(-50%,-50%);
+    z-index:4;
+    opacity:.95;
+    pointer-events:none;
+  }
+  #crosshair:before,
+  #crosshair:after{
+    content:"";
+    position:absolute;
+    background:rgba(160,255,170,.9);
+    box-shadow:0 0 8px rgba(125,255,141,.35);
+  }
+  #crosshair:before{
+    left:12px;
+    top:0;
+    width:2px;
+    height:26px;
+  }
+  #crosshair:after{
+    left:0;
+    top:12px;
+    width:26px;
+    height:2px;
+  }
+  #status{
+    position:absolute;
+    left:12px;
+    bottom:12px;
+    right:12px;
+    z-index:5;
+    min-height:34px;
+    background:rgba(0,12,0,.70);
+    border:1px solid rgba(11,90,44,.95);
+    border-radius:10px;
+    padding:8px 10px;
+    color:var(--muted);
+    text-shadow:0 0 5px rgba(125,255,141,.25);
+  }
+  #panel{
+    border-left:1px solid var(--line);
+    /* FIX 3: semi-transparent so gameplay shows through */
+    background:rgba(0,12,0,.35);
+    backdrop-filter:blur(3px);
+    padding:14px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    overflow:auto;
+    transition: opacity 0.15s ease;
+  }
+  .hidden{
+    display:none !important;
+  }
+  h1{
+    margin:0 0 6px 0;
+    font-size:18px;
+    color:var(--accent);
+    text-shadow:0 0 8px rgba(125,255,141,.22);
+  }
+  .small{
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.45;
+  }
+  textarea{
+    width:100%;
+    min-height:280px;
+    resize:vertical;
+    background:#000;
+    color:#b9ffbf;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px;
+    font:13px/1.45 Consolas,Menlo,monospace;
+    outline:none;
+    box-shadow:inset 0 0 10px rgba(0,255,100,.03);
+  }
+  .buttons{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  button{
+    border:1px solid #0b5a2c;
+    background:#021008;
+    color:#b9ffbf;
+    border-radius:10px;
+    padding:10px 12px;
+    cursor:pointer;
+    font:13px Consolas,Menlo,monospace;
+  }
+  button:hover{
+    border-color:#2ed16b;
+    background:#052010;
+  }
+  button.primary{
+    border-color:#2ed16b;
+    background:#062412;
+    color:#deffe2;
+  }
+  #log{
+    white-space:pre-wrap;
+    background:#000;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px;
+    min-height:110px;
+    color:#9de2a7;
+  }
+  .k{color:#dcff8c}
+
+  body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(100,255,140,0.02) 0px,
+        rgba(100,255,140,0.02) 1px,
+        rgba(0,0,0,0.00) 2px,
+        rgba(0,0,0,0.00) 4px
+      );
+    mix-blend-mode:screen;
+    opacity:.18;
+    z-index:20;
+  }
+
+  @media (max-width: 980px){
+    #app{grid-template-columns:1fr}
+    #panel{
+      position:absolute;
+      right:8px;
+      top:8px;
+      bottom:8px;
+      width:min(380px,calc(100vw - 16px));
+      z-index:10;
+      background:rgba(0,12,0,.35);
+      backdrop-filter:blur(4px);
+      border:1px solid var(--line);
+      border-radius:14px;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="viewWrap">
+    <canvas id="game"></canvas>
+    <div id="crosshair"></div>
+    <div id="hud">
+      <div class="row">
+        <div>score <strong id="score">0</strong></div>
+        <div>lives <strong id="lives">3</strong></div>
+        <div>entities <strong id="entities">0</strong></div>
+        <div>weapon <strong>pop</strong></div>
+      </div>
+    </div>
+    <div id="status">Loading Pyodide and Spherepop engine…</div>
+  </div>
+  <aside id="panel">
+    <div>
+      <h1>Spherepop script</h1>
+      <div class="small">Each non-empty line is <span class="k">TAG -&gt; EFFECT arg=value arg=value ...</span>. Effects: <span class="k">split</span>, <span class="k">burst</span>, <span class="k">score</span>, <span class="k">spawn</span>, <span class="k">explode</span>.</div>
+    </div>
+    <textarea id="script"># Each non-empty line is: TAG -> EFFECT arg=value arg=value ...
+# Effects: split, burst, score, spawn, explode
+splitter  -> split count=2 radius=0.60 speed=0.95 spread=1.3 score=20 child=enemy
+starburst -> burst count=8 speed=2.8 radius=0.09 life=0.9 score=30 child=particle
+heavy     -> score value=50
+healer    -> spawn kind=pickup count=1 radius=0.34 score=15
+mine      -> explode count=12 speed=3.2 radius=0.10 score=40 child=particle</textarea>
+    <div class="buttons">
+      <button class="primary" id="applyBtn">Apply script</button>
+      <button id="resetBtn">Reset world</button>
+      <button id="waveBtn">Spawn wave</button>
+    </div>
+    <div id="log">Engine not started yet.</div>
+    <div class="small">Controls: WASD move, mouse to aim, click to lock pointer, hold click or Space to fire, R to reset, H to hide/show interface, <strong>Tab</strong> to ghost panel.</div>
+  </aside>
+</div>
+
+<script>
+const statusEl = document.getElementById('status');
+const logEl = document.getElementById('log');
+const panelEl = document.getElementById('panel');
+const hudEl = document.getElementById('hud');
+const crosshairEl = document.getElementById('crosshair');
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+
+let W = 0, H = 0;
+function resize(){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  W = canvas.clientWidth = canvas.parentElement.clientWidth;
+  H = canvas.clientHeight = canvas.parentElement.clientHeight;
+  canvas.width = Math.floor(W * dpr);
+  canvas.height = Math.floor(H * dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+window.addEventListener('resize', resize);
+resize();
+
+const input = {
+  forward:0,
+  strafe:0,
+  shoot:false,
+  yawDelta:0,
+  pitchDelta:0,
+};
+
+const keys = new Set();
+
+window.addEventListener('keydown', e => {
+  if (e.code === 'Space') {
+    input.shoot = true;
+    e.preventDefault();
+  }
+  if (e.code === 'KeyH') {
+    panelEl.classList.toggle('hidden');
+    hudEl.classList.toggle('hidden');
+    statusEl.classList.toggle('hidden');
+  }
+  // FIX: Tab = peek mode (ghost panel)
+  if (e.code === 'Tab') {
+    e.preventDefault();
+    panelEl.style.opacity = panelEl.style.opacity === '0.05' ? '1' : '0.05';
+  }
+  keys.add(e.code);
+});
+
+window.addEventListener('keyup', e => {
+  if (e.code === 'Space') input.shoot = false;
+  keys.delete(e.code);
+});
+
+canvas.addEventListener('mousedown', () => {
+  input.shoot = true;
+});
+
+window.addEventListener('mouseup', () => {
+  input.shoot = false;
+});
+
+canvas.addEventListener('click', () => {
+  if (document.pointerLockElement !== canvas) canvas.requestPointerLock?.();
+});
+
+document.addEventListener('mousemove', e => {
+  if (document.pointerLockElement === canvas) {
+    input.yawDelta += e.movementX * 0.0025;
+    input.pitchDelta += e.movementY * 0.0021;
+  }
+});
+
+function refreshMovement(){
+  input.forward = (keys.has('KeyW') ? 1 : 0) + (keys.has('KeyS') ? -1 : 0);
+  input.strafe = (keys.has('KeyD') ? 1 : 0) + (keys.has('KeyA') ? -1 : 0);
+}
+
+let pyodide = null;
+let pyReady = false;
+
+const ENGINE_CODE = String.raw`
+import math, random
+from dataclasses import dataclass, field
+
+WORLD = None
+COMPILED = {}
+
+def clamp(x, lo, hi):
+    return lo if x < lo else hi if x > hi else x
+
+def parse_value(text):
+    t = text.strip()
+    if not t:
+        return t
+    if t.lower() in ("true", "false"):
+        return t.lower() == "true"
+    try:
+        if any(c in t for c in (".", "e", "E")):
+            return float(t)
+        return int(t)
+    except Exception:
+        return t
+
+def compile_script(text):
+    compiled = {}
+    lines = text.splitlines()
+    for i, raw in enumerate(lines, start=1):
+        line = raw.strip()
+        if (not line) or line.startswith("#"):
+            continue
+        if "->" not in line:
+            raise ValueError(f"Line {i}: missing '->'")
+        lhs, rhs = [part.strip() for part in line.split("->", 1)]
+        if not lhs or not rhs:
+            raise ValueError(f"Line {i}: malformed rule")
+        tokens = rhs.split()
+        effect = tokens[0]
+        params = {}
+        for token in tokens[1:]:
+            if "=" not in token:
+                raise ValueError(f"Line {i}: bad token '{token}'")
+            k, v = token.split("=", 1)
+            params[k] = parse_value(v)
+        compiled[lhs] = {"effect": effect, "params": params}
+    return compiled
+
+@dataclass
+class Entity:
+    eid: int
+    kind: str
+    x: float
+    y: float
+    z: float
+    vx: float = 0.0
+    vy: float = 0.0
+    vz: float = 0.0
+    radius: float = 0.5
+    life: float = 9999.0
+    alive: bool = True
+    tags: set = field(default_factory=set)
+    data: dict = field(default_factory=dict)
+
+class World:
+    def __init__(self):
+        self.next_id = 1
+        self.entities = {}
+        self.score = 0
+        self.lives = 3
+        self.time = 0.0
+        self.weapon = "pop"
+        self.player = {
+            "x": 0.0, "y": 0.0, "z": 0.0,
+            "yaw": 0.0, "pitch": 0.0,
+            "speed": 6.5,
+            "cooldown": 0.0,
+        }
+        self.status = "ready"
+
+    def spawn(self, kind, x, y, z, vx=0.0, vy=0.0, vz=0.0, radius=0.5, tags=None, life=9999.0, data=None):
+        e = Entity(
+            eid=self.next_id,
+            kind=kind,
+            x=float(x), y=float(y), z=float(z),
+            vx=float(vx), vy=float(vy), vz=float(vz),
+            radius=float(radius),
+            tags=set(tags or []),
+            life=float(life),
+            data=dict(data or {})
+        )
+        self.entities[e.eid] = e
+        self.next_id += 1
+        return e
+
+def reset_world():
+    global WORLD
+    WORLD = World()
+    spawn_wave(8)
+    return {"ok": True, "status": "world reset"}
+
+def spawn_wave(count=7):
+    w = WORLD
+    if w is None:
+        reset_world()
+        w = WORLD
+    count = int(count)
+    tags_cycle = [
+        ["splitter"], ["starburst"], ["heavy"], ["healer"], ["mine"], [], ["splitter", "heavy"]
+    ]
+    for i in range(count):
+        z = -(18 + random.random() * 65)
+        x = random.uniform(-18, 18)
+        y = random.uniform(-10, 10)
+        radius = random.uniform(0.7, 1.7)
+        vz = random.uniform(2.0, 4.0)
+        vx = random.uniform(-0.4, 0.4)
+        vy = random.uniform(-0.25, 0.25)
+        tags = set(tags_cycle[i % len(tags_cycle)])
+        kind = "enemy"
+        w.spawn(kind, x, y, z, vx=vx, vy=vy, vz=vz, radius=radius, tags=tags)
+    w.status = f"spawned wave of {count}"
+    return {"ok": True, "status": w.status}
+
+def apply_script(text):
+    global COMPILED
+    COMPILED = compile_script(text)
+    tags = ", ".join(COMPILED.keys()) if COMPILED else "none"
+    WORLD.status = f"compiled {len(COMPILED)} rules: {tags}"
+    return {"ok": True, "status": WORLD.status, "rules": list(COMPILED.keys())}
+
+def forward_vector(yaw, pitch):
+    cp = math.cos(pitch)
+    return (
+        math.sin(yaw) * cp,
+        -math.sin(pitch),
+        -math.cos(yaw) * cp,
+    )
+
+def right_vector(yaw):
+    return (math.cos(yaw), 0.0, math.sin(yaw))
+
+def spawn_projectile():
+    w = WORLD
+    px, py, pz = w.player["x"], w.player["y"], w.player["z"]
+    fx, fy, fz = forward_vector(w.player["yaw"], w.player["pitch"])
+    speed = 28.0
+    w.spawn(
+        "projectile",
+        px + fx * 1.2, py + fy * 1.2, pz + fz * 1.2,
+        vx=fx * speed, vy=fy * speed, vz=fz * speed,
+        radius=0.22, life=1.7, tags={"projectile"}
+    )
+
+def effect_split(entity, params):
+    w = WORLD
+    count = int(params.get("count", 2))
+    child = params.get("child", "enemy")
+    radius = float(params.get("radius", entity.radius * 0.6))
+    speed = float(params.get("speed", 1.0))
+    spread = float(params.get("spread", 1.0))
+    score = int(params.get("score", 0))
+    for i in range(count):
+        angle = (i / max(1, count)) * math.tau
+        ox = math.cos(angle) * spread * 0.55
+        oy = math.sin(angle) * spread * 0.35
+        vx = entity.vx + math.cos(angle) * speed
+        vy = entity.vy + math.sin(angle) * speed * 0.45
+        vz = max(1.2, entity.vz * 0.95)
+        w.spawn(child, entity.x + ox, entity.y + oy, entity.z, vx=vx, vy=vy, vz=vz, radius=radius, tags=set())
+    w.score += score
+
+def effect_burst(entity, params):
+    w = WORLD
+    count = int(params.get("count", 8))
+    speed = float(params.get("speed", 2.5))
+    radius = float(params.get("radius", 0.08))
+    life = float(params.get("life", 0.8))
+    score = int(params.get("score", 0))
+    child = params.get("child", "particle")
+    for i in range(count):
+        angle = (i / max(1, count)) * math.tau
+        vz = random.uniform(-0.3, 0.9)
+        w.spawn(
+            child, entity.x, entity.y, entity.z,
+            vx=math.cos(angle) * speed,
+            vy=math.sin(angle) * speed,
+            vz=vz,
+            radius=radius,
+            life=life,
+            tags={"fx"}
+        )
+    w.score += score
+
+def effect_score(entity, params):
+    w = WORLD
+    w.score += int(params.get("value", params.get("score", 10)))
+
+def effect_spawn(entity, params):
+    w = WORLD
+    kind = params.get("kind", "pickup")
+    count = int(params.get("count", 1))
+    radius = float(params.get("radius", 0.28))
+    score = int(params.get("score", 0))
+    for _ in range(count):
+        w.spawn(
+            kind,
+            entity.x + random.uniform(-0.6, 0.6),
+            entity.y + random.uniform(-0.6, 0.6),
+            entity.z,
+            vx=random.uniform(-0.25, 0.25),
+            vy=random.uniform(-0.25, 0.25),
+            vz=max(1.4, entity.vz * 0.65),
+            radius=radius,
+            tags={"pickup"}
+        )
+    w.score += score
+
+def effect_explode(entity, params):
+    effect_burst(entity, {
+        "count": params.get("count", 12),
+        "speed": params.get("speed", 3.2),
+        "radius": params.get("radius", 0.10),
+        "life": params.get("life", 0.7),
+        "child": params.get("child", "particle"),
+        "score": params.get("score", 0),
+    })
+
+EFFECTS = {
+    "split": effect_split,
+    "burst": effect_burst,
+    "score": effect_score,
+    "spawn": effect_spawn,
+    "explode": effect_explode,
+}
+
+def apply_rules(entity):
+    for tag in list(entity.tags):
+        rule = COMPILED.get(tag)
+        if not rule:
+            continue
+        effect = rule["effect"]
+        params = dict(rule["params"])
+        fn = EFFECTS.get(effect)
+        if fn:
+            fn(entity, params)
+
+def pop_entity(entity):
+    if not entity.alive:
+        return
+    entity.alive = False
+    if entity.kind == "pickup":
+        WORLD.score += 5
+        return
+    apply_rules(entity)
+    if entity.kind == "enemy" and not entity.tags:
+        WORLD.score += 10
+
+def update_player(inp, dt):
+    w = WORLD
+    p = w.player
+    p["yaw"] += float(inp.get("yawDelta", 0.0))
+    p["pitch"] = clamp(p["pitch"] + float(inp.get("pitchDelta", 0.0)), -1.15, 1.15)
+    fwd = float(inp.get("forward", 0.0))
+    strafe = float(inp.get("strafe", 0.0))
+    fx, fy, fz = forward_vector(p["yaw"], 0.0)
+    rx, ry, rz = right_vector(p["yaw"])
+    speed = p["speed"]
+    p["x"] += (fx * fwd + rx * strafe) * speed * dt
+    p["z"] += (fz * fwd + rz * strafe) * speed * dt
+    p["cooldown"] = max(0.0, p["cooldown"] - dt)
+    if inp.get("shoot") and p["cooldown"] <= 0.0:
+        spawn_projectile()
+        # FIX 2: tighter cooldown = more responsive feel
+        p["cooldown"] = 0.05
+
+def update_entities(dt):
+    w = WORLD
+    p = w.player
+    if len([e for e in w.entities.values() if e.alive and e.kind == "enemy"]) < 4:
+        spawn_wave(5)
+    for e in list(w.entities.values()):
+        if not e.alive:
+            continue
+        e.x += e.vx * dt
+        e.y += e.vy * dt
+        e.z += e.vz * dt
+        e.life -= dt
+        if e.kind == "pickup":
+            e.vy += math.sin(w.time * 4.0 + e.eid) * 0.006
+        if e.kind == "particle":
+            e.vz *= 0.995
+            e.vx *= 0.998
+            e.vy *= 0.998
+        if e.life <= 0:
+            e.alive = False
+            continue
+        dx = e.x - p["x"]
+        dy = e.y - p["y"]
+        dz = e.z - p["z"]
+        if e.kind in ("enemy", "pickup") and dz > 2.4:
+            e.z = -(35 + random.random() * 40)
+            e.x = p["x"] + random.uniform(-16, 16)
+            e.y = p["y"] + random.uniform(-9, 9)
+        if e.kind == "enemy" and (dx*dx + dy*dy + dz*dz) < (e.radius + 0.65) ** 2:
+            e.alive = False
+            w.lives -= 1
+            w.status = "you were hit"
+            if w.lives <= 0:
+                w.status = "game over - press reset"
+        if e.kind == "pickup" and (dx*dx + dy*dy + dz*dz) < (e.radius + 0.65) ** 2:
+            e.alive = False
+            w.score += 25
+            w.status = "pickup collected"
+
+# FIX 1: Ray-based hit detection — crosshair = view ray = what you actually hit
+def projectile_hits():
+    w = WORLD
+    p = w.player
+
+    fx, fy, fz = forward_vector(p["yaw"], p["pitch"])
+
+    best = None
+    best_dist = 999999
+
+    for e in w.entities.values():
+        if not e.alive or e.kind not in ("enemy", "pickup"):
+            continue
+
+        # vector from player to entity
+        dx = e.x - p["x"]
+        dy = e.y - p["y"]
+        dz = e.z - p["z"]
+
+        # projection of entity center onto view ray
+        t = dx*fx + dy*fy + dz*fz
+        if t < 0:
+            continue  # behind us
+
+        # closest point on ray to entity center
+        cx = p["x"] + fx * t
+        cy = p["y"] + fy * t
+        cz = p["z"] + fz * t
+
+        # perpendicular distance from entity center to ray
+        dist2 = (e.x - cx)**2 + (e.y - cy)**2 + (e.z - cz)**2
+
+        if dist2 <= (e.radius ** 2):
+            if t < best_dist:
+                best = e
+                best_dist = t
+
+    if best:
+        pop_entity(best)
+
+def serializable_state():
+    w = WORLD
+    payload = []
+    for e in w.entities.values():
+        if not e.alive:
+            continue
+        payload.append({
+            "id": e.eid,
+            "kind": e.kind,
+            "x": e.x,
+            "y": e.y,
+            "z": e.z,
+            "radius": e.radius,
+            "tags": list(e.tags),
+            "life": e.life,
+        })
+    return {
+        "score": w.score,
+        "lives": w.lives,
+        "entities": payload,
+        "weapon": w.weapon,
+        "status": w.status,
+        "player": dict(w.player),
+        "time": w.time,
+    }
+
+def step_game(inp):
+    if hasattr(inp, "to_py"):
+        inp = inp.to_py()
+    if inp is None:
+        inp = {}
+    w = WORLD
+    if w.lives <= 0:
+        w.time += 1.0 / 60.0
+        return serializable_state()
+    dt = float(inp.get("dt", 1.0/60.0))
+    update_player(inp, dt)
+    update_entities(dt)
+    projectile_hits()
+    w.time += dt
+    return serializable_state()
+
+reset_world()
+`;
+
+async function boot() {
+  try {
+    statusEl.textContent = 'Loading Pyodide…';
+    pyodide = await loadPyodide();
+    await pyodide.runPythonAsync(ENGINE_CODE);
+    pyReady = true;
+    await applyScript();
+    statusEl.textContent = 'Engine ready. Click the canvas to lock pointer.';
+    log('Pyodide ready. Spherepop engine loaded.\nFixes active: ray-based aiming, tighter cooldown, see-through panel, Tab=peek.');
+    requestAnimationFrame(frame);
+  } catch (err) {
+    statusEl.textContent = 'Runtime error';
+    log(String(err && err.stack ? err.stack : err));
+  }
+}
+
+function log(msg){
+  logEl.textContent = String(msg);
+}
+
+async function pyCall(expr, globals = {}) {
+  if (!pyReady) throw new Error('Pyodide not ready');
+  for (const [k, v] of Object.entries(globals)) pyodide.globals.set(k, v);
+  try {
+    const result = await pyodide.runPythonAsync(expr);
+    if (result && typeof result.toJs === 'function') {
+      return result.toJs({dict_converter:Object.fromEntries});
+    }
+    return result;
+  } finally {
+    for (const k of Object.keys(globals)) pyodide.globals.delete(k);
+  }
+}
+
+async function applyScript(){
+  try {
+    const scriptText = document.getElementById('script').value;
+    const result = await pyCall('apply_script(SCRIPT_TEXT)', {SCRIPT_TEXT: scriptText});
+    statusEl.textContent = result.status || 'script applied';
+    log(JSON.stringify(result, null, 2));
+  } catch (err) {
+    statusEl.textContent = 'Runtime error';
+    log(String(err && err.stack ? err.stack : err));
+  }
+}
+
+async function resetWorld(){
+  try {
+    const result = await pyCall('reset_world()');
+    statusEl.textContent = result.status || 'world reset';
+    await applyScript();
+  } catch (err) {
+    statusEl.textContent = 'Runtime error';
+    log(String(err && err.stack ? err.stack : err));
+  }
+}
+
+async function spawnWave(){
+  try {
+    const result = await pyCall('spawn_wave(8)');
+    statusEl.textContent = result.status || 'wave spawned';
+    log(JSON.stringify(result, null, 2));
+  } catch (err) {
+    statusEl.textContent = 'Runtime error';
+    log(String(err && err.stack ? err.stack : err));
+  }
+}
+
+document.getElementById('applyBtn').addEventListener('click', applyScript);
+document.getElementById('resetBtn').addEventListener('click', resetWorld);
+document.getElementById('waveBtn').addEventListener('click', spawnWave);
+window.addEventListener('keydown', e => { if (e.code === 'KeyR') resetWorld(); });
+
+function rotateToCamera(dx, dy, dz, yaw, pitch){
+  const cy = Math.cos(-yaw), sy = Math.sin(-yaw);
+  let x1 = dx * cy - dz * sy;
+  let z1 = dx * sy + dz * cy;
+  let y1 = dy;
+  const cp = Math.cos(-pitch), sp = Math.sin(-pitch);
+  const y2 = y1 * cp - z1 * sp;
+  const z2 = y1 * sp + z1 * cp;
+  return [x1, y2, z2];
+}
+
+function projectPoint(dx, dy, dz, player){
+  const [cx, cy, cz] = rotateToCamera(dx, dy, dz, player.yaw, player.pitch);
+  if (cz > -0.2) return null;
+  // FIX 4: tighter focal = better crosshair alignment
+  const focal = Math.min(W, H) * 1.05;
+  const scale = focal / (-cz + 0.0001);
+  return {
+    x: W * 0.5 + cx * scale,
+    y: H * 0.5 + cy * scale,
+    scale,
+    depth: -cz,
+  };
+}
+
+function drawCRTOverlay(){
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.fillStyle = 'rgba(0,255,120,0.018)';
+  ctx.fillRect(0,0,W,H);
+  ctx.restore();
+}
+
+function drawStarfield(player, time){
+  ctx.fillStyle = '#000000';
+  ctx.fillRect(0,0,W,H);
+
+  const count = 700;
+  const yawParallax = player.yaw * 14;
+  const pitchParallax = player.pitch * 10;
+
+  for(let i = 0; i < count; i++){
+    const seed = i * 17.123 + 9.331;
+    const sx = ((((Math.sin(seed * 0.91) * 43758.5453) % 1) + 1) % 1) - 0.5;
+    const sy = ((((Math.sin(seed * 1.37) * 12345.6789) % 1) + 1) % 1) - 0.5;
+    const sz = ((((Math.sin(seed * 2.17) * 98765.4321) % 1) + 1) % 1);
+
+    const layer = 0.25 + (i % 9) / 9;
+    const x = sx * 180 + yawParallax * layer;
+    const y = sy * 110 + pitchParallax * layer;
+    const z = -(((sz * 140 + time * (24 + layer * 70)) % 140) + 2);
+
+    const p = projectPoint(x, y, z, {yaw:player.yaw * 0.12, pitch:player.pitch * 0.10});
+    if (!p) continue;
+
+    const size = Math.max(0.8, Math.min(2.8, p.scale * 0.016 * layer));
+    const trail = Math.min(18, 10 / Math.max(0.08, p.depth * 0.05));
+    const alpha = Math.max(0.14, Math.min(0.95, 1 / (p.depth * 0.06)));
+
+    ctx.fillStyle = `rgba(125,255,141,${alpha})`;
+    ctx.fillRect(p.x, p.y, size, size);
+
+    if (layer > 0.55) {
+      ctx.strokeStyle = `rgba(125,255,141,${alpha * 0.22})`;
+      ctx.beginPath();
+      ctx.moveTo(p.x + size * 0.5, p.y + size * 0.5);
+      ctx.lineTo(p.x + size * 0.5, p.y + size * 0.5 + trail);
+      ctx.stroke();
+    }
+  }
+
+  drawCRTOverlay();
+}
+
+function entityLabel(e){
+  if (e.kind === 'projectile') return '';
+  if (e.kind === 'particle') return '';
+  if (e.kind === 'pickup') return 'pickup';
+  if (e.tags && e.tags.length) return e.tags[0];
+  return e.kind;
+}
+
+function drawEntities(state){
+  const player = state.player;
+  const drawables = [];
+
+  for (const e of state.entities) {
+    const dx = e.x - player.x;
+    const dy = e.y - player.y;
+    const dz = e.z - player.z;
+    const p = projectPoint(dx, dy, dz, player);
+    if (!p) continue;
+    const screenR = Math.max(e.kind === 'projectile' ? 2.5 : 6, e.radius * p.scale);
+    drawables.push({e, p, screenR});
+  }
+
+  drawables.sort((a,b) => b.p.depth - a.p.depth);
+
+  for (const d of drawables) {
+    const {e, p, screenR:r} = d;
+
+    if (e.kind === 'particle') {
+      ctx.fillStyle = 'rgba(125,255,141,0.55)';
+      ctx.fillRect(p.x - 1, p.y - 1, 2, 2);
+      continue;
+    }
+
+    if (e.kind === 'projectile') {
+      ctx.strokeStyle = 'rgba(210,255,220,0.95)';
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y - 5);
+      ctx.lineTo(p.x, p.y + 5);
+      ctx.moveTo(p.x - 5, p.y);
+      ctx.lineTo(p.x + 5, p.y);
+      ctx.stroke();
+      continue;
+    }
+
+    ctx.strokeStyle = `rgba(125,255,141,${Math.max(0.45, Math.min(0.95, 1.2 / (d.p.depth * 0.08)))})`;
+    ctx.lineWidth = Math.max(1, r * 0.035);
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+    ctx.stroke();
+
+    if (r > 10) {
+      const label = entityLabel(e);
+      ctx.fillStyle = 'rgba(202,255,207,0.95)';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = `${Math.max(10, Math.min(26, r * 0.38))}px monospace`;
+      ctx.fillText(label, p.x, p.y);
+    }
+
+    if (r > 18) {
+      ctx.strokeStyle = 'rgba(125,255,141,0.16)';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r * 0.72, Math.PI * 0.18, Math.PI * 1.15);
+      ctx.stroke();
+    }
+  }
+}
+
+function drawReticlePulse(isFiring){
+  crosshairEl.style.opacity = isFiring ? '1' : '0.92';
+}
+
+function updateHud(state){
+  document.getElementById('score').textContent = state.score;
+  document.getElementById('lives').textContent = state.lives;
+  document.getElementById('entities').textContent = state.entities.length;
+  statusEl.textContent = state.status || 'ready';
+}
+
+let lastTs = 0;
+
+async function frame(ts){
+  if (!pyReady) return;
+  if (!lastTs) lastTs = ts;
+  const dt = Math.min(0.033, (ts - lastTs) / 1000);
+  lastTs = ts;
+
+  refreshMovement();
+
+  try {
+    const state = await pyCall('step_game(INPUT_STATE)', {
+      INPUT_STATE: {
+        forward: input.forward,
+        strafe: input.strafe,
+        shoot: input.shoot,
+        yawDelta: input.yawDelta,
+        pitchDelta: input.pitchDelta,
+        dt,
+      }
+    });
+
+    input.yawDelta = 0;
+    input.pitchDelta = 0;
+
+    drawStarfield(state.player, state.time);
+    drawEntities(state);
+    updateHud(state);
+    drawReticlePulse(input.shoot);
+  } catch (err) {
+    statusEl.textContent = 'Runtime error';
+    log(String(err && err.stack ? err.stack : err));
+  }
+
+  requestAnimationFrame(frame);
+}
+
+boot();
+</script>
+</body>
+</html>
