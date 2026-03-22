@@ -6,29 +6,26 @@
 <title>Starpop · Word Shooter</title>
 <script src="https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pyodide.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:Consolas,monospace}
+html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Consolas,monospace}
 canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
 
 #hud{
-  position:fixed;top:12px;left:12px;
-  font-size:14px;color:#7dff8d;
-  background:rgba(0,8,0,.65);
-  border:1px solid rgba(125,255,141,.2);
-  border-radius:8px;padding:7px 12px;
-  line-height:1.7;
+  position:fixed;top:10px;left:10px;
+  font-size:13px;color:#7dff8d;
+  background:rgba(0,10,0,.6);
+  padding:6px 10px;
+  border:1px solid rgba(125,255,141,.22);
+  border-radius:6px;
+  text-shadow:0 0 6px rgba(125,255,141,.4);
   opacity:0;transition:opacity .5s;
   pointer-events:none;
-  text-shadow:0 0 8px rgba(125,255,141,.4);
 }
-#hud.on{opacity:1}
 #hud strong{color:#caffcf}
 
 #status{
-  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
   font-size:13px;color:#5aba6a;
-  opacity:0;transition:opacity .4s;
-  pointer-events:none;text-align:center;
+  opacity:0;transition:opacity .4s;pointer-events:none;
 }
 #status.on{opacity:1}
 
@@ -43,14 +40,11 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:
   animation:sp 1s linear infinite;
 }
 @keyframes sp{to{transform:rotate(360deg)}}
-
 body::after{
   content:"";position:fixed;inset:0;pointer-events:none;
-  background:repeating-linear-gradient(
-    to bottom,
-    rgba(100,255,140,.012) 0px,rgba(100,255,140,.012) 1px,
-    transparent 2px,transparent 4px
-  );
+  background:repeating-linear-gradient(to bottom,
+    rgba(100,255,140,.012) 0,rgba(100,255,140,.012) 1px,
+    transparent 2px,transparent 4px);
   mix-blend-mode:screen;opacity:.2;z-index:30;
 }
 </style>
@@ -58,14 +52,8 @@ body::after{
 <body>
 
 <canvas id="game"></canvas>
-
-<div id="hud">
-  score <strong id="score">0</strong><br>
-  lives <strong id="lives">3</strong>
-</div>
-
+<div id="hud">score <strong id="score">0</strong></div>
 <div id="status"></div>
-
 <div id="loader">
   <div class="spin"></div>
   <div>Loading Starpop…</div>
@@ -73,83 +61,63 @@ body::after{
 </div>
 
 <script>
-// ── Canvas ──────────────────────────────────────────────────────────────────
+// ── Canvas ────────────────────────────────────────────────────────────────────
 const canvas = document.getElementById('game');
 const ctx    = canvas.getContext('2d');
 let W = 0, H = 0;
 function resize(){
   const dpr = Math.max(1, devicePixelRatio || 1);
-  W = window.innerWidth; H = window.innerHeight;
-  canvas.width  = Math.floor(W * dpr);
-  canvas.height = Math.floor(H * dpr);
-  canvas.style.width  = W + 'px';
-  canvas.style.height = H + 'px';
+  W = innerWidth; H = innerHeight;
+  canvas.width  = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W+'px'; canvas.style.height = H+'px';
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 resize();
-window.addEventListener('resize', resize);
+addEventListener('resize', resize);
 
-// ── Input ────────────────────────────────────────────────────────────────────
+// ── Input ─────────────────────────────────────────────────────────────────────
 const input = { strafe: 0, forward: 0 };
 
 canvas.addEventListener('touchstart', e => {
-  hudBrief();
-  applyDrift(e.touches[0]);
+  revealHud();
+  const t = e.touches[0];
+  input.strafe  =  (t.clientX - W/2) / (W/2);
+  input.forward = -(t.clientY - H/2) / (H/2);
 }, { passive: true });
 
 canvas.addEventListener('touchmove', e => {
-  e.preventDefault();
-  applyDrift(e.touches[0]);
-}, { passive: false });
+  const t = e.touches[0];
+  input.strafe  =  (t.clientX - W/2) / (W/2);
+  input.forward = -(t.clientY - H/2) / (H/2);
+}, { passive: true });
 
-canvas.addEventListener('touchend', () => {
-  input.strafe = 0;
-  input.forward = 0;
-});
+canvas.addEventListener('touchend', () => { input.strafe = 0; input.forward = 0; });
 
-function applyDrift(t){
-  input.strafe  =  (t.clientX - W * 0.5) / (W * 0.5);
-  input.forward = -(t.clientY - H * 0.5) / (H * 0.5);
-}
-
-// ── HUD ──────────────────────────────────────────────────────────────────────
+// ── HUD ───────────────────────────────────────────────────────────────────────
 let hudTimer = null;
-function hudBrief(ms = 2500){
-  document.getElementById('hud').classList.add('on');
+function revealHud(ms = 2500){
+  document.getElementById('hud').style.opacity = '1';
   clearTimeout(hudTimer);
-  hudTimer = setTimeout(() => document.getElementById('hud').classList.remove('on'), ms);
+  hudTimer = setTimeout(() => document.getElementById('hud').style.opacity = '0', ms);
 }
 
 let statusTimer = null;
 function showStatus(msg){
   const el = document.getElementById('status');
-  el.textContent = msg;
-  el.classList.add('on');
+  el.textContent = msg; el.classList.add('on');
   clearTimeout(statusTimer);
   statusTimer = setTimeout(() => el.classList.remove('on'), 1800);
-  hudBrief(2000);
+  revealHud(2000);
 }
 
-// ── Engine ───────────────────────────────────────────────────────────────────
-const ENGINE = String.raw`
-import math, random
+// ── Engine ────────────────────────────────────────────────────────────────────
+const ENGINE = `
+import random, math
 from dataclasses import dataclass, field
 
 WORLD = None
 
-CORRECT = [
-    "necessary","accommodate","occurrence","particularly","definitely",
-    "separate","beautiful","beginning","conscience","millennium",
-    "privilege","threshold","apparent","tendency","discipline",
-    "embarrass","equipment","exaggerate","immediately","independent",
-    "leisure","lieutenant","maintenance","noticeable","parallel",
-    "persistent","relevant","resistance","restaurant","ridiculous",
-    "silhouette","successful","technically","temperature","throughout",
-    "guarantee","manoeuvre","fahrenheit","theoretical","unfortunately",
-    "rhythm","liaison","questionnaire","bureaucracy","conscientious",
-    "chrysanthemum","miscellaneous","accommodate","commemorate","Mediterranean",
-]
-
+# (misspelled_word, correct_word, error_count)
 MISSPELLED = [
     ("recieve","receive",2),("occured","occurred",2),("untill","until",3),
     ("wierd","weird",3),("accomodate","accommodate",3),("existance","existence",2),
@@ -161,326 +129,222 @@ MISSPELLED = [
     ("parralel","parallel",3),("privelege","privilege",3),("recieved","received",2),
     ("relevent","relevant",2),("resistence","resistance",3),("resteraunt","restaurant",4),
     ("riddiculous","ridiculous",3),("succesfull","successful",3),("tounge","tongue",2),
-    ("vaccum","vacuum",2),("writting","writing",2),("writeing","writing",2),
-    ("lieing","lying",2),("payed","paid",2),("refered","referred",2),
-    ("aquire","acquire",2),("publically","publicly",2),("technicly","technically",3),
-    ("freind","friend",2),("beleive","believe",3),("calender","calendar",2),
-    ("catagory","category",2),("collegue","colleague",2),("concious","conscious",2),
-    ("dependant","dependent",2),("dilemna","dilemma",2),("enviroment","environment",2),
-    ("febuary","february",2),("finaly","finally",2),("foward","forward",2),
-    ("goverment","government",2),("harrass","harass",2),("ignorence","ignorance",2),
-    ("immediatly","immediately",3),("innoculate","inoculate",2),("liason","liaison",2),
-    ("memento","memento",1),("milenium","millennium",3),("miniscule","minuscule",2),
-    ("occurance","occurrence",3),("perseverence","perseverance",2),("pronounciation","pronunciation",3),
-    ("recurrence","recurrence",1),("restarant","restaurant",3),("shedule","schedule",2),
-    ("supercede","supersede",2),("tatoo","tattoo",2),("tendancy","tendency",2),
-    ("truely","truly",2),("tyrany","tyranny",2),("unforseen","unforeseen",2),
-    ("untill","until",3),("vaccinate","vaccinate",1),("vegeterian","vegetarian",2),
-    ("wether","whether",2),("wierd","weird",3),("writting","writing",2),
+    ("vaccum","vacuum",2),("writting","writing",2),("freind","friend",2),
+    ("beleive","believe",3),("calender","calendar",2),("catagory","category",2),
+    ("collegue","colleague",2),("concious","conscious",2),("dependant","dependent",2),
+    ("dilemna","dilemma",2),("enviroment","environment",2),("febuary","february",2),
+    ("goverment","government",2),("harrass","harass",2),("immediatly","immediately",3),
+    ("innoculate","inoculate",2),("liason","liaison",2),("miniscule","minuscule",2),
+    ("perseverence","perseverance",2),("pronounciation","pronunciation",3),
+    ("shedule","schedule",2),("supercede","supersede",2),("tatoo","tattoo",2),
+    ("tendancy","tendency",2),("tyrany","tyranny",2),("unforseen","unforeseen",2),
+    ("vegeterian","vegetarian",2),("wether","whether",2),("aquire","acquire",2),
+    ("publically","publicly",2),("technicly","technically",3),("payed","paid",2),
 ]
 
-def clamp(x, lo, hi): return lo if x < lo else hi if x > hi else x
+CORRECT = [
+    "necessary","accommodate","occurrence","particularly","definitely",
+    "separate","beautiful","beginning","conscience","millennium",
+    "privilege","threshold","apparent","tendency","discipline",
+    "embarrass","equipment","exaggerate","immediately","independent",
+    "leisure","lieutenant","maintenance","noticeable","parallel",
+    "persistent","relevant","resistance","restaurant","ridiculous",
+    "silhouette","successful","technically","temperature","throughout",
+    "guarantee","manoeuvre","fahrenheit","theoretical","unfortunately",
+    "rhythm","liaison","questionnaire","bureaucracy","conscientious",
+    "Mediterranean","miscellaneous","commemorate","chrysanthemum",
+]
 
 @dataclass
-class Entity:
-    eid: int
-    kind: str
+class Ent:
+    id: int
     x: float; y: float; z: float
-    vx: float = 0.; vy: float = 0.; vz: float = 0.
-    radius: float = 0.5
-    life: float = 9999.
+    r: float
+    word: str
+    bad: bool          # True = misspelled, should pop
+    pts: int = 0       # points on pop
     alive: bool = True
-    tags: set = field(default_factory=set)
-    data: dict = field(default_factory=dict)
 
-class World:
-    def __init__(self):
-        self.next_id = 1
-        self.entities = {}
-        self.score = 0
-        self.lives = 3
-        self.time  = 0.
-        self.status = ""
-        self.player = {"x": 0., "y": 0.}
-
-    def spawn(self, kind, x, y, z, vx=0., vy=0., vz=0.,
-              radius=0.5, tags=None, life=9999., data=None):
-        e = Entity(eid=self.next_id, kind=kind,
-                   x=float(x), y=float(y), z=float(z),
-                   vx=float(vx), vy=float(vy), vz=float(vz),
-                   radius=float(radius),
-                   tags=set(tags or []),
-                   life=float(life),
-                   data=dict(data or {}))
-        self.entities[e.eid] = e
-        self.next_id += 1
-        return e
-
-def reset_world():
+def reset():
     global WORLD
-    WORLD = World()
-    spawn_wave(16)
-    return {"ok": True}
+    WORLD = {"ents": {}, "next": 1, "score": 0, "time": 0.0, "status": ""}
+    _spawn(20)
 
-def spawn_wave(count=8):
-    w = WORLD
-    count = int(count)
-    for _ in range(count):
-        z      = -(28 + random.random() * 90)
-        x      = random.uniform(-15, 15)
-        y      = random.uniform(-9, 9)
-        radius = random.uniform(0.9, 2.2)
-        vz     = random.uniform(2.8, 4.8)
-        vx     = random.uniform(-0.12, 0.12)
-        vy     = random.uniform(-0.08, 0.08)
-        if random.random() < 0.55:
-            word, correct, errors = random.choice(MISSPELLED)
-            w.spawn("word", x, y, z, vx=vx, vy=vy, vz=vz, radius=radius,
-                    tags={"misspelled"}, data={"label": word, "errors": errors, "correct": correct})
+def _spawn(n):
+    for _ in range(n):
+        if random.random() < 0.58:
+            w, correct, errors = random.choice(MISSPELLED)
+            bad = True; pts = 10 * errors
         else:
-            word = random.choice(CORRECT)
-            w.spawn("word", x, y, z, vx=vx, vy=vy, vz=vz, radius=radius,
-                    tags={"correct"}, data={"label": word})
-    return {"ok": True}
+            w = random.choice(CORRECT)
+            bad = False; pts = 0
+        eid = WORLD["next"]
+        WORLD["ents"][eid] = Ent(
+            id=eid,
+            x=random.uniform(-12, 12),
+            y=random.uniform(-7, 7),
+            z=-(12 + random.random() * 70),
+            r=random.uniform(0.9, 2.2),
+            word=w, bad=bad, pts=pts
+        )
+        WORLD["next"] += 1
 
-def update_player(inp, dt):
-    w = WORLD; p = w.player
-    p["x"] += float(inp.get("strafe",  0.)) * 5.5 * dt
-    p["y"] -= float(inp.get("forward", 0.)) * 4.0 * dt
-    p["x"]  = clamp(p["x"], -12., 12.)
-    p["y"]  = clamp(p["y"],  -7.,  7.)
-
-def burst(entity, count=10, col="green"):
-    w = WORLD
-    for i in range(count):
-        angle = (i / max(1, count)) * 6.2832
-        spd   = random.uniform(1.2, 2.8)
-        w.spawn("particle", entity.x, entity.y, entity.z,
-                vx=math.cos(angle)*spd, vy=math.sin(angle)*spd,
-                vz=random.uniform(0., 0.8),
-                radius=0.06, life=0.7, data={"col": col})
-
-def pop_entity(e):
-    if not e.alive: return
-    e.alive = False
-    if "misspelled" in e.tags:
-        pts = 10 * e.data.get("errors", 1)
-        WORLD.score += pts
-        WORLD.status = f'+{pts}'
-        burst(e, 12, "green")
-    elif "correct" in e.tags:
-        # ghost — correct words pass through, no effect
-        return
-
-def update_entities(dt):
-    w = WORLD; p = w.player
-    alive = [e for e in w.entities.values() if e.alive and e.kind == "word"]
-    if len(alive) < 8:
-        spawn_wave(8)
-    for e in list(w.entities.values()):
-        if not e.alive: continue
-        # damp lateral drift, maintain forward speed
-        e.vx *= 0.93
-        e.vy *= 0.93
-        e.vz  = max(2.5, e.vz)
-        e.x  += e.vx * dt
-        e.y  += e.vy * dt
-        e.z  += e.vz * dt
-        e.life -= dt
-        if e.kind == "particle":
-            e.vx *= 0.96; e.vy *= 0.96; e.vz *= 0.97
-        if e.life <= 0:
-            e.alive = False; continue
-        # recycle words that pass the player
-        if e.kind == "word" and e.z > 3.0:
-            e.z  = -(30 + random.random() * 70)
-            e.x  = p["x"] + random.uniform(-15, 15)
-            e.y  = p["y"] + random.uniform(-9, 9)
-            e.vx = random.uniform(-0.12, 0.12)
-            e.vy = random.uniform(-0.08, 0.08)
-        # collision: 2D only (x/y), misspelled words only
-        if e.kind == "word" and "misspelled" in e.tags:
-            dx = e.x - p["x"]
-            dy = e.y - p["y"]
-            if (dx*dx + dy*dy) < (e.radius * 1.25)**2:
-                pop_entity(e)
-
-def serializable_state():
-    w = WORLD; payload = []
-    for e in w.entities.values():
-        if not e.alive: continue
-        payload.append({"id": e.eid, "kind": e.kind,
-                         "x": e.x, "y": e.y, "z": e.z,
-                         "radius": e.radius,
-                         "tags": list(e.tags),
-                         "life": e.life,
-                         "data": dict(e.data)})
-    return {"score": w.score, "lives": w.lives,
-            "entities": payload, "status": w.status,
-            "player": dict(w.player), "time": w.time}
-
-def step_game(inp):
-    if hasattr(inp, "to_py"): inp = inp.to_py()
+def step(inp):
     if inp is None: inp = {}
-    w = WORLD
-    dt = float(inp.get("dt", 1./60.))
-    update_player(inp, dt)
-    update_entities(dt)
-    w.time += dt
-    return serializable_state()
+    dt = float(inp.get("dt", 1/60))
+    sx = float(inp.get("strafe",  0))
+    sy = float(inp.get("forward", 0))
 
-reset_world()
+    # player drift (shift world opposite direction)
+    px_delta =  sx * 5.5 * dt
+    py_delta = -sy * 4.0 * dt
+
+    WORLD["time"] += dt
+
+    alive = [e for e in WORLD["ents"].values() if e.alive]
+    if len(alive) < 10:
+        _spawn(8)
+
+    for e in alive:
+        # move toward camera
+        e.z += max(2.5, 3.5) * dt
+        # apply player drift as world offset
+        e.x -= px_delta
+        e.y -= py_delta
+        # very slight lateral damping
+        e.x *= 0.998
+        e.y *= 0.998
+        # recycle
+        if e.z > 2.5:
+            e.z = -(15 + random.random() * 60)
+            e.x = random.uniform(-12, 12)
+            e.y = random.uniform(-7,  7)
+
+    return {
+        "score":  WORLD["score"],
+        "status": WORLD["status"],
+        "time":   WORLD["time"],
+        "ents":   [{"id":e.id,"x":e.x,"y":e.y,"z":e.z,
+                    "r":e.r,"word":e.word,"bad":e.bad,"pts":e.pts}
+                   for e in alive],
+    }
+
+def pop(eid, pts):
+    e = WORLD["ents"].get(int(eid))
+    if not e or not e.alive or not e.bad: return 0
+    e.alive = False
+    WORLD["score"] += int(pts)
+    WORLD["status"] = f'+{pts}'
+    return int(pts)
+
+reset()
 `;
 
-let pyodide = null, pyReady = false;
+let py = null;
 
-async function boot(){
-  try{
-    pyodide = await loadPyodide();
-    await pyodide.runPythonAsync(ENGINE);
-    pyReady = true;
-    document.getElementById('loader').style.display = 'none';
-    hudBrief(4000);
-    requestAnimationFrame(frame);
-  } catch(err){
-    document.querySelector('#loader div:nth-child(2)').textContent = 'Error: '+err;
-  }
+// ── Projection ────────────────────────────────────────────────────────────────
+function project(x, y, z){
+  if(z > -0.2) return null;
+  const f = Math.min(W, H) * 1.1;
+  const s = f / (-z + 0.001);
+  return { x: W/2 + x*s, y: H/2 + y*s, s };
 }
 
-async function pyCall(expr, globals = {}){
-  for(const [k, v] of Object.entries(globals)) pyodide.globals.set(k, v);
-  try{
-    const r = await pyodide.runPythonAsync(expr);
-    return r && typeof r.toJs === 'function'
-      ? r.toJs({ dict_converter: Object.fromEntries }) : r;
-  } finally {
-    for(const k of Object.keys(globals)) pyodide.globals.delete(k);
-  }
-}
-
-// ── Pure perspective, no rotation ────────────────────────────────────────────
-function project(dx, dy, dz){
-  if(dz > -0.3) return null;
-  const focal = Math.min(W, H) * 1.1;
-  const sc    = focal / (-dz + 0.0001);
-  return { x: W * 0.5 + dx * sc, y: H * 0.5 + dy * sc, scale: sc, depth: -dz };
-}
-
-// ── Stars ─────────────────────────────────────────────────────────────────────
-function drawStars(player, time){
-  ctx.fillStyle = '#000';
-  ctx.fillRect(0, 0, W, H);
-  for(let i = 0; i < 480; i++){
-    const s  = i * 17.123 + 9.331;
-    const sx = ((((Math.sin(s * .91) * 43758.5) % 1) + 1) % 1) - 0.5;
-    const sy = ((((Math.sin(s * 1.37) * 12345.6) % 1) + 1) % 1) - 0.5;
-    const sz = ((((Math.sin(s * 2.17) * 98765.4) % 1) + 1) % 1);
-    const lay = 0.3 + (i % 7) / 7;
-    const x  = sx * 180;
-    const y  = sy * 105;
-    const z  = -(((sz * 140 + time * (18 + lay * 58)) % 140) + 2);
-    const p  = project(x - player.x * 0.035, y - player.y * 0.035, z);
+// ── Stars ──────────────────────────────────────────────────────────────────────
+let time = 0;
+function drawStars(){
+  for(let i = 0; i < 460; i++){
+    const seed = i * 17.123 + 9.331;
+    const sx = ((((Math.sin(seed*.91)*43758.5)%1)+1)%1)-.5;
+    const sy = ((((Math.sin(seed*1.37)*12345.6)%1)+1)%1)-.5;
+    const sz = ((((Math.sin(seed*2.17)*98765.4)%1)+1)%1);
+    const lay = .3 + (i%7)/7;
+    const z = -(((sz*130 + time*(18+lay*55))%130)+2);
+    const p = project(sx*170, sy*100, z);
     if(!p) continue;
-    const size  = Math.max(0.5, Math.min(2.2, p.scale * 0.013 * lay));
-    const alpha = Math.max(0.08, Math.min(0.88, 1 / (p.depth * 0.052)));
+    const size  = Math.max(.5, Math.min(2.2, p.s*.013*lay));
+    const alpha = Math.max(.07, Math.min(.85, 1/((-z)*.052)));
     ctx.fillStyle = `rgba(125,255,141,${alpha})`;
     ctx.fillRect(p.x, p.y, size, size);
   }
 }
 
-// ── Entities ──────────────────────────────────────────────────────────────────
-function drawEntities(state){
-  const pl = state.player;
-  const ds = [];
-  for(const e of state.entities){
-    const p = project(e.x - pl.x, e.y - pl.y, e.z);
+// ── Main loop ─────────────────────────────────────────────────────────────────
+let lastTs = 0, lastStatus = '';
+
+async function loop(ts){
+  if(!lastTs) lastTs = ts;
+  const dt = Math.min(0.05, (ts - lastTs) / 1000);
+  lastTs = ts; time += dt;
+
+  const state = (await py.runPythonAsync('step(INP)', { INP: { ...input, dt } }))
+    .toJs({ dict_converter: Object.fromEntries });
+
+  // ── Draw ──
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+  drawStars();
+
+  for(const e of state.ents){
+    const p = project(e.x, e.y, e.z);
     if(!p) continue;
-    const r = Math.max(e.kind === 'particle' ? 1.5 : 8, e.radius * p.scale);
-    ds.push({ e, p, r });
-  }
-  ds.sort((a, b) => b.p.depth - a.p.depth);
 
-  for(const { e, p, r } of ds){
-    // particles
-    if(e.kind === 'particle'){
-      const alpha = Math.min(0.9, e.life * 1.3);
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, Math.max(1.2, r * 0.45), 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(125,255,141,${alpha})`;
-      ctx.fill();
-      continue;
-    }
+    const r = e.r * p.s;
 
-    // all word bubbles look identical — player must judge
-    const alpha = Math.max(0.3, Math.min(0.92, 1.5 / (p.depth * 0.072)));
-    const glow  = Math.max(0.15, Math.min(0.55, 1.2 / (p.depth * 0.09)));
-
-    ctx.shadowColor = `rgba(125,255,141,${glow})`;
-    ctx.shadowBlur  = r * 0.28;
+    // bubble
+    const alpha = Math.max(.3, Math.min(.92, 1.5/((-e.z)*.072)));
+    ctx.shadowColor = `rgba(125,255,141,${Math.min(.5, alpha*.6)})`;
+    ctx.shadowBlur  = r * .28;
     ctx.strokeStyle = `rgba(125,255,141,${alpha})`;
-    ctx.lineWidth   = Math.max(1, r * 0.04);
+    ctx.lineWidth   = Math.max(1, r*.04);
     ctx.beginPath();
-    ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+    ctx.arc(p.x, p.y, r, 0, Math.PI*2);
     ctx.stroke();
     ctx.shadowBlur = 0;
 
-    // subtle inner ring — same for all
+    // inner ring pulse
     if(r > 14){
-      const pulse = 0.7 + Math.sin(state.time * 3.2 + e.id * 1.7) * 0.05;
-      ctx.strokeStyle = `rgba(125,255,141,${alpha * 0.18})`;
-      ctx.lineWidth   = 1;
+      ctx.strokeStyle = `rgba(125,255,141,${alpha*.17})`;
+      ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, r * pulse, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, r*(.70+Math.sin(time*3.1+e.id*1.7)*.05), 0, Math.PI*2);
       ctx.stroke();
     }
 
-    // label — uniform style, no hints
+    // label
     if(r > 9){
-      const label = e.data && e.data.label ? e.data.label : '';
-      const fs    = Math.max(9, Math.min(19, r * 0.32));
-      ctx.font         = `${fs}px Consolas,monospace`;
-      ctx.textAlign    = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle    = `rgba(202,255,207,${alpha})`;
-      ctx.fillText(label, p.x, p.y);
+      const fs = Math.max(9, Math.min(19, r*.33));
+      ctx.font = `${fs}px Consolas,monospace`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = `rgba(202,255,207,${alpha})`;
+      ctx.fillText(e.word, p.x, p.y);
+    }
+
+    // ── Screen-space collision ─────────────────────────────────────────────
+    if(e.bad){
+      const cx = p.x - W/2;
+      const cy = p.y - H/2;
+      if(cx*cx + cy*cy < (r*1.2)*(r*1.2)){
+        py.runPythonAsync('pop(EID, PTS)', { EID: e.id, PTS: e.pts });
+        showStatus('+' + e.pts);
+      }
     }
   }
-}
 
-// ── HUD update ────────────────────────────────────────────────────────────────
-let lastStatus = '';
-function updateHud(state){
+  // HUD
   document.getElementById('score').textContent = state.score;
-  document.getElementById('lives').textContent = state.lives;
-  if(state.status && state.status !== lastStatus){
-    lastStatus = state.status;
-    if(state.status) showStatus(state.status);
-  }
+
+  requestAnimationFrame(loop);
 }
 
-// ── Loop ──────────────────────────────────────────────────────────────────────
-let lastTs = 0;
-async function frame(ts){
-  if(!pyReady){ requestAnimationFrame(frame); return; }
-  if(!lastTs) lastTs = ts;
-  const dt = Math.min(0.05, (ts - lastTs) / 1000);
-  lastTs = ts;
-  try{
-    const state = await pyCall('step_game(INP)', {
-      INP: { strafe: input.strafe, forward: input.forward, dt }
-    });
-    if(state){
-      drawStars(state.player, state.time);
-      drawEntities(state);
-      updateHud(state);
-    }
-  } catch(err){
-    showStatus('err: ' + String(err).slice(0, 60));
-  }
-  requestAnimationFrame(frame);
-}
-
-boot();
+// ── Boot ──────────────────────────────────────────────────────────────────────
+(async () => {
+  py = await loadPyodide();
+  await py.runPythonAsync(ENGINE);
+  document.getElementById('loader').style.display = 'none';
+  revealHud(4000);
+  requestAnimationFrame(loop);
+})();
 </script>
 </body>
 </html>
