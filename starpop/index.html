@@ -6,685 +6,504 @@
 <title>Starpop · Word Shooter</title>
 <script src="https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pyodide.js"></script>
 <style>
-  :root{
-    --bg:#000;
-    --green:#7dff8d;
-    --amber:#ffbb44;
-    --muted:#3a8a4a;
-    --bright:#caffcf;
-    --panel:#010d01;
-  }
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Consolas,monospace;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:Consolas,monospace}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
 
-  canvas{
-    position:fixed;inset:0;width:100%;height:100%;
-    display:block;touch-action:none;
-  }
+/* HUD — tap screen to toggle */
+#hud{
+  position:fixed;top:12px;left:12px;
+  font-size:14px;color:#7dff8d;
+  background:rgba(0,8,0,.65);
+  border:1px solid rgba(125,255,141,.25);
+  border-radius:8px;padding:7px 12px;
+  line-height:1.7;
+  opacity:0;transition:opacity .4s;
+  pointer-events:none;
+  text-shadow:0 0 8px rgba(125,255,141,.5);
+}
+#hud.on{opacity:1}
+#hud strong{color:#caffcf}
 
-  /* Crosshair */
-  #crosshair{
-    position:fixed;left:50%;top:50%;
-    width:32px;height:32px;
-    transform:translate(-50%,-50%);
-    pointer-events:none;z-index:6;
-  }
-  #crosshair::before,#crosshair::after{
-    content:"";position:absolute;background:rgba(180,255,190,.9);
-    box-shadow:0 0 6px rgba(125,255,141,.5);
-  }
-  #crosshair::before{left:15px;top:0;width:2px;height:32px;}
-  #crosshair::after{left:0;top:15px;width:32px;height:2px;}
-  #crosshair .dot{
-    position:absolute;left:13px;top:13px;width:6px;height:6px;
-    border-radius:50%;background:rgba(125,255,141,.7);
-  }
+/* Status line */
+#status{
+  position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+  font-size:12px;color:#3a8a4a;
+  text-align:center;white-space:nowrap;
+  opacity:0;transition:opacity .4s;
+}
+#status.on{opacity:1}
 
-  /* HUD — hidden by default */
-  #hud{
-    position:fixed;top:10px;left:10px;right:10px;
-    display:flex;justify-content:space-between;align-items:flex-start;
-    z-index:8;opacity:0;pointer-events:none;
-    transition:opacity .3s;
-  }
-  #hud.visible{opacity:1;pointer-events:auto;}
+/* Legend */
+#legend{
+  position:fixed;top:12px;right:12px;
+  font-size:11px;line-height:1.9;
+  opacity:0;transition:opacity .4s;
+  text-align:right;
+}
+#legend.on{opacity:1}
+.lrow{display:flex;align-items:center;justify-content:flex-end;gap:6px}
+.ldot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 
-  .hud-box{
-    background:rgba(0,10,0,.75);
-    border:1px solid rgba(125,255,141,.3);
-    border-radius:8px;padding:6px 10px;
-    font-size:13px;color:var(--green);
-    text-shadow:0 0 6px rgba(125,255,141,.4);
-    line-height:1.6;
-  }
-  .hud-box strong{color:var(--bright);}
+/* Loading screen */
+#loader{
+  position:fixed;inset:0;background:#000;z-index:50;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  color:#7dff8d;font-size:13px;text-shadow:0 0 8px rgba(125,255,141,.4);
+}
+.spin{
+  width:36px;height:36px;border-radius:50%;
+  border:2px solid #1a4a2a;border-top-color:#7dff8d;
+  animation:sp 1s linear infinite;
+}
+@keyframes sp{to{transform:rotate(360deg)}}
 
-  /* Legend */
-  #legend{
-    position:fixed;bottom:140px;left:50%;transform:translateX(-50%);
-    display:flex;gap:14px;z-index:8;opacity:0;pointer-events:none;
-    transition:opacity .3s;font-size:11px;
-  }
-  #legend.visible{opacity:1;}
-  .leg{display:flex;align-items:center;gap:5px;}
-  .leg-dot{width:10px;height:10px;border-radius:50%;}
-
-  /* Status bar */
-  #status{
-    position:fixed;bottom:130px;left:10px;right:10px;
-    text-align:center;font-size:11px;color:var(--muted);
-    z-index:8;opacity:0;transition:opacity .3s;pointer-events:none;
-  }
-  #status.visible{opacity:1;}
-
-  /* Aim toggle */
-  #aimToggle{
-    position:fixed;top:10px;right:10px;
-    background:rgba(0,12,0,.8);border:1px solid rgba(125,255,141,.4);
-    border-radius:8px;padding:7px 11px;
-    font:12px Consolas,monospace;color:var(--green);
-    z-index:10;cursor:pointer;
-    display:none; /* shown once engine ready */
-  }
-
-  /* Fire button */
-  #fireBtn{
-    position:fixed;bottom:24px;right:24px;
-    width:80px;height:80px;border-radius:50%;
-    background:rgba(0,30,0,.7);
-    border:2px solid var(--green);
-    color:var(--green);font:bold 13px Consolas,monospace;
-    cursor:pointer;z-index:10;
-    box-shadow:0 0 18px rgba(125,255,141,.2);
-    transition:background .1s,box-shadow .1s;
-    user-select:none;touch-action:none;
-  }
-  #fireBtn:active,#fireBtn.firing{
-    background:rgba(0,80,0,.8);
-    box-shadow:0 0 28px rgba(125,255,141,.5);
-  }
-
-  /* HUD tap zone (whole screen, below UI) */
-  #hudTap{
-    position:fixed;inset:0;z-index:5;
-  }
-
-  /* Reset button (small, bottom-left) */
-  #resetBtn{
-    position:fixed;bottom:24px;left:24px;
-    padding:10px 14px;border-radius:8px;
-    background:rgba(0,12,0,.7);border:1px solid rgba(125,255,141,.3);
-    color:var(--muted);font:12px Consolas,monospace;
-    cursor:pointer;z-index:10;
-  }
-
-  /* Loading overlay */
-  #loader{
-    position:fixed;inset:0;z-index:100;
-    background:#000;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:16px;
-    color:var(--green);font:14px Consolas,monospace;
-    text-shadow:0 0 8px rgba(125,255,141,.4);
-  }
-  .spinner{
-    width:40px;height:40px;border-radius:50%;
-    border:2px solid var(--muted);
-    border-top-color:var(--green);
-    animation:spin 1s linear infinite;
-  }
-  @keyframes spin{to{transform:rotate(360deg);}}
-
-  /* Scan-line overlay */
-  body::after{
-    content:"";position:fixed;inset:0;pointer-events:none;
-    background:repeating-linear-gradient(
-      to bottom,
-      rgba(100,255,140,.015) 0px,
-      rgba(100,255,140,.015) 1px,
-      transparent 2px, transparent 4px
-    );
-    mix-blend-mode:screen;opacity:.2;z-index:20;
-  }
+/* scanlines */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(
+    to bottom,
+    rgba(100,255,140,.014) 0px,rgba(100,255,140,.014) 1px,
+    transparent 2px,transparent 4px
+  );
+  mix-blend-mode:screen;opacity:.22;z-index:30;
+}
 </style>
 </head>
 <body>
 
 <canvas id="game"></canvas>
-<div id="crosshair"><div class="dot"></div></div>
 
-<div id="hud" class="visible">
-  <div class="hud-box">
-    score <strong id="score">0</strong><br>
-    lives <strong id="lives">3</strong>
-  </div>
-  <div class="hud-box" style="text-align:right">
-    entities <strong id="entities">0</strong><br>
-    aim <strong id="aimMode">accel</strong>
-  </div>
+<div id="hud">
+  score <strong id="score">0</strong><br>
+  lives <strong id="lives">3</strong>
 </div>
 
-<div id="legend" class="visible">
-  <div class="leg"><div class="leg-dot" style="background:#7dff8d;box-shadow:0 0 5px #7dff8d"></div><span style="color:#9fff9f">misspelled → shoot</span></div>
-  <div class="leg"><div class="leg-dot" style="background:#ffbb44;box-shadow:0 0 5px #ffbb44"></div><span style="color:#ffcc66">correct → avoid</span></div>
+<div id="legend">
+  <div class="lrow"><span style="color:#9fff9f">misspelled</span><div class="ldot" style="background:#7dff8d;box-shadow:0 0 5px #7dff8d"></div></div>
+  <div class="lrow"><span style="color:#ffd080">correct</span><div class="ldot" style="background:#ffbb44;box-shadow:0 0 4px #ffbb44"></div></div>
 </div>
 
-<div id="status" class="visible">Loading engine…</div>
-
-<button id="aimToggle">aim: accel</button>
-<div id="hudTap"></div>
-<button id="fireBtn">FIRE</button>
-<button id="resetBtn">reset</button>
+<div id="status"></div>
 
 <div id="loader">
-  <div class="spinner"></div>
-  <div>Loading Spherepop engine…</div>
-  <div style="font-size:11px;color:#3a8a4a">This may take ~15s on first load</div>
+  <div class="spin"></div>
+  <div>Loading engine…</div>
+  <div style="font-size:11px;color:#2a6a3a">~15 seconds on first load</div>
 </div>
 
 <script>
-// ─── Canvas setup ──────────────────────────────────────────────────────────
+// ── Canvas ──────────────────────────────────────────────────────────────────
 const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d');
-let W=0,H=0;
+const ctx    = canvas.getContext('2d');
+let W = 0, H = 0;
 function resize(){
-  const dpr=Math.max(1,devicePixelRatio||1);
-  W=canvas.clientWidth=window.innerWidth;
-  H=canvas.clientHeight=window.innerHeight;
-  canvas.width=Math.floor(W*dpr);
-  canvas.height=Math.floor(H*dpr);
-  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const dpr = Math.max(1, devicePixelRatio || 1);
+  W = window.innerWidth; H = window.innerHeight;
+  canvas.width  = Math.floor(W * dpr);
+  canvas.height = Math.floor(H * dpr);
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 resize();
-window.addEventListener('resize',resize);
+window.addEventListener('resize', resize);
 
-// ─── Input state ────────────────────────────────────────────────────────────
-const input={forward:0,strafe:0,shoot:false,yawDelta:0,pitchDelta:0};
+// ── Input: just gentle drift from touch position ─────────────────────────────
+const input = { strafe: 0, forward: 0 };
 
-// ─── Aim mode: 'accel' or 'drag' ────────────────────────────────────────────
-let aimMode = 'accel';
-const aimToggleBtn = document.getElementById('aimToggle');
-aimToggleBtn.addEventListener('click', ()=>{
-  aimMode = aimMode==='accel' ? 'drag' : 'accel';
-  aimToggleBtn.textContent = 'aim: '+aimMode;
-  document.getElementById('aimMode').textContent = aimMode;
+canvas.addEventListener('touchstart', e => {
+  hudToggle(); // tap shows HUD
+  applyDrift(e.touches[0]);
+}, { passive: true });
+
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  applyDrift(e.touches[0]);
+}, { passive: false });
+
+canvas.addEventListener('touchend', () => {
+  input.strafe = 0;
+  input.forward = 0;
 });
 
-// ─── Accelerometer ──────────────────────────────────────────────────────────
-let accelYaw=0, accelPitch=0;
-let baseAlpha=null, baseBeta=null;
-
-function handleOrientation(e){
-  if(aimMode!=='accel') return;
-  // calibrate on first reading
-  if(baseAlpha===null){ baseAlpha=e.alpha||0; baseBeta=e.beta||45; }
-  const da = ((e.alpha||0) - baseAlpha + 540) % 360 - 180;
-  const db = (e.beta||45) - baseBeta;
-  accelYaw  =  da * 0.012;
-  accelPitch= -db * 0.010;
-  // recalibrate slowly toward zero
-  baseAlpha += da * 0.015;
-  baseBeta  += db * 0.015;
+function applyDrift(t) {
+  // offset from center → normalized -1..1
+  input.strafe  =  (t.clientX - W * 0.5) / (W * 0.5);
+  input.forward = -(t.clientY - H * 0.5) / (H * 0.5); // up = positive
 }
 
-// Request permission on iOS 13+
-function requestOrientationAccess(){
-  if(typeof DeviceOrientationEvent !== 'undefined' &&
-     typeof DeviceOrientationEvent.requestPermission === 'function'){
-    DeviceOrientationEvent.requestPermission().then(s=>{
-      if(s==='granted') window.addEventListener('deviceorientation', handleOrientation, true);
-    }).catch(()=>{
-      // fall back to drag
-      aimMode='drag';
-      aimToggleBtn.textContent='aim: drag';
-      document.getElementById('aimMode').textContent='drag';
-    });
-  } else {
-    window.addEventListener('deviceorientation', handleOrientation, true);
-  }
-}
-// Trigger on first user gesture
-let orientationRequested=false;
-function tryRequestOrientation(){
-  if(!orientationRequested){ orientationRequested=true; requestOrientationAccess(); }
+// ── HUD toggle ───────────────────────────────────────────────────────────────
+let hudOn = false, hudTimer = null;
+function hudToggle(){
+  hudOn = true;
+  ['hud','legend','status'].forEach(id => document.getElementById(id).classList.add('on'));
+  clearTimeout(hudTimer);
+  hudTimer = setTimeout(() => {
+    hudOn = false;
+    ['hud','legend','status'].forEach(id => document.getElementById(id).classList.remove('on'));
+  }, 3000);
 }
 
-// ─── Touch for drag-aim ──────────────────────────────────────────────────────
-let touchDragging=false, touchLX=0, touchLY=0;
-canvas.addEventListener('touchstart', e=>{
-  tryRequestOrientation();
-  if(aimMode==='drag' && e.touches.length===1){
-    touchDragging=true;
-    touchLX=e.touches[0].clientX;
-    touchLY=e.touches[0].clientY;
-  }
-},{passive:true});
-canvas.addEventListener('touchmove', e=>{
-  if(!touchDragging) return;
-  const t=e.touches[0];
-  input.yawDelta+=(t.clientX-touchLX)*0.006;
-  input.pitchDelta+=(t.clientY-touchLY)*0.005;
-  touchLX=t.clientX; touchLY=t.clientY;
-},{passive:true});
-canvas.addEventListener('touchend',()=>touchDragging=false);
+function setStatus(msg){
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.classList.add('on');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('on'), 2500);
+}
 
-// Tap canvas = fire (single tap, not drag)
-let tapStart=0, tapMoved=false;
-canvas.addEventListener('touchstart', e=>{
-  tapStart=Date.now(); tapMoved=false;
-},{passive:true});
-canvas.addEventListener('touchmove',()=>tapMoved=true,{passive:true});
-canvas.addEventListener('touchend', e=>{
-  if(!tapMoved && Date.now()-tapStart < 250){ input.shoot=true; setTimeout(()=>input.shoot=false,80); }
-});
-
-// ─── Fire button ─────────────────────────────────────────────────────────────
-const fireBtn=document.getElementById('fireBtn');
-fireBtn.addEventListener('touchstart', e=>{ e.preventDefault(); tryRequestOrientation(); input.shoot=true; fireBtn.classList.add('firing'); },{passive:false});
-fireBtn.addEventListener('touchend', ()=>{ input.shoot=false; fireBtn.classList.remove('firing'); });
-fireBtn.addEventListener('mousedown', ()=>input.shoot=true);
-fireBtn.addEventListener('mouseup',   ()=>input.shoot=false);
-
-// ─── Reset ───────────────────────────────────────────────────────────────────
-document.getElementById('resetBtn').addEventListener('click', ()=>resetWorld());
-
-// ─── HUD tap-to-toggle ────────────────────────────────────────────────────────
-let hudVisible=true;
-document.getElementById('hudTap').addEventListener('click', ()=>{
-  hudVisible=!hudVisible;
-  ['hud','legend','status'].forEach(id=>{
-    document.getElementById(id).classList.toggle('visible',hudVisible);
-  });
-});
-
-// ─── Python engine ───────────────────────────────────────────────────────────
-const ENGINE_CODE = String.raw`
+// ── Python engine ────────────────────────────────────────────────────────────
+const ENGINE = String.raw`
 import math, random
 from dataclasses import dataclass, field
 
 WORLD = None
-COMPILED = {}
 
-# ── Word banks ────────────────────────────────────────────────────────────────
-CORRECT_WORDS = [
+CORRECT = [
     "necessary","accommodate","occurrence","particularly","definitely",
     "separate","beautiful","beginning","conscience","millennium",
     "privilege","threshold","apparent","tendency","discipline",
-    "embarrass","equipment","exaggerate","fahrenheit","immediately",
-    "independent","leisure","lieutenant","maintenance","manoeuvre",
-    "noticeable","parallel","persistent","relevant","resistance",
-    "restaurant","ridiculous","silhouette","successful","technically",
-    "temperature","theoretical","throughout","unfortunately","guarantee",
+    "embarrass","equipment","exaggerate","immediately","independent",
+    "leisure","lieutenant","maintenance","noticeable","parallel",
+    "persistent","relevant","resistance","restaurant","ridiculous",
+    "silhouette","successful","technically","temperature","throughout",
+    "guarantee","manoeuvre","fahrenheit","theoretical","unfortunately",
 ]
 
-MISSPELLED_WORDS = [
+MISSPELLED = [
     ("recieve","receive",2),("occured","occurred",2),("untill","until",3),
     ("wierd","weird",3),("accomodate","accommodate",3),("existance","existence",2),
-    ("grammer","grammar",2),("occassion","occasion",2),("pavillion","pavilion",2),
-    ("neccessary","necessary",3),("seperate","separate",2),("definately","definitely",3),
-    ("persue","pursue",2),("embarass","embarrass",2),("aquire","acquire",2),
-    ("reccomend","recommend",3),("belive","believe",2),("writting","writing",2),
+    ("grammer","grammar",2),("occassion","occasion",2),("neccessary","necessary",3),
+    ("seperate","separate",2),("definately","definitely",3),("persue","pursue",2),
+    ("embarass","embarrass",2),("reccomend","recommend",3),("belive","believe",2),
     ("begining","beginning",3),("arguement","argument",3),("truely","truly",2),
-    ("writeing","writing",2),("comming","coming",2),("intresting","interesting",3),
-    ("lieing","lying",2),("maintainance","maintenance",3),("parralel","parallel",3),
-    ("payed","paid",2),("privelege","privilege",3),("publically","publicly",2),
-    ("recieved","received",2),("refered","referred",2),("relevent","relevant",2),
-    ("resistence","resistance",3),("resteraunt","restaurant",4),("riddiculous","ridiculous",3),
-    ("succesfull","successful",3),("technicly","technically",3),("tounge","tongue",2),
-    ("vaccum","vacuum",2),
+    ("comming","coming",2),("intresting","interesting",3),("maintainance","maintenance",3),
+    ("parralel","parallel",3),("privelege","privilege",3),("recieved","received",2),
+    ("relevent","relevant",2),("resistence","resistance",3),("resteraunt","restaurant",4),
+    ("riddiculous","ridiculous",3),("succesfull","successful",3),("tounge","tongue",2),
+    ("vaccum","vacuum",2),("writting","writing",2),("writeing","writing",2),
+    ("lieing","lying",2),("payed","paid",2),("refered","referred",2),
+    ("aquire","acquire",2),("publically","publicly",2),("technicly","technically",3),
 ]
 
-def clamp(x,lo,hi): return lo if x<lo else hi if x>hi else x
+def clamp(x, lo, hi): return lo if x < lo else hi if x > hi else x
 
 @dataclass
 class Entity:
     eid: int
     kind: str
     x: float; y: float; z: float
-    vx: float=0.; vy: float=0.; vz: float=0.
-    radius: float=0.5
-    life: float=9999.
-    alive: bool=True
-    tags: set=field(default_factory=set)
-    data: dict=field(default_factory=dict)
+    vx: float = 0.; vy: float = 0.; vz: float = 0.
+    radius: float = 0.5
+    life: float = 9999.
+    alive: bool = True
+    tags: set = field(default_factory=set)
+    data: dict = field(default_factory=dict)
 
 class World:
     def __init__(self):
-        self.next_id=1; self.entities={}
-        self.score=0; self.lives=3; self.time=0.
-        self.player={"x":0.,"y":0.,"z":0.,"yaw":0.,"pitch":0.,"speed":6.5,"cooldown":0.}
-        self.status="ready"
+        self.next_id = 1
+        self.entities = {}
+        self.score = 0
+        self.lives = 3
+        self.time  = 0.
+        self.status = "fly through space"
+        self.player = {"x": 0., "y": 0.}
 
-    def spawn(self,kind,x,y,z,vx=0.,vy=0.,vz=0.,radius=0.5,tags=None,life=9999.,data=None):
-        e=Entity(eid=self.next_id,kind=kind,x=float(x),y=float(y),z=float(z),
-                 vx=float(vx),vy=float(vy),vz=float(vz),radius=float(radius),
-                 tags=set(tags or []),life=float(life),data=dict(data or {}))
-        self.entities[e.eid]=e; self.next_id+=1; return e
+    def spawn(self, kind, x, y, z, vx=0., vy=0., vz=0.,
+              radius=0.5, tags=None, life=9999., data=None):
+        e = Entity(eid=self.next_id, kind=kind,
+                   x=float(x), y=float(y), z=float(z),
+                   vx=float(vx), vy=float(vy), vz=float(vz),
+                   radius=float(radius),
+                   tags=set(tags or []),
+                   life=float(life),
+                   data=dict(data or {}))
+        self.entities[e.eid] = e
+        self.next_id += 1
+        return e
 
 def reset_world():
     global WORLD
-    WORLD=World(); spawn_wave(10)
-    return {"ok":True,"status":"world reset"}
+    WORLD = World()
+    spawn_wave(14)
+    return {"ok": True, "status": "reset"}
 
 def spawn_wave(count=8):
-    w=WORLD
-    if w is None: reset_world(); w=WORLD
-    count=int(count)
+    w = WORLD
+    count = int(count)
     for _ in range(count):
-        z=-(20+random.random()*60)
-        x=random.uniform(-18,18); y=random.uniform(-9,9)
-        radius=random.uniform(0.8,1.9)
-        vz=random.uniform(1.5,3.5); vx=random.uniform(-.4,.4); vy=random.uniform(-.2,.2)
-        # 60% chance misspelled, 40% correct
-        if random.random()<0.60:
-            word,correct,errors=random.choice(MISSPELLED_WORDS)
-            w.spawn("word",x,y,z,vx=vx,vy=vy,vz=vz,radius=radius,
-                    tags={"misspelled"},life=9999.,
-                    data={"label":word,"errors":errors,"correct":correct})
+        z      = -(25 + random.random() * 80)
+        x      = random.uniform(-14, 14)
+        y      = random.uniform(-8, 8)
+        radius = random.uniform(0.9, 2.1)
+        vz     = random.uniform(2.5, 4.5)     # always moving forward
+        vx     = random.uniform(-0.15, 0.15)  # barely any lateral drift
+        vy     = random.uniform(-0.10, 0.10)
+        if random.random() < 0.62:
+            word, correct, errors = random.choice(MISSPELLED)
+            w.spawn("word", x, y, z, vx=vx, vy=vy, vz=vz, radius=radius,
+                    tags={"misspelled"}, data={"label": word, "errors": errors, "correct": correct})
         else:
-            word=random.choice(CORRECT_WORDS)
-            w.spawn("word",x,y,z,vx=vx,vy=vy,vz=vz,radius=radius,
-                    tags={"correct"},life=9999.,
-                    data={"label":word,"errors":0})
-    w.status=f"wave of {count}"
-    return {"ok":True,"status":w.status}
+            word = random.choice(CORRECT)
+            w.spawn("word", x, y, z, vx=vx, vy=vy, vz=vz, radius=radius,
+                    tags={"correct"}, data={"label": word, "errors": 0})
+    return {"ok": True}
 
-def forward_vector(yaw,pitch):
-    cp=math.cos(pitch)
-    return math.sin(yaw)*cp, -math.sin(pitch), -math.cos(yaw)*cp
+def update_player(inp, dt):
+    w = WORLD; p = w.player
+    p["x"] += float(inp.get("strafe",  0.)) * 5.5 * dt
+    p["y"] -= float(inp.get("forward", 0.)) * 4.0 * dt
+    # soft boundary
+    p["x"] = clamp(p["x"], -12., 12.)
+    p["y"] = clamp(p["y"],  -7.,  7.)
 
-def right_vector(yaw):
-    return math.cos(yaw), 0., math.sin(yaw)
-
-def spawn_projectile():
-    w=WORLD; p=w.player
-    fx,fy,fz=forward_vector(p["yaw"],p["pitch"])
-    speed=30.
-    w.spawn("projectile",p["x"]+fx*1.2,p["y"]+fy*1.2,p["z"]+fz*1.2,
-            vx=fx*speed,vy=fy*speed,vz=fz*speed,radius=0.18,life=1.5,tags={"projectile"})
-
-def update_player(inp,dt):
-    w=WORLD; p=w.player
-    p["yaw"]+=float(inp.get("yawDelta",0.))
-    p["pitch"]=clamp(p["pitch"]+float(inp.get("pitchDelta",0.)),-1.1,1.1)
-    fwd=float(inp.get("forward",0.)); strafe=float(inp.get("strafe",0.))
-    fx,fy,fz=forward_vector(p["yaw"],0.)
-    rx,ry,rz=right_vector(p["yaw"])
-    speed=p["speed"]
-    p["x"]+=(fx*fwd+rx*strafe)*speed*dt
-    p["z"]+=(fz*fwd+rz*strafe)*speed*dt
-    p["cooldown"]=max(0.,p["cooldown"]-dt)
-    if inp.get("shoot") and p["cooldown"]<=0.:
-        spawn_projectile(); p["cooldown"]=0.08
-
-def update_entities(dt):
-    w=WORLD; p=w.player
-    alive_words=[e for e in w.entities.values() if e.alive and e.kind=="word"]
-    if len(alive_words)<6: spawn_wave(6)
-    for e in list(w.entities.values()):
-        if not e.alive: continue
-        e.x+=e.vx*dt; e.y+=e.vy*dt; e.z+=e.vz*dt; e.life-=dt
-        if e.kind=="particle":
-            e.vz*=0.995; e.vx*=0.997; e.vy*=0.997
-        if e.life<=0: e.alive=False; continue
-        dx=e.x-p["x"]; dy=e.y-p["y"]; dz=e.z-p["z"]
-        if e.kind=="word" and dz>2.5:
-            e.z=-(30+random.random()*45)
-            e.x=p["x"]+random.uniform(-17,17)
-            e.y=p["y"]+random.uniform(-9,9)
-        if e.kind=="word" and "correct" not in e.tags:
-            if (dx*dx+dy*dy+dz*dz)<(e.radius+0.6)**2:
-                e.alive=False; w.lives-=1
-                w.status="hit by misspelled word!"
-                if w.lives<=0: w.status="game over — tap reset"
-
-def ray_hit():
-    w=WORLD; p=w.player
-    fx,fy,fz=forward_vector(p["yaw"],p["pitch"])
-    best=None; best_dist=999999
-    for e in w.entities.values():
-        if not e.alive or e.kind not in ("word","pickup"): continue
-        dx=e.x-p["x"]; dy=e.y-p["y"]; dz=e.z-p["z"]
-        t=dx*fx+dy*fy+dz*fz
-        if t<0: continue
-        cx=p["x"]+fx*t; cy=p["y"]+fy*t; cz=p["z"]+fz*t
-        d2=(e.x-cx)**2+(e.y-cy)**2+(e.z-cz)**2
-        if d2<=(e.radius**2) and t<best_dist:
-            best=e; best_dist=t
-    if best:
-        pop_entity(best)
+def burst(entity, count=8, col="green"):
+    w = WORLD
+    for i in range(count):
+        angle = (i / max(1, count)) * 6.2832
+        spd   = random.uniform(1.0, 2.5)
+        w.spawn("particle", entity.x, entity.y, entity.z,
+                vx=math.cos(angle)*spd, vy=math.sin(angle)*spd,
+                vz=random.uniform(0., 1.),
+                radius=0.06, life=0.65, data={"col": col})
 
 def pop_entity(e):
     if not e.alive: return
-    e.alive=False
-    if e.kind=="word":
-        if "misspelled" in e.tags:
-            errors=e.data.get("errors",1)
-            pts=10*errors
-            WORLD.score+=pts
-            WORLD.status=f'+{pts} — "{e.data.get("label","?")}" should be "{e.data.get("correct","?")}"'
-            burst(e,8,rgba=(125,255,141))
-        elif "correct" in e.tags:
-            WORLD.score=max(0,WORLD.score-15)
-            WORLD.lives=max(0,WORLD.lives-1)
-            WORLD.status=f'-15 penalty! "{e.data.get("label","?")}" was correct'
-            burst(e,5,rgba=(255,80,80))
+    e.alive = False
+    if "misspelled" in e.tags:
+        pts = 10 * e.data.get("errors", 1)
+        WORLD.score += pts
+        WORLD.status = f'+{pts}  "{e.data["label"]}" → "{e.data["correct"]}"'
+        burst(e, 10, "green")
+    elif "correct" in e.tags:
+        WORLD.score = max(0, WORLD.score - 15)
+        WORLD.lives = max(0, WORLD.lives - 1)
+        WORLD.status = f'−15  "{e.data["label"]}" was spelled correctly'
+        burst(e, 6, "amber")
 
-def burst(entity,count,rgba=(125,255,141)):
-    w=WORLD
-    for i in range(count):
-        angle=(i/max(1,count))*math.tau
-        speed=random.uniform(1.5,3.0)
-        w.spawn("particle",entity.x,entity.y,entity.z,
-                vx=math.cos(angle)*speed,vy=math.sin(angle)*speed,
-                vz=random.uniform(-.5,.5),radius=0.07,life=0.7,
-                data={"rgba":rgba})
+def update_entities(dt):
+    w = WORLD; p = w.player
+    alive = [e for e in w.entities.values() if e.alive and e.kind == "word"]
+    if len(alive) < 7:
+        spawn_wave(8)
+    for e in list(w.entities.values()):
+        if not e.alive: continue
+        # damp lateral, keep forward speed high
+        e.vx *= 0.94
+        e.vy *= 0.94
+        e.vz  = max(2.5, e.vz)
+        e.x  += e.vx * dt
+        e.y  += e.vy * dt
+        e.z  += e.vz * dt
+        e.life -= dt
+        if e.kind == "particle":
+            e.vx *= 0.97; e.vy *= 0.97; e.vz *= 0.98
+        if e.life <= 0:
+            e.alive = False; continue
+        dz = e.z - 0.  # player is always at z=0
+        if e.kind == "word" and dz > 2.5:
+            # recycle behind
+            e.z  = -(30 + random.random() * 60)
+            e.x  = p["x"] + random.uniform(-14, 14)
+            e.y  = p["y"] + random.uniform(-8, 8)
+            e.vx = random.uniform(-0.15, 0.15)
+            e.vy = random.uniform(-0.10, 0.10)
+        # collision: word touches player
+        if e.kind == "word":
+            dx = e.x - p["x"]; dy = e.y - p["y"]; dz2 = e.z
+            if (dx*dx + dy*dy + dz2*dz2) < (e.radius + 0.55)**2:
+                pop_entity(e)
 
 def serializable_state():
-    w=WORLD; payload=[]
+    w = WORLD; payload = []
     for e in w.entities.values():
         if not e.alive: continue
-        payload.append({"id":e.eid,"kind":e.kind,"x":e.x,"y":e.y,"z":e.z,
-                         "radius":e.radius,"tags":list(e.tags),"life":e.life,
-                         "data":dict(e.data)})
-    return {"score":w.score,"lives":w.lives,"entities":payload,
-            "status":w.status,"player":dict(w.player),"time":w.time}
+        payload.append({"id": e.eid, "kind": e.kind,
+                         "x": e.x, "y": e.y, "z": e.z,
+                         "radius": e.radius,
+                         "tags": list(e.tags),
+                         "life": e.life,
+                         "data": dict(e.data)})
+    return {"score": w.score, "lives": w.lives,
+            "entities": payload, "status": w.status,
+            "player": dict(w.player), "time": w.time}
 
 def step_game(inp):
-    if hasattr(inp,"to_py"): inp=inp.to_py()
-    if inp is None: inp={}
-    w=WORLD
-    if w.lives<=0:
-        w.time+=1./60.; return serializable_state()
-    dt=float(inp.get("dt",1./60.))
-    update_player(inp,dt)
+    if hasattr(inp, "to_py"): inp = inp.to_py()
+    if inp is None: inp = {}
+    w = WORLD
+    if w.lives <= 0:
+        w.time += 1./60.; return serializable_state()
+    dt = float(inp.get("dt", 1./60.))
+    update_player(inp, dt)
     update_entities(dt)
-    ray_hit()
-    w.time+=dt
+    w.time += dt
     return serializable_state()
 
 reset_world()
 `;
 
-let pyodide=null, pyReady=false;
+let pyodide = null, pyReady = false;
 
 async function boot(){
-  try{
-    pyodide=await loadPyodide();
-    await pyodide.runPythonAsync(ENGINE_CODE);
-    pyReady=true;
-    document.getElementById('loader').style.display='none';
-    document.getElementById('aimToggle').style.display='';
-    setStatus('Tap screen or FIRE to shoot • aim: accelerometer');
-    requestAnimationFrame(frame);
-  }catch(err){
-    document.getElementById('loader').querySelector('div:nth-child(2)').textContent='Error: '+err;
-  }
+  pyodide = await loadPyodide();
+  await pyodide.runPythonAsync(ENGINE);
+  pyReady = true;
+  document.getElementById('loader').style.display = 'none';
+  hudToggle();
+  requestAnimationFrame(frame);
 }
 
-function setStatus(msg){
-  document.getElementById('status').textContent=msg;
-}
-
-async function pyCall(expr,globals={}){
-  if(!pyReady) return null;
-  for(const[k,v] of Object.entries(globals)) pyodide.globals.set(k,v);
-  try{
-    const r=await pyodide.runPythonAsync(expr);
-    return r&&typeof r.toJs==='function'?r.toJs({dict_converter:Object.fromEntries}):r;
-  }finally{
+async function pyCall(expr, globals = {}){
+  for(const [k, v] of Object.entries(globals)) pyodide.globals.set(k, v);
+  try {
+    const r = await pyodide.runPythonAsync(expr);
+    return r && typeof r.toJs === 'function'
+      ? r.toJs({ dict_converter: Object.fromEntries }) : r;
+  } finally {
     for(const k of Object.keys(globals)) pyodide.globals.delete(k);
   }
 }
 
-async function resetWorld(){
-  if(!pyReady)return;
-  await pyCall('reset_world()');
+// ── Projection (no rotation — pure perspective) ───────────────────────────────
+function project(dx, dy, dz){
+  if(dz > -0.3) return null;
+  const focal = Math.min(W, H) * 1.1;
+  const sc    = focal / (-dz + 0.0001);
+  return { x: W * 0.5 + dx * sc, y: H * 0.5 + dy * sc, scale: sc, depth: -dz };
 }
 
-// ─── Rendering ───────────────────────────────────────────────────────────────
-function rotateToCamera(dx,dy,dz,yaw,pitch){
-  const cy=Math.cos(-yaw),sy=Math.sin(-yaw);
-  const x1=dx*cy-dz*sy, z1=dx*sy+dz*cy, y1=dy;
-  const cp=Math.cos(-pitch),sp=Math.sin(-pitch);
-  return [x1, y1*cp-z1*sp, y1*sp+z1*cp];
-}
-
-function project(dx,dy,dz,player){
-  const[cx,cy,cz]=rotateToCamera(dx,dy,dz,player.yaw,player.pitch);
-  if(cz>-0.2) return null;
-  const focal=Math.min(W,H)*1.05;
-  const sc=focal/(-cz+.0001);
-  return{x:W*.5+cx*sc, y:H*.5+cy*sc, scale:sc, depth:-cz};
-}
-
-function drawStars(player,time){
-  ctx.fillStyle='#000';
-  ctx.fillRect(0,0,W,H);
-  const yp=player.yaw*14, pp=player.pitch*10;
-  for(let i=0;i<500;i++){
-    const s=i*17.123+9.331;
-    const sx=((((Math.sin(s*.91)*43758.5)%1)+1)%1)-.5;
-    const sy=((((Math.sin(s*1.37)*12345.6)%1)+1)%1)-.5;
-    const sz=((((Math.sin(s*2.17)*98765.4)%1)+1)%1);
-    const lay=.25+(i%9)/9;
-    const x=sx*180+yp*lay, y=sy*110+pp*lay;
-    const z=-(((sz*140+time*(22+lay*65))%140)+2);
-    const p=project(x,y,z,{yaw:player.yaw*.12,pitch:player.pitch*.10});
+// ── Stars ──────────────────────────────────────────────────────────────────────
+function drawStars(player, time){
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+  for(let i = 0; i < 420; i++){
+    const s  = i * 17.123 + 9.331;
+    const sx = ((((Math.sin(s * .91) * 43758.5) % 1) + 1) % 1) - 0.5;
+    const sy = ((((Math.sin(s * 1.37) * 12345.6) % 1) + 1) % 1) - 0.5;
+    const sz = ((((Math.sin(s * 2.17) * 98765.4) % 1) + 1) % 1);
+    const lay = 0.3 + (i % 7) / 7;
+    const x  = sx * 170;
+    const y  = sy * 100;
+    const z  = -(((sz * 130 + time * (20 + lay * 60)) % 130) + 2);
+    const p  = project(x - player.x * 0.04, y - player.y * 0.04, z);
     if(!p) continue;
-    const size=Math.max(.7,Math.min(2.5,p.scale*.015*lay));
-    const alpha=Math.max(.1,Math.min(.9,1/(p.depth*.06)));
-    ctx.fillStyle=`rgba(125,255,141,${alpha})`;
-    ctx.fillRect(p.x,p.y,size,size);
+    const size  = Math.max(0.6, Math.min(2.4, p.scale * 0.014 * lay));
+    const alpha = Math.max(0.1, Math.min(0.9, 1 / (p.depth * 0.055)));
+    ctx.fillStyle = `rgba(125,255,141,${alpha})`;
+    ctx.fillRect(p.x, p.y, size, size);
   }
 }
 
+// ── Entities ──────────────────────────────────────────────────────────────────
 function drawEntities(state){
-  const pl=state.player;
-  const drawables=[];
+  const pl = state.player;
+  const ds = [];
   for(const e of state.entities){
-    const dx=e.x-pl.x,dy=e.y-pl.y,dz=e.z-pl.z;
-    const p=project(dx,dy,dz,pl);
+    const p = project(e.x - pl.x, e.y - pl.y, e.z);
     if(!p) continue;
-    const r=Math.max(e.kind==='projectile'?2:8,e.radius*p.scale);
-    drawables.push({e,p,r});
+    const r = Math.max(e.kind === 'particle' ? 1.5 : 8, e.radius * p.scale);
+    ds.push({ e, p, r });
   }
-  drawables.sort((a,b)=>b.p.depth-a.p.depth);
+  ds.sort((a, b) => b.p.depth - a.p.depth);
 
-  for(const{e,p,r} of drawables){
-    if(e.kind==='particle'){
-      const rgba=e.data&&e.data.rgba?e.data.rgba:[125,255,141];
-      ctx.fillStyle=`rgba(${rgba[0]},${rgba[1]},${rgba[2]},0.6)`;
-      ctx.beginPath();ctx.arc(p.x,p.y,Math.max(1.5,r*.4),0,Math.PI*2);ctx.fill();
+  for(const { e, p, r } of ds){
+    if(e.kind === 'particle'){
+      const col = e.data && e.data.col === 'amber' ? '255,187,68' : '125,255,141';
+      const alpha = Math.min(0.9, e.life * 1.4);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, Math.max(1.2, r * 0.5), 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${col},${alpha})`;
+      ctx.fill();
       continue;
     }
-    if(e.kind==='projectile'){
-      ctx.strokeStyle='rgba(200,255,210,.9)';ctx.lineWidth=1.5;
-      ctx.beginPath();ctx.moveTo(p.x,p.y-5);ctx.lineTo(p.x,p.y+5);
-      ctx.moveTo(p.x-5,p.y);ctx.lineTo(p.x+5,p.y);ctx.stroke();
-      continue;
-    }
-    // Word bubble
-    const isMisspelled=e.tags&&e.tags.includes('misspelled');
-    const isCorrect=e.tags&&e.tags.includes('correct');
-    const alpha=Math.max(.4,Math.min(.95,1.4/(p.depth*.07)));
 
-    if(isMisspelled){
-      ctx.strokeStyle=`rgba(125,255,141,${alpha})`;
-      ctx.shadowColor='rgba(125,255,141,0.4)';
-      ctx.shadowBlur=r*.3;
-    } else if(isCorrect){
-      ctx.strokeStyle=`rgba(255,187,68,${alpha})`;
-      ctx.shadowColor='rgba(255,187,68,0.3)';
-      ctx.shadowBlur=r*.2;
+    const isMiss = e.tags && e.tags.includes('misspelled');
+    const isCorr = e.tags && e.tags.includes('correct');
+    const alpha  = Math.max(0.35, Math.min(0.95, 1.5 / (p.depth * 0.075)));
+
+    // glow halo
+    if(isMiss){
+      ctx.shadowColor = 'rgba(125,255,141,0.35)';
+      ctx.shadowBlur  = r * 0.35;
+      ctx.strokeStyle = `rgba(125,255,141,${alpha})`;
     } else {
-      ctx.strokeStyle=`rgba(150,150,150,${alpha})`;
-      ctx.shadowBlur=0;
+      ctx.shadowColor = 'rgba(255,187,68,0.25)';
+      ctx.shadowBlur  = r * 0.22;
+      ctx.strokeStyle = `rgba(255,187,68,${alpha})`;
     }
 
-    ctx.lineWidth=Math.max(1,r*.04);
-    ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);ctx.stroke();
-    ctx.shadowBlur=0;
+    ctx.lineWidth = Math.max(1, r * 0.045);
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
 
-    // Label
-    if(r>9){
-      const label=e.data&&e.data.label?e.data.label:(e.tags?e.tags[0]||'':e.kind);
-      const fs=Math.max(9,Math.min(22,r*.38));
-      ctx.font=`${fs}px Consolas,monospace`;
-      ctx.textAlign='center';ctx.textBaseline='middle';
-      if(isMisspelled) ctx.fillStyle=`rgba(202,255,207,${alpha})`;
-      else if(isCorrect) ctx.fillStyle=`rgba(255,220,140,${alpha})`;
-      else ctx.fillStyle=`rgba(180,180,180,${alpha})`;
-      ctx.fillText(label,p.x,p.y);
+    // inner ring pulse (misspelled only)
+    if(isMiss && r > 12){
+      const pulse = 0.72 + Math.sin(state.time * 3.5 + e.id * 1.3) * 0.06;
+      ctx.strokeStyle = `rgba(125,255,141,${alpha * 0.22})`;
+      ctx.lineWidth   = 1;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r * pulse, 0, Math.PI * 2);
+      ctx.stroke();
+    }
 
-      // Error count badge for misspelled
-      if(isMisspelled&&e.data&&e.data.errors&&r>16){
-        const errors=e.data.errors;
-        ctx.font=`bold ${Math.max(8,fs*.65)}px Consolas,monospace`;
-        ctx.fillStyle='rgba(255,80,80,.85)';
-        ctx.fillText(`×${errors}`,p.x+r*.55,p.y-r*.55);
+    // label
+    if(r > 10){
+      const label = e.data && e.data.label ? e.data.label : '';
+      const fs    = Math.max(9, Math.min(20, r * 0.34));
+      ctx.font          = `${fs}px Consolas,monospace`;
+      ctx.textAlign     = 'center';
+      ctx.textBaseline  = 'middle';
+      ctx.fillStyle     = isMiss
+        ? `rgba(202,255,207,${alpha})`
+        : `rgba(255,220,140,${alpha})`;
+      ctx.fillText(label, p.x, p.y);
+
+      // error badge
+      if(isMiss && e.data.errors && r > 18){
+        ctx.font      = `bold ${Math.max(8, fs * 0.6)}px Consolas,monospace`;
+        ctx.fillStyle = `rgba(255,90,90,0.85)`;
+        ctx.fillText(`×${e.data.errors}`, p.x + r * 0.62, p.y - r * 0.58);
       }
     }
   }
 }
 
+// ── HUD update ────────────────────────────────────────────────────────────────
+let lastStatus = '';
 function updateHud(state){
-  document.getElementById('score').textContent=state.score;
-  document.getElementById('lives').textContent=state.lives;
-  document.getElementById('entities').textContent=state.entities.length;
-  if(state.status&&state.status!=='ready') setStatus(state.status);
+  document.getElementById('score').textContent = state.score;
+  document.getElementById('lives').textContent = state.lives;
+  if(state.status && state.status !== lastStatus && state.status !== 'fly through space'){
+    lastStatus = state.status;
+    setStatus(state.status);
+    hudToggle();
+  }
 }
 
-// ─── Game loop ────────────────────────────────────────────────────────────────
-let lastTs=0;
+// ── Loop ──────────────────────────────────────────────────────────────────────
+let lastTs = 0;
 async function frame(ts){
-  if(!pyReady){requestAnimationFrame(frame);return;}
-  if(!lastTs)lastTs=ts;
-  const dt=Math.min(0.05,(ts-lastTs)/1000);
-  lastTs=ts;
-
-  // Apply accelerometer as yaw/pitch deltas each frame
-  if(aimMode==='accel'){
-    input.yawDelta+=accelYaw*dt*60;
-    input.pitchDelta+=accelPitch*dt*60;
-  }
+  if(!pyReady){ requestAnimationFrame(frame); return; }
+  if(!lastTs) lastTs = ts;
+  const dt = Math.min(0.05, (ts - lastTs) / 1000);
+  lastTs = ts;
 
   try{
-    const state=await pyCall('step_game(INPUT_STATE)',{
-      INPUT_STATE:{
-        forward:input.forward,strafe:input.strafe,
-        shoot:input.shoot,
-        yawDelta:input.yawDelta,pitchDelta:input.pitchDelta,
-        dt,
-      }
+    const state = await pyCall('step_game(INP)', {
+      INP: { strafe: input.strafe, forward: input.forward, dt }
     });
-    input.yawDelta=0;input.pitchDelta=0;
     if(state){
-      drawStars(state.player,state.time);
+      drawStars(state.player, state.time);
       drawEntities(state);
       updateHud(state);
     }
-  }catch(err){
-    setStatus('error: '+String(err).slice(0,80));
+  } catch(err){
+    setStatus('err: ' + String(err).slice(0, 60));
   }
 
   requestAnimationFrame(frame);
