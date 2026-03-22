@@ -7,206 +7,353 @@
 <script src="https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pyodide.js"></script>
 <style>
 html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Consolas,monospace}
-canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
-
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
 #hud{
   position:fixed;top:10px;left:10px;
   color:#7dff8d;font-size:13px;
   background:rgba(0,10,0,.6);
   padding:6px 10px;
   border:1px solid rgba(125,255,141,.25);
+  border-radius:5px;
+  text-shadow:0 0 6px rgba(125,255,141,.4);
+  pointer-events:none;
 }
+#hud strong{color:#caffcf}
+#pop{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  font-size:18px;color:#7dff8d;font-weight:bold;
+  text-shadow:0 0 10px #7dff8d;
+  opacity:0;transition:opacity .1s;pointer-events:none;
+}
+#loader{
+  position:fixed;inset:0;background:#000;z-index:50;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  color:#7dff8d;font-size:13px;
+}
+.spin{width:34px;height:34px;border-radius:50%;border:2px solid #1a4a2a;border-top-color:#7dff8d;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,rgba(100,255,140,.011) 0,rgba(100,255,140,.011) 1px,transparent 2px,transparent 4px);
+  mix-blend-mode:screen;opacity:.18;z-index:30}
 </style>
 </head>
 <body>
 
 <canvas id="game"></canvas>
-<div id="hud">score <span id="score">0</span></div>
+<div id="hud">score <strong id="score">0</strong></div>
+<div id="pop"></div>
+<div id="loader">
+  <div class="spin"></div>
+  <div>Loading Starpop…</div>
+  <div style="font-size:11px;color:#2a6a3a">~15s on first load</div>
+</div>
 
 <script>
-// ── Canvas ─────────────────────────────
+// ── Canvas ────────────────────────────────────────────────────────────────────
 const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d');
-
-let W,H;
+const ctx    = canvas.getContext('2d');
+let W, H;
 function resize(){
-  const dpr = Math.max(1, devicePixelRatio||1);
+  const dpr = Math.max(1, devicePixelRatio || 1);
   W = innerWidth; H = innerHeight;
-  canvas.width = W*dpr;
-  canvas.height = H*dpr;
-  canvas.style.width = W+"px";
-  canvas.style.height = H+"px";
-  ctx.setTransform(dpr,0,0,dpr,0,0);
+  canvas.width = W*dpr; canvas.height = H*dpr;
+  canvas.style.width = W+'px'; canvas.style.height = H+'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 resize();
 addEventListener('resize', resize);
 
-// ── Tilt controls ─────────────────────
-let tiltX = 0;
-let tiltY = 0;
-let baseBeta = null;
-let baseGamma = null;
-
+// ── Tilt ──────────────────────────────────────────────────────────────────────
+let tiltX = 0, tiltY = 0, baseBeta = null, baseGamma = null;
 function handleOrientation(e){
-  if(baseBeta === null){
-    baseBeta = e.beta || 0;
-    baseGamma = e.gamma || 0;
-  }
-  const db = (e.beta || 0) - baseBeta;
-  const dg = (e.gamma || 0) - baseGamma;
-
-  tiltY = Math.max(-1, Math.min(1, db / 30));
-  tiltX = Math.max(-1, Math.min(1, dg / 30));
+  if(baseBeta === null){ baseBeta = e.beta||0; baseGamma = e.gamma||0; }
+  tiltY = Math.max(-1, Math.min(1, ((e.beta||0)  - baseBeta)  / 30));
+  tiltX = Math.max(-1, Math.min(1, ((e.gamma||0) - baseGamma) / 30));
 }
-
 function requestOrientation(){
   if(typeof DeviceOrientationEvent !== 'undefined' &&
      typeof DeviceOrientationEvent.requestPermission === 'function'){
-    DeviceOrientationEvent.requestPermission().then(s=>{
-      if(s === 'granted'){
-        window.addEventListener('deviceorientation', handleOrientation, true);
-      }
-    });
+    DeviceOrientationEvent.requestPermission()
+      .then(s => { if(s==='granted') addEventListener('deviceorientation', handleOrientation, true); });
   } else {
-    window.addEventListener('deviceorientation', handleOrientation, true);
+    addEventListener('deviceorientation', handleOrientation, true);
+  }
+}
+addEventListener('touchstart', requestOrientation, { once: true });
+
+// ── Tap to pop ────────────────────────────────────────────────────────────────
+// We keep a live list of drawn bubbles from the last frame so tap can hit-test them.
+let lastEnts = [];
+
+function handleTap(clientX, clientY){
+  for(const { p, r, e } of lastEnts){
+    if(!e.bad) continue;
+    const dx = clientX - p.x;
+    const dy = clientY - p.y;
+    if(dx*dx + dy*dy < r*r){
+      doPop(e.id, e.pts);
+      break; // pop one per tap
+    }
   }
 }
 
-// trigger permission
-window.addEventListener('touchstart', requestOrientation, {once:true});
+canvas.addEventListener('click',      e => handleTap(e.clientX, e.clientY));
+canvas.addEventListener('touchstart', e => {
+  const t = e.touches[0];
+  handleTap(t.clientX, t.clientY);
+}, { passive: true });
 
-// ── Python engine ─────────────────────
+// ── Engine ────────────────────────────────────────────────────────────────────
 const ENGINE = `
 import random
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-WORLD=None
+WORLD = None
 
-WORDS=[
-("recieve",True),("definately",True),("seperate",True),
-("necessary",False),("beautiful",False),("parallel",False)
+MISSPELLED = [
+    ("recieve","receive",2),("occured","occurred",2),("untill","until",3),
+    ("wierd","weird",3),("accomodate","accommodate",3),("existance","existence",2),
+    ("grammer","grammar",2),("occassion","occasion",2),("neccessary","necessary",3),
+    ("seperate","separate",2),("definately","definitely",3),("persue","pursue",2),
+    ("embarass","embarrass",2),("reccomend","recommend",3),("belive","believe",2),
+    ("begining","beginning",3),("arguement","argument",3),("truely","truly",2),
+    ("comming","coming",2),("intresting","interesting",3),("maintainance","maintenance",3),
+    ("parralel","parallel",3),("privelege","privilege",3),("recieved","received",2),
+    ("relevent","relevant",2),("resistence","resistance",3),("resteraunt","restaurant",4),
+    ("riddiculous","ridiculous",3),("succesfull","successful",3),("tounge","tongue",2),
+    ("vaccum","vacuum",2),("writting","writing",2),("freind","friend",2),
+    ("beleive","believe",3),("calender","calendar",2),("catagory","category",2),
+    ("collegue","colleague",2),("concious","conscious",2),("dependant","dependent",2),
+    ("dilemna","dilemma",2),("enviroment","environment",2),("febuary","february",2),
+    ("goverment","government",2),("harrass","harass",2),("immediatly","immediately",3),
+    ("innoculate","inoculate",2),("liason","liaison",2),("miniscule","minuscule",2),
+    ("perseverence","perseverance",2),("pronounciation","pronunciation",3),
+    ("shedule","schedule",2),("supercede","supersede",2),("tatoo","tattoo",2),
+    ("tendancy","tendency",2),("tyrany","tyranny",2),("unforseen","unforeseen",2),
+    ("vegeterian","vegetarian",2),("wether","whether",2),("aquire","acquire",2),
+    ("publically","publicly",2),("payed","paid",2),("freind","friend",2),
+]
+
+CORRECT = [
+    "necessary","accommodate","occurrence","particularly","definitely",
+    "separate","beautiful","beginning","conscience","millennium",
+    "privilege","threshold","apparent","tendency","discipline",
+    "embarrass","equipment","exaggerate","immediately","independent",
+    "leisure","lieutenant","maintenance","noticeable","parallel",
+    "persistent","relevant","resistance","restaurant","ridiculous",
+    "silhouette","successful","technically","temperature","throughout",
+    "guarantee","manoeuvre","fahrenheit","theoretical","unfortunately",
+    "rhythm","liaison","questionnaire","bureaucracy","conscientious",
+    "Mediterranean","miscellaneous","commemorate","chrysanthemum",
 ]
 
 @dataclass
 class E:
-  id:int; x:float; y:float; z:float; r:float; word:str; bad:bool; alive:bool=True
+    id:   int
+    x:    float
+    y:    float
+    z:    float
+    r:    float
+    word: str
+    bad:  bool
+    pts:  int
+    alive: bool = True
 
 def reset():
-  global WORLD
-  WORLD={"ents":{}, "next":1, "score":0}
-  spawn(25)
+    global WORLD
+    WORLD = {"ents": {}, "next": 1, "score": 0}
+    _spawn(28)
 
-def spawn(n):
-  for _ in range(n):
-    w=random.choice(WORDS)
-    WORLD["ents"][WORLD["next"]] = E(
-      WORLD["next"],
-      random.uniform(-10,10),
-      random.uniform(-6,6),
-      -(10+random.random()*50),
-      random.uniform(1.0,2.0),
-      w[0],
-      w[1]
-    )
-    WORLD["next"]+=1
+def _spawn(n):
+    for _ in range(n):
+        if random.random() < 0.58:
+            w, correct, errors = random.choice(MISSPELLED)
+            bad = True; pts = 10 * errors
+        else:
+            w = random.choice(CORRECT)
+            bad = False; pts = 0
+        eid = WORLD["next"]
+        WORLD["ents"][eid] = E(eid,
+            random.uniform(-11, 11),
+            random.uniform(-7,  7),
+            -(12 + random.random() * 65),
+            random.uniform(1.0, 2.2),
+            w, bad, pts)
+        WORLD["next"] += 1
 
-def step(inp):
-  for e in WORLD["ents"].values():
-    if not e.alive: continue
-
-    e.z += 0.04
-
-    if e.z > 2:
-      e.z = -(10+random.random()*50)
-      e.x = random.uniform(-10,10)
-      e.y = random.uniform(-6,6)
-
-  return {
-    "score":WORLD["score"],
-    "ents":[e.__dict__ for e in WORLD["ents"].values() if e.alive]
-  }
+def step():
+    alive_words = [e for e in WORLD["ents"].values() if e.alive]
+    if len(alive_words) < 12:
+        _spawn(10)
+    for e in alive_words:
+        e.z += 0.055   # forward speed — tweak this to taste
+        if e.z > 2.5:
+            e.z = -(12 + random.random() * 60)
+            e.x = random.uniform(-11, 11)
+            e.y = random.uniform(-7,  7)
+    return {
+        "score": WORLD["score"],
+        "ents":  [{"id":e.id,"x":e.x,"y":e.y,"z":e.z,
+                   "r":e.r,"word":e.word,"bad":e.bad,"pts":e.pts}
+                  for e in alive_words]
+    }
 
 def pop(eid):
-  e = WORLD["ents"].get(eid)
-  if not e or not e.alive or not e.bad: return
-  e.alive=False
-  WORLD["score"]+=1
+    e = WORLD["ents"].get(int(eid))
+    if not e or not e.alive or not e.bad: return 0
+    e.alive = False
+    WORLD["score"] += e.pts
+    return e.pts
 
 reset()
 `;
 
-let py;
-let pyReady=false;
+let py, pyReady = false;
 
-// helper
-async function pyCall(expr, globals={}){
+async function pyCall(expr, globals = {}){
   for(const k in globals) py.globals.set(k, globals[k]);
-  const r = await py.runPythonAsync(expr);
-  for(const k in globals) py.globals.delete(k);
-  return r.toJs({dict_converter:Object.fromEntries});
+  try{
+    const r = await py.runPythonAsync(expr);
+    return r && r.toJs ? r.toJs({ dict_converter: Object.fromEntries }) : r;
+  } finally {
+    for(const k in globals) py.globals.delete(k);
+  }
 }
 
-// ── Projection ─────────────────────────
-function project(dx,dy,dz){
-  if(dz>-0.2) return null;
-  const f = Math.min(W,H)*1.1;
-  const s = f/(-dz+0.001);
-  return {x:W/2+dx*s, y:H/2+dy*s, s};
+// ── Pop feedback ──────────────────────────────────────────────────────────────
+let popTimer = null;
+function flashPop(pts){
+  const el = document.getElementById('pop');
+  el.textContent = '+' + pts;
+  el.style.opacity = '1';
+  clearTimeout(popTimer);
+  popTimer = setTimeout(() => el.style.opacity = '0', 700);
 }
 
-// ── Loop ───────────────────────────────
-let last=0;
+// particles for burst effect
+const particles = [];
+function spawnBurst(px, py_){
+  for(let i = 0; i < 10; i++){
+    const angle = (i / 10) * Math.PI * 2;
+    const spd   = 1.5 + Math.random() * 2.5;
+    particles.push({ x: px, y: py_, vx: Math.cos(angle)*spd, vy: Math.sin(angle)*spd, life: 1 });
+  }
+}
+
+async function doPop(eid, pts){
+  const scored = await pyCall('pop(EID)', { EID: eid });
+  if(scored > 0){
+    document.getElementById('score').textContent =
+      (parseInt(document.getElementById('score').textContent)||0) + scored;
+    flashPop(scored);
+  }
+}
+
+// ── Projection ────────────────────────────────────────────────────────────────
+function project(x, y, z){
+  if(z > -0.2) return null;
+  const f = Math.min(W, H) * 1.1;
+  const s = f / (-z + 0.001);
+  return { x: W/2 + x*s, y: H/2 + y*s, s };
+}
+
+// ── Stars ─────────────────────────────────────────────────────────────────────
+let time = 0;
+function drawStars(){
+  for(let i = 0; i < 460; i++){
+    const seed = i*17.123+9.331;
+    const sx = ((((Math.sin(seed*.91)*43758.5)%1)+1)%1)-.5;
+    const sy = ((((Math.sin(seed*1.37)*12345.6)%1)+1)%1)-.5;
+    const sz = ((((Math.sin(seed*2.17)*98765.4)%1)+1)%1);
+    const lay = .3+(i%7)/7;
+    const z = -(((sz*130+time*(18+lay*55))%130)+2);
+    const p = project(sx*170 - tiltX*2, sy*100 - tiltY*2, z);
+    if(!p) continue;
+    const size  = Math.max(.5, Math.min(2.2, p.s*.013*lay));
+    const alpha = Math.max(.07, Math.min(.85, 1/((-z)*.052)));
+    ctx.fillStyle = `rgba(125,255,141,${alpha})`;
+    ctx.fillRect(p.x, p.y, size, size);
+  }
+}
+
+// ── Main loop ─────────────────────────────────────────────────────────────────
+let lastTs = 0;
 
 async function loop(ts){
-  if(!pyReady){requestAnimationFrame(loop);return;}
-  if(!last) last=ts;
-  last=ts;
+  if(!pyReady){ requestAnimationFrame(loop); return; }
+  if(!lastTs) lastTs = ts;
+  const dt = Math.min(0.05, (ts - lastTs) / 1000);
+  lastTs = ts; time += dt;
 
-  const state = await pyCall("step({})");
+  const state = await pyCall('step()');
 
-  ctx.fillStyle="#000";
-  ctx.fillRect(0,0,W,H);
+  // clear
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+  drawStars();
 
-  for(const e of state.ents){
-    const p = project(e.x - tiltX*0.5, e.y - tiltY*0.5, e.z);
-    if(!p) continue;
-
-    const r = e.r * p.s;
-
-    ctx.strokeStyle="rgba(125,255,141,0.8)";
+  // particles
+  for(let i = particles.length - 1; i >= 0; i--){
+    const pt = particles[i];
+    pt.x += pt.vx; pt.y += pt.vy; pt.life -= 0.045;
+    if(pt.life <= 0){ particles.splice(i,1); continue; }
     ctx.beginPath();
-    ctx.arc(p.x,p.y,r,0,Math.PI*2);
-    ctx.stroke();
-
-    if(r>10){
-      ctx.fillStyle="#caffcf";
-      ctx.textAlign="center";
-      ctx.textBaseline="middle";
-      ctx.font=`${Math.min(22,r*0.4)}px monospace`;
-      ctx.fillText(e.word, p.x, p.y);
-    }
-
-    // PERFECT COLLISION (center screen)
-    if(e.bad){
-      const dx = p.x - W/2;
-      const dy = p.y - H/2;
-
-      if(dx*dx + dy*dy < (r*1.6)*(r*1.6)){
-        pyCall("pop(EID)", {EID:e.id});
-      }
-    }
+    ctx.arc(pt.x, pt.y, Math.max(1, 3*pt.life), 0, Math.PI*2);
+    ctx.fillStyle = `rgba(125,255,141,${pt.life*.9})`;
+    ctx.fill();
   }
 
-  document.getElementById("score").textContent = state.score;
+  // build hit list for this frame
+  lastEnts = [];
+
+  for(const e of state.ents){
+    const p = project(e.x - tiltX*0.6, e.y - tiltY*0.6, e.z);
+    if(!p) continue;
+
+    const r = Math.max(10, e.r * p.s);
+
+    // store for tap hit-testing
+    lastEnts.push({ p, r, e });
+
+    // bubble ring
+    const alpha = Math.max(.3, Math.min(.92, 1.5/((-e.z)*.07)));
+    ctx.shadowColor = `rgba(125,255,141,${Math.min(.45,alpha*.5)})`;
+    ctx.shadowBlur  = r*.26;
+    ctx.strokeStyle = `rgba(125,255,141,${alpha})`;
+    ctx.lineWidth   = Math.max(1, r*.04);
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, r, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // inner pulse ring
+    if(r > 14){
+      ctx.strokeStyle = `rgba(125,255,141,${alpha*.16})`;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r*(.70+Math.sin(time*3+e.id*1.7)*.05), 0, Math.PI*2);
+      ctx.stroke();
+    }
+
+    // label
+    if(r > 9){
+      const fs = Math.max(9, Math.min(19, r*.33));
+      ctx.font = `${fs}px Consolas,monospace`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = `rgba(202,255,207,${alpha})`;
+      ctx.fillText(e.word, p.x, p.y);
+    }
+  }
 
   requestAnimationFrame(loop);
 }
 
-// ── Boot ──────────────────────────────
-(async ()=>{
+// ── Boot ──────────────────────────────────────────────────────────────────────
+(async () => {
   py = await loadPyodide();
   await py.runPythonAsync(ENGINE);
-  pyReady=true;
+  pyReady = true;
+  document.getElementById('loader').style.display = 'none';
   requestAnimationFrame(loop);
 })();
 </script>
