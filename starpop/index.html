@@ -10,42 +10,28 @@
 html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:Consolas,monospace}
 canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
 
-/* HUD — tap screen to toggle */
 #hud{
   position:fixed;top:12px;left:12px;
   font-size:14px;color:#7dff8d;
   background:rgba(0,8,0,.65);
-  border:1px solid rgba(125,255,141,.25);
+  border:1px solid rgba(125,255,141,.2);
   border-radius:8px;padding:7px 12px;
   line-height:1.7;
-  opacity:0;transition:opacity .4s;
+  opacity:0;transition:opacity .5s;
   pointer-events:none;
-  text-shadow:0 0 8px rgba(125,255,141,.5);
+  text-shadow:0 0 8px rgba(125,255,141,.4);
 }
 #hud.on{opacity:1}
 #hud strong{color:#caffcf}
 
-/* Status line */
 #status{
-  position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
-  font-size:12px;color:#3a8a4a;
-  text-align:center;white-space:nowrap;
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+  font-size:13px;color:#5aba6a;
   opacity:0;transition:opacity .4s;
+  pointer-events:none;text-align:center;
 }
 #status.on{opacity:1}
 
-/* Legend */
-#legend{
-  position:fixed;top:12px;right:12px;
-  font-size:11px;line-height:1.9;
-  opacity:0;transition:opacity .4s;
-  text-align:right;
-}
-#legend.on{opacity:1}
-.lrow{display:flex;align-items:center;justify-content:flex-end;gap:6px}
-.ldot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-
-/* Loading screen */
 #loader{
   position:fixed;inset:0;background:#000;z-index:50;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
@@ -58,15 +44,14 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:
 }
 @keyframes sp{to{transform:rotate(360deg)}}
 
-/* scanlines */
 body::after{
   content:"";position:fixed;inset:0;pointer-events:none;
   background:repeating-linear-gradient(
     to bottom,
-    rgba(100,255,140,.014) 0px,rgba(100,255,140,.014) 1px,
+    rgba(100,255,140,.012) 0px,rgba(100,255,140,.012) 1px,
     transparent 2px,transparent 4px
   );
-  mix-blend-mode:screen;opacity:.22;z-index:30;
+  mix-blend-mode:screen;opacity:.2;z-index:30;
 }
 </style>
 </head>
@@ -79,17 +64,12 @@ body::after{
   lives <strong id="lives">3</strong>
 </div>
 
-<div id="legend">
-  <div class="lrow"><span style="color:#9fff9f">misspelled</span><div class="ldot" style="background:#7dff8d;box-shadow:0 0 5px #7dff8d"></div></div>
-  <div class="lrow"><span style="color:#ffd080">correct</span><div class="ldot" style="background:#ffbb44;box-shadow:0 0 4px #ffbb44"></div></div>
-</div>
-
 <div id="status"></div>
 
 <div id="loader">
   <div class="spin"></div>
-  <div>Loading engine…</div>
-  <div style="font-size:11px;color:#2a6a3a">~15 seconds on first load</div>
+  <div>Loading Starpop…</div>
+  <div style="font-size:11px;color:#2a6a3a">~15s on first load</div>
 </div>
 
 <script>
@@ -109,11 +89,11 @@ function resize(){
 resize();
 window.addEventListener('resize', resize);
 
-// ── Input: just gentle drift from touch position ─────────────────────────────
+// ── Input ────────────────────────────────────────────────────────────────────
 const input = { strafe: 0, forward: 0 };
 
 canvas.addEventListener('touchstart', e => {
-  hudToggle(); // tap shows HUD
+  hudBrief();
   applyDrift(e.touches[0]);
 }, { passive: true });
 
@@ -127,33 +107,30 @@ canvas.addEventListener('touchend', () => {
   input.forward = 0;
 });
 
-function applyDrift(t) {
-  // offset from center → normalized -1..1
+function applyDrift(t){
   input.strafe  =  (t.clientX - W * 0.5) / (W * 0.5);
-  input.forward = -(t.clientY - H * 0.5) / (H * 0.5); // up = positive
+  input.forward = -(t.clientY - H * 0.5) / (H * 0.5);
 }
 
-// ── HUD toggle ───────────────────────────────────────────────────────────────
-let hudOn = false, hudTimer = null;
-function hudToggle(){
-  hudOn = true;
-  ['hud','legend','status'].forEach(id => document.getElementById(id).classList.add('on'));
+// ── HUD ──────────────────────────────────────────────────────────────────────
+let hudTimer = null;
+function hudBrief(ms = 2500){
+  document.getElementById('hud').classList.add('on');
   clearTimeout(hudTimer);
-  hudTimer = setTimeout(() => {
-    hudOn = false;
-    ['hud','legend','status'].forEach(id => document.getElementById(id).classList.remove('on'));
-  }, 3000);
+  hudTimer = setTimeout(() => document.getElementById('hud').classList.remove('on'), ms);
 }
 
-function setStatus(msg){
+let statusTimer = null;
+function showStatus(msg){
   const el = document.getElementById('status');
   el.textContent = msg;
   el.classList.add('on');
-  clearTimeout(el._t);
-  el._t = setTimeout(() => el.classList.remove('on'), 2500);
+  clearTimeout(statusTimer);
+  statusTimer = setTimeout(() => el.classList.remove('on'), 1800);
+  hudBrief(2000);
 }
 
-// ── Python engine ────────────────────────────────────────────────────────────
+// ── Engine ───────────────────────────────────────────────────────────────────
 const ENGINE = String.raw`
 import math, random
 from dataclasses import dataclass, field
@@ -169,6 +146,8 @@ CORRECT = [
     "persistent","relevant","resistance","restaurant","ridiculous",
     "silhouette","successful","technically","temperature","throughout",
     "guarantee","manoeuvre","fahrenheit","theoretical","unfortunately",
+    "rhythm","liaison","questionnaire","bureaucracy","conscientious",
+    "chrysanthemum","miscellaneous","accommodate","commemorate","Mediterranean",
 ]
 
 MISSPELLED = [
@@ -185,6 +164,19 @@ MISSPELLED = [
     ("vaccum","vacuum",2),("writting","writing",2),("writeing","writing",2),
     ("lieing","lying",2),("payed","paid",2),("refered","referred",2),
     ("aquire","acquire",2),("publically","publicly",2),("technicly","technically",3),
+    ("freind","friend",2),("beleive","believe",3),("calender","calendar",2),
+    ("catagory","category",2),("collegue","colleague",2),("concious","conscious",2),
+    ("dependant","dependent",2),("dilemna","dilemma",2),("enviroment","environment",2),
+    ("febuary","february",2),("finaly","finally",2),("foward","forward",2),
+    ("goverment","government",2),("harrass","harass",2),("ignorence","ignorance",2),
+    ("immediatly","immediately",3),("innoculate","inoculate",2),("liason","liaison",2),
+    ("memento","memento",1),("milenium","millennium",3),("miniscule","minuscule",2),
+    ("occurance","occurrence",3),("perseverence","perseverance",2),("pronounciation","pronunciation",3),
+    ("recurrence","recurrence",1),("restarant","restaurant",3),("shedule","schedule",2),
+    ("supercede","supersede",2),("tatoo","tattoo",2),("tendancy","tendency",2),
+    ("truely","truly",2),("tyrany","tyranny",2),("unforseen","unforeseen",2),
+    ("untill","until",3),("vaccinate","vaccinate",1),("vegeterian","vegetarian",2),
+    ("wether","whether",2),("wierd","weird",3),("writting","writing",2),
 ]
 
 def clamp(x, lo, hi): return lo if x < lo else hi if x > hi else x
@@ -208,7 +200,7 @@ class World:
         self.score = 0
         self.lives = 3
         self.time  = 0.
-        self.status = "fly through space"
+        self.status = ""
         self.player = {"x": 0., "y": 0.}
 
     def spawn(self, kind, x, y, z, vx=0., vy=0., vz=0.,
@@ -227,47 +219,46 @@ class World:
 def reset_world():
     global WORLD
     WORLD = World()
-    spawn_wave(14)
-    return {"ok": True, "status": "reset"}
+    spawn_wave(16)
+    return {"ok": True}
 
 def spawn_wave(count=8):
     w = WORLD
     count = int(count)
     for _ in range(count):
-        z      = -(25 + random.random() * 80)
-        x      = random.uniform(-14, 14)
-        y      = random.uniform(-8, 8)
-        radius = random.uniform(0.9, 2.1)
-        vz     = random.uniform(2.5, 4.5)     # always moving forward
-        vx     = random.uniform(-0.15, 0.15)  # barely any lateral drift
-        vy     = random.uniform(-0.10, 0.10)
-        if random.random() < 0.62:
+        z      = -(28 + random.random() * 90)
+        x      = random.uniform(-15, 15)
+        y      = random.uniform(-9, 9)
+        radius = random.uniform(0.9, 2.2)
+        vz     = random.uniform(2.8, 4.8)
+        vx     = random.uniform(-0.12, 0.12)
+        vy     = random.uniform(-0.08, 0.08)
+        if random.random() < 0.55:
             word, correct, errors = random.choice(MISSPELLED)
             w.spawn("word", x, y, z, vx=vx, vy=vy, vz=vz, radius=radius,
                     tags={"misspelled"}, data={"label": word, "errors": errors, "correct": correct})
         else:
             word = random.choice(CORRECT)
             w.spawn("word", x, y, z, vx=vx, vy=vy, vz=vz, radius=radius,
-                    tags={"correct"}, data={"label": word, "errors": 0})
+                    tags={"correct"}, data={"label": word})
     return {"ok": True}
 
 def update_player(inp, dt):
     w = WORLD; p = w.player
     p["x"] += float(inp.get("strafe",  0.)) * 5.5 * dt
     p["y"] -= float(inp.get("forward", 0.)) * 4.0 * dt
-    # soft boundary
-    p["x"] = clamp(p["x"], -12., 12.)
-    p["y"] = clamp(p["y"],  -7.,  7.)
+    p["x"]  = clamp(p["x"], -12., 12.)
+    p["y"]  = clamp(p["y"],  -7.,  7.)
 
-def burst(entity, count=8, col="green"):
+def burst(entity, count=10, col="green"):
     w = WORLD
     for i in range(count):
         angle = (i / max(1, count)) * 6.2832
-        spd   = random.uniform(1.0, 2.5)
+        spd   = random.uniform(1.2, 2.8)
         w.spawn("particle", entity.x, entity.y, entity.z,
                 vx=math.cos(angle)*spd, vy=math.sin(angle)*spd,
-                vz=random.uniform(0., 1.),
-                radius=0.06, life=0.65, data={"col": col})
+                vz=random.uniform(0., 0.8),
+                radius=0.06, life=0.7, data={"col": col})
 
 def pop_entity(e):
     if not e.alive: return
@@ -275,45 +266,43 @@ def pop_entity(e):
     if "misspelled" in e.tags:
         pts = 10 * e.data.get("errors", 1)
         WORLD.score += pts
-        WORLD.status = f'+{pts}  "{e.data["label"]}" → "{e.data["correct"]}"'
-        burst(e, 10, "green")
+        WORLD.status = f'+{pts}'
+        burst(e, 12, "green")
     elif "correct" in e.tags:
-        WORLD.score = max(0, WORLD.score - 15)
-        WORLD.lives = max(0, WORLD.lives - 1)
-        WORLD.status = f'−15  "{e.data["label"]}" was spelled correctly'
-        burst(e, 6, "amber")
+        # ghost — correct words pass through, no effect
+        return
 
 def update_entities(dt):
     w = WORLD; p = w.player
     alive = [e for e in w.entities.values() if e.alive and e.kind == "word"]
-    if len(alive) < 7:
+    if len(alive) < 8:
         spawn_wave(8)
     for e in list(w.entities.values()):
         if not e.alive: continue
-        # damp lateral, keep forward speed high
-        e.vx *= 0.94
-        e.vy *= 0.94
+        # damp lateral drift, maintain forward speed
+        e.vx *= 0.93
+        e.vy *= 0.93
         e.vz  = max(2.5, e.vz)
         e.x  += e.vx * dt
         e.y  += e.vy * dt
         e.z  += e.vz * dt
         e.life -= dt
         if e.kind == "particle":
-            e.vx *= 0.97; e.vy *= 0.97; e.vz *= 0.98
+            e.vx *= 0.96; e.vy *= 0.96; e.vz *= 0.97
         if e.life <= 0:
             e.alive = False; continue
-        dz = e.z - 0.  # player is always at z=0
-        if e.kind == "word" and dz > 2.5:
-            # recycle behind
-            e.z  = -(30 + random.random() * 60)
-            e.x  = p["x"] + random.uniform(-14, 14)
-            e.y  = p["y"] + random.uniform(-8, 8)
-            e.vx = random.uniform(-0.15, 0.15)
-            e.vy = random.uniform(-0.10, 0.10)
-        # collision: word touches player
-        if e.kind == "word":
-            dx = e.x - p["x"]; dy = e.y - p["y"]; dz2 = e.z
-            if (dx*dx + dy*dy + dz2*dz2) < (e.radius + 0.55)**2:
+        # recycle words that pass the player
+        if e.kind == "word" and e.z > 3.0:
+            e.z  = -(30 + random.random() * 70)
+            e.x  = p["x"] + random.uniform(-15, 15)
+            e.y  = p["y"] + random.uniform(-9, 9)
+            e.vx = random.uniform(-0.12, 0.12)
+            e.vy = random.uniform(-0.08, 0.08)
+        # collision: 2D only (x/y), misspelled words only
+        if e.kind == "word" and "misspelled" in e.tags:
+            dx = e.x - p["x"]
+            dy = e.y - p["y"]
+            if (dx*dx + dy*dy) < (e.radius * 1.25)**2:
                 pop_entity(e)
 
 def serializable_state():
@@ -334,8 +323,6 @@ def step_game(inp):
     if hasattr(inp, "to_py"): inp = inp.to_py()
     if inp is None: inp = {}
     w = WORLD
-    if w.lives <= 0:
-        w.time += 1./60.; return serializable_state()
     dt = float(inp.get("dt", 1./60.))
     update_player(inp, dt)
     update_entities(dt)
@@ -348,17 +335,21 @@ reset_world()
 let pyodide = null, pyReady = false;
 
 async function boot(){
-  pyodide = await loadPyodide();
-  await pyodide.runPythonAsync(ENGINE);
-  pyReady = true;
-  document.getElementById('loader').style.display = 'none';
-  hudToggle();
-  requestAnimationFrame(frame);
+  try{
+    pyodide = await loadPyodide();
+    await pyodide.runPythonAsync(ENGINE);
+    pyReady = true;
+    document.getElementById('loader').style.display = 'none';
+    hudBrief(4000);
+    requestAnimationFrame(frame);
+  } catch(err){
+    document.querySelector('#loader div:nth-child(2)').textContent = 'Error: '+err;
+  }
 }
 
 async function pyCall(expr, globals = {}){
   for(const [k, v] of Object.entries(globals)) pyodide.globals.set(k, v);
-  try {
+  try{
     const r = await pyodide.runPythonAsync(expr);
     return r && typeof r.toJs === 'function'
       ? r.toJs({ dict_converter: Object.fromEntries }) : r;
@@ -367,7 +358,7 @@ async function pyCall(expr, globals = {}){
   }
 }
 
-// ── Projection (no rotation — pure perspective) ───────────────────────────────
+// ── Pure perspective, no rotation ────────────────────────────────────────────
 function project(dx, dy, dz){
   if(dz > -0.3) return null;
   const focal = Math.min(W, H) * 1.1;
@@ -375,23 +366,23 @@ function project(dx, dy, dz){
   return { x: W * 0.5 + dx * sc, y: H * 0.5 + dy * sc, scale: sc, depth: -dz };
 }
 
-// ── Stars ──────────────────────────────────────────────────────────────────────
+// ── Stars ─────────────────────────────────────────────────────────────────────
 function drawStars(player, time){
   ctx.fillStyle = '#000';
   ctx.fillRect(0, 0, W, H);
-  for(let i = 0; i < 420; i++){
+  for(let i = 0; i < 480; i++){
     const s  = i * 17.123 + 9.331;
     const sx = ((((Math.sin(s * .91) * 43758.5) % 1) + 1) % 1) - 0.5;
     const sy = ((((Math.sin(s * 1.37) * 12345.6) % 1) + 1) % 1) - 0.5;
     const sz = ((((Math.sin(s * 2.17) * 98765.4) % 1) + 1) % 1);
     const lay = 0.3 + (i % 7) / 7;
-    const x  = sx * 170;
-    const y  = sy * 100;
-    const z  = -(((sz * 130 + time * (20 + lay * 60)) % 130) + 2);
-    const p  = project(x - player.x * 0.04, y - player.y * 0.04, z);
+    const x  = sx * 180;
+    const y  = sy * 105;
+    const z  = -(((sz * 140 + time * (18 + lay * 58)) % 140) + 2);
+    const p  = project(x - player.x * 0.035, y - player.y * 0.035, z);
     if(!p) continue;
-    const size  = Math.max(0.6, Math.min(2.4, p.scale * 0.014 * lay));
-    const alpha = Math.max(0.1, Math.min(0.9, 1 / (p.depth * 0.055)));
+    const size  = Math.max(0.5, Math.min(2.2, p.scale * 0.013 * lay));
+    const alpha = Math.max(0.08, Math.min(0.88, 1 / (p.depth * 0.052)));
     ctx.fillStyle = `rgba(125,255,141,${alpha})`;
     ctx.fillRect(p.x, p.y, size, size);
   }
@@ -410,65 +401,48 @@ function drawEntities(state){
   ds.sort((a, b) => b.p.depth - a.p.depth);
 
   for(const { e, p, r } of ds){
+    // particles
     if(e.kind === 'particle'){
-      const col = e.data && e.data.col === 'amber' ? '255,187,68' : '125,255,141';
-      const alpha = Math.min(0.9, e.life * 1.4);
+      const alpha = Math.min(0.9, e.life * 1.3);
       ctx.beginPath();
-      ctx.arc(p.x, p.y, Math.max(1.2, r * 0.5), 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${col},${alpha})`;
+      ctx.arc(p.x, p.y, Math.max(1.2, r * 0.45), 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(125,255,141,${alpha})`;
       ctx.fill();
       continue;
     }
 
-    const isMiss = e.tags && e.tags.includes('misspelled');
-    const isCorr = e.tags && e.tags.includes('correct');
-    const alpha  = Math.max(0.35, Math.min(0.95, 1.5 / (p.depth * 0.075)));
+    // all word bubbles look identical — player must judge
+    const alpha = Math.max(0.3, Math.min(0.92, 1.5 / (p.depth * 0.072)));
+    const glow  = Math.max(0.15, Math.min(0.55, 1.2 / (p.depth * 0.09)));
 
-    // glow halo
-    if(isMiss){
-      ctx.shadowColor = 'rgba(125,255,141,0.35)';
-      ctx.shadowBlur  = r * 0.35;
-      ctx.strokeStyle = `rgba(125,255,141,${alpha})`;
-    } else {
-      ctx.shadowColor = 'rgba(255,187,68,0.25)';
-      ctx.shadowBlur  = r * 0.22;
-      ctx.strokeStyle = `rgba(255,187,68,${alpha})`;
-    }
-
-    ctx.lineWidth = Math.max(1, r * 0.045);
+    ctx.shadowColor = `rgba(125,255,141,${glow})`;
+    ctx.shadowBlur  = r * 0.28;
+    ctx.strokeStyle = `rgba(125,255,141,${alpha})`;
+    ctx.lineWidth   = Math.max(1, r * 0.04);
     ctx.beginPath();
     ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
     ctx.stroke();
     ctx.shadowBlur = 0;
 
-    // inner ring pulse (misspelled only)
-    if(isMiss && r > 12){
-      const pulse = 0.72 + Math.sin(state.time * 3.5 + e.id * 1.3) * 0.06;
-      ctx.strokeStyle = `rgba(125,255,141,${alpha * 0.22})`;
+    // subtle inner ring — same for all
+    if(r > 14){
+      const pulse = 0.7 + Math.sin(state.time * 3.2 + e.id * 1.7) * 0.05;
+      ctx.strokeStyle = `rgba(125,255,141,${alpha * 0.18})`;
       ctx.lineWidth   = 1;
       ctx.beginPath();
       ctx.arc(p.x, p.y, r * pulse, 0, Math.PI * 2);
       ctx.stroke();
     }
 
-    // label
-    if(r > 10){
+    // label — uniform style, no hints
+    if(r > 9){
       const label = e.data && e.data.label ? e.data.label : '';
-      const fs    = Math.max(9, Math.min(20, r * 0.34));
-      ctx.font          = `${fs}px Consolas,monospace`;
-      ctx.textAlign     = 'center';
-      ctx.textBaseline  = 'middle';
-      ctx.fillStyle     = isMiss
-        ? `rgba(202,255,207,${alpha})`
-        : `rgba(255,220,140,${alpha})`;
+      const fs    = Math.max(9, Math.min(19, r * 0.32));
+      ctx.font         = `${fs}px Consolas,monospace`;
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle    = `rgba(202,255,207,${alpha})`;
       ctx.fillText(label, p.x, p.y);
-
-      // error badge
-      if(isMiss && e.data.errors && r > 18){
-        ctx.font      = `bold ${Math.max(8, fs * 0.6)}px Consolas,monospace`;
-        ctx.fillStyle = `rgba(255,90,90,0.85)`;
-        ctx.fillText(`×${e.data.errors}`, p.x + r * 0.62, p.y - r * 0.58);
-      }
     }
   }
 }
@@ -478,10 +452,9 @@ let lastStatus = '';
 function updateHud(state){
   document.getElementById('score').textContent = state.score;
   document.getElementById('lives').textContent = state.lives;
-  if(state.status && state.status !== lastStatus && state.status !== 'fly through space'){
+  if(state.status && state.status !== lastStatus){
     lastStatus = state.status;
-    setStatus(state.status);
-    hudToggle();
+    if(state.status) showStatus(state.status);
   }
 }
 
@@ -492,7 +465,6 @@ async function frame(ts){
   if(!lastTs) lastTs = ts;
   const dt = Math.min(0.05, (ts - lastTs) / 1000);
   lastTs = ts;
-
   try{
     const state = await pyCall('step_game(INP)', {
       INP: { strafe: input.strafe, forward: input.forward, dt }
@@ -503,9 +475,8 @@ async function frame(ts){
       updateHud(state);
     }
   } catch(err){
-    setStatus('err: ' + String(err).slice(0, 60));
+    showStatus('err: ' + String(err).slice(0, 60));
   }
-
   requestAnimationFrame(frame);
 }
 
