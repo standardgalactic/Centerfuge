@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Starpop · Word Shooter</title>
+<title>Starpop</title>
 <script src="https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pyodide.js"></script>
 <style>
 html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Consolas,monospace}
@@ -87,7 +87,7 @@ let lastEnts = [];
 
 function handleTap(clientX, clientY){
   for(const { p, r, e } of lastEnts){
-    if(!e.bad) continue;
+
     const dx = clientX - p.x;
     const dy = clientY - p.y;
     if(dx*dx + dy*dy < r*r){
@@ -200,10 +200,14 @@ def step():
 
 def pop(eid):
     e = WORLD["ents"].get(int(eid))
-    if not e or not e.alive or not e.bad: return 0
+    if not e or not e.alive: return 0
     e.alive = False
-    WORLD["score"] += e.pts
-    return e.pts
+    if e.bad:
+        WORLD["score"] += e.pts
+        return e.pts
+    else:
+        WORLD["score"] = max(0, WORLD["score"] - 10)
+        return -10
 
 reset()
 `;
@@ -222,13 +226,6 @@ async function pyCall(expr, globals = {}){
 
 // ── Pop feedback ──────────────────────────────────────────────────────────────
 let popTimer = null;
-function flashPop(pts){
-  const el = document.getElementById('pop');
-  el.textContent = '+' + pts;
-  el.style.opacity = '1';
-  clearTimeout(popTimer);
-  popTimer = setTimeout(() => el.style.opacity = '0', 700);
-}
 
 // particles for burst effect
 const particles = [];
@@ -242,10 +239,20 @@ function spawnBurst(px, py_){
 
 async function doPop(eid, pts){
   const scored = await pyCall('pop(EID)', { EID: eid });
-  if(scored > 0){
-    document.getElementById('score').textContent =
-      (parseInt(document.getElementById('score').textContent)||0) + scored;
-    flashPop(scored);
+  if(scored !== 0){
+    const el = document.getElementById('pop');
+    if(scored > 0){
+      el.style.color = '#7dff8d';
+      el.textContent = '+' + scored;
+    } else {
+      el.style.color = '#ff6060';
+      el.textContent = '−10';
+    }
+    el.style.opacity = '1';
+    clearTimeout(popTimer);
+    popTimer = setTimeout(() => el.style.opacity = '0', 700);
+    const newScore = await pyCall('WORLD["score"]');
+    document.getElementById('score').textContent = newScore;
   }
 }
 
