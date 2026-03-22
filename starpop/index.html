@@ -234,32 +234,32 @@ const pendingPops = new Map();
 const particles = [];
 
 function spawnExplosion(px, py_, r, isBad){
-  const col   = isBad ? [125, 255, 141] : [255, 140, 40];
-  const count = 14 + Math.floor(Math.random() * 10); // 14–23 pieces
+  const col   = isBad ? [180, 255, 180] : [255, 80, 60];
+  const count = 14 + Math.floor(Math.random() * 10);
   for(let i = 0; i < count; i++){
     const angle  = Math.random() * Math.PI * 2;
     const spd    = 2.5 + Math.random() * 6.5;        // wide speed range
-    const size   = 2 + Math.random() * 5;
-    const wobbleFreq  = 3 + Math.random() * 6;       // warble frequency
-    const wobbleAmp   = 0.8 + Math.random() * 2.2;   // warble amplitude
-    const wobblePhase = Math.random() * Math.PI * 2;
-    const lifespan    = 0.55 + Math.random() * 0.65; // 0.55–1.2s
+    const segLen       = 8  + Math.random() * 18;
+    const wobbleFreq   = 4  + Math.random() * 8;
+    const wobbleAmp    = 3  + Math.random() * 9;
+    const wobblePhase  = Math.random() * Math.PI * 2;
+    const curveSeed    = (Math.random() - 0.5) * 1.4;
+    const lifespan     = 0.6 + Math.random() * 0.75;
+    const lineWidth    = 1.2 + Math.random() * 2.2;
     particles.push({
       x: px, y: py_,
       vx: Math.cos(angle) * spd,
       vy: Math.sin(angle) * spd,
-      vy0: Math.sin(angle) * spd,
-      ax: (Math.random() - 0.5) * 0.3,  // slight random drift
-      ay: 0.08 + Math.random() * 0.12,   // subtle gravity
-      wobbleFreq, wobbleAmp, wobblePhase,
-      size, col,
+      ax: (Math.random() - 0.5) * 0.25,
+      ay: 0.06 + Math.random() * 0.1,
+      wobbleFreq, wobbleAmp, wobblePhase, curveSeed,
+      segLen, lineWidth, col,
       life: lifespan, maxLife: lifespan,
-      t: 0,
+      t: Math.random() * Math.PI * 2,
     });
   }
-  // ring shockwave
-  particles.push({ shockwave: true, x: px, y: py_, r: r * 0.3, maxR: r * 2.8,
-                   col, life: 0.35, maxLife: 0.35 });
+  particles.push({ shockwave: true, x: px, y: py_, r: r * 0.25, maxR: r * 2.6,
+                   col, life: 0.32, maxLife: 0.32 });
 }
 
 async function doPop(eid, isBad, px, py_, r){
@@ -345,28 +345,44 @@ async function loop(ts){
       continue;
     }
 
-    // warbling fragment
-    pt.t    += 0.08;
-    pt.vx   += pt.ax;
-    pt.vy   += pt.ay;
-    // wobble perpendicular to velocity
-    const spd  = Math.sqrt(pt.vx*pt.vx + pt.vy*pt.vy);
-    const nx   = -pt.vy / (spd||1);
-    const ny   =  pt.vx / (spd||1);
-    const wob  = Math.sin(pt.t * pt.wobbleFreq + pt.wobblePhase) * pt.wobbleAmp;
-    pt.x += pt.vx + nx * wob;
-    pt.y += pt.vy + ny * wob;
-    pt.life -= 0.016 + Math.random() * 0.008; // randomised fade rate
+    // wriggling segment fragment
+    pt.t  += 0.11;
+    pt.vx += pt.ax;
+    pt.vy += pt.ay;
+    pt.x  += pt.vx;
+    pt.y  += pt.vy;
+    pt.life -= 0.014 + Math.random() * 0.009;
     if(pt.life <= 0){ particles.splice(i,1); continue; }
 
+    // direction unit vector
+    const spd2 = Math.sqrt(pt.vx*pt.vx + pt.vy*pt.vy) || 1;
+    const dx_  = pt.vx / spd2;
+    const dy_  = pt.vy / spd2;
+    // perpendicular
+    const nx_  = -dy_;
+    const ny_  =  dx_;
+
+    // segment endpoints (tail behind, head in direction of travel)
+    const segL = pt.segLen * Math.min(1, decay * 2.5); // shrink as it fades
+    const tailX = pt.x - dx_ * segL;
+    const tailY = pt.y - dy_ * segL;
+
+    // bezier control point — wriggle perpendicular + curveSeed bias
+    const wriggle = Math.sin(pt.t * pt.wobbleFreq + pt.wobblePhase) * pt.wobbleAmp * decay;
+    const cpX = pt.x - dx_ * segL * 0.5 + nx_ * (wriggle + pt.curveSeed * segL * 0.3);
+    const cpY = pt.y - dy_ * segL * 0.5 + ny_ * (wriggle + pt.curveSeed * segL * 0.3);
+
     const [r0,g0,b0] = pt.col;
-    const sz = pt.size * decay;
-    ctx.shadowColor = `rgba(${r0},${g0},${b0},${decay*.6})`;
-    ctx.shadowBlur  = sz * 2;
-    ctx.fillStyle   = `rgba(${r0},${g0},${b0},${Math.min(1, decay*1.3)})`;
+    const alpha_ = Math.min(1, decay * 1.4);
+    ctx.shadowColor = `rgba(${r0},${g0},${b0},${decay * 0.5})`;
+    ctx.shadowBlur  = pt.lineWidth * 3;
+    ctx.strokeStyle = `rgba(${r0},${g0},${b0},${alpha_})`;
+    ctx.lineWidth   = pt.lineWidth * decay;
+    ctx.lineCap     = 'round';
     ctx.beginPath();
-    ctx.arc(pt.x, pt.y, Math.max(0.8, sz), 0, Math.PI*2);
-    ctx.fill();
+    ctx.moveTo(tailX, tailY);
+    ctx.quadraticCurveTo(cpX, cpY, pt.x, pt.y);
+    ctx.stroke();
     ctx.shadowBlur = 0;
   }
 
@@ -389,14 +405,21 @@ async function loop(ts){
     const baseCol = e.bad ? '125,255,141' : '255,187,68';
     const textCol = e.bad ? '202,255,207'  : '255,228,140';
 
-    // bubble ring — flash red if pending pop
+    // bubble ring — correct words flash red; misspelled flash bright green
     const alpha = Math.max(.3, Math.min(.92, 1.5/((-e.z)*.07)));
     let strokeCol, glowCol;
     if(isPending){
-      const age = (performance.now() - pendingPops.get(e.id).startTs) / 250;
-      const pulse = 0.6 + 0.4 * Math.sin(age * Math.PI * 8); // fast flicker
-      strokeCol = `rgba(255,60,60,${Math.min(1, alpha * 1.4 * pulse)})`;
-      glowCol   = `rgba(255,60,60,0.6)`;
+      const age   = (performance.now() - pendingPops.get(e.id).startTs) / 250;
+      const pulse = 0.6 + 0.4 * Math.sin(age * Math.PI * 8);
+      if(!e.bad){
+        // correct word → red flash
+        strokeCol = `rgba(255,60,60,${Math.min(1, alpha * 1.4 * pulse)})`;
+        glowCol   = `rgba(255,60,60,0.6)`;
+      } else {
+        // misspelled → bright green surge
+        strokeCol = `rgba(200,255,200,${Math.min(1, alpha * 1.6 * pulse)})`;
+        glowCol   = `rgba(180,255,180,0.7)`;
+      }
     } else {
       strokeCol = `rgba(${baseCol},${alpha})`;
       glowCol   = `rgba(${baseCol},${Math.min(.45,alpha*.5)})`;
@@ -425,7 +448,9 @@ async function loop(ts){
       const fs = Math.max(9, Math.min(19, r*.33));
       ctx.font = `${fs}px Consolas,monospace`;
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillStyle = isPending ? `rgba(255,160,160,${alpha})` : `rgba(${textCol},${alpha})`;
+      ctx.fillStyle = isPending
+        ? (e.bad ? `rgba(220,255,220,${alpha})` : `rgba(255,140,140,${alpha})`)
+        : `rgba(${textCol},${alpha})`;
       ctx.fillText(e.word, p.x, p.y);
     }
   }
