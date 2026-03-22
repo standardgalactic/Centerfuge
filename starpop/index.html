@@ -6,469 +6,208 @@
 <title>Starpop · Word Shooter</title>
 <script src="https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pyodide.js"></script>
 <style>
-html,body{
-  margin:0;
-  height:100%;
-  background:#000;
-  overflow:hidden;
-  font-family:Consolas,monospace;
-}
-canvas{
-  position:fixed;
-  inset:0;
-  width:100%;
-  height:100%;
-  display:block;
-  touch-action:none;
-}
+html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Consolas,monospace}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+
 #hud{
-  position:fixed;
-  top:10px;
-  left:10px;
-  font-size:13px;
-  color:#7dff8d;
+  position:fixed;top:10px;left:10px;
+  color:#7dff8d;font-size:13px;
   background:rgba(0,10,0,.6);
   padding:6px 10px;
-  border:1px solid rgba(125,255,141,.22);
-  border-radius:6px;
-  text-shadow:0 0 6px rgba(125,255,141,.4);
-  opacity:0;
-  transition:opacity .4s;
-  pointer-events:none;
-  z-index:10;
-}
-#hud.on{opacity:1}
-#hud strong{color:#caffcf}
-#status{
-  position:fixed;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:13px;
-  color:#5aba6a;
-  opacity:0;
-  transition:opacity .3s;
-  pointer-events:none;
-  z-index:10;
-}
-#status.on{opacity:1}
-#loader{
-  position:fixed;
-  inset:0;
-  background:#000;
-  z-index:50;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:14px;
-  color:#7dff8d;
-  font-size:13px;
-  text-shadow:0 0 8px rgba(125,255,141,.4);
-}
-.spin{
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  border:2px solid #1a4a2a;
-  border-top-color:#7dff8d;
-  animation:sp 1s linear infinite;
-}
-@keyframes sp{to{transform:rotate(360deg)}}
-body::after{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  background:repeating-linear-gradient(
-    to bottom,
-    rgba(100,255,140,.012) 0,
-    rgba(100,255,140,.012) 1px,
-    transparent 2px,
-    transparent 4px
-  );
-  mix-blend-mode:screen;
-  opacity:.2;
-  z-index:30;
+  border:1px solid rgba(125,255,141,.25);
 }
 </style>
 </head>
 <body>
 
 <canvas id="game"></canvas>
-
-<div id="hud">score <strong id="score">0</strong></div>
-<div id="status"></div>
-
-<div id="loader">
-  <div class="spin"></div>
-  <div>Loading Starpop…</div>
-  <div style="font-size:11px;color:#2a6a3a">~15s on first load</div>
-</div>
+<div id="hud">score <span id="score">0</span></div>
 
 <script>
+// ── Canvas ─────────────────────────────
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
-let W = 0;
-let H = 0;
-
+let W,H;
 function resize(){
-  const dpr = Math.max(1, window.devicePixelRatio || 1);
-  W = window.innerWidth;
-  H = window.innerHeight;
-  canvas.width = Math.floor(W * dpr);
-  canvas.height = Math.floor(H * dpr);
-  canvas.style.width = W + 'px';
-  canvas.style.height = H + 'px';
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const dpr = Math.max(1, devicePixelRatio||1);
+  W = innerWidth; H = innerHeight;
+  canvas.width = W*dpr;
+  canvas.height = H*dpr;
+  canvas.style.width = W+"px";
+  canvas.style.height = H+"px";
+  ctx.setTransform(dpr,0,0,dpr,0,0);
 }
 resize();
-window.addEventListener('resize', resize);
+addEventListener('resize', resize);
 
-const input = { strafe: 0, forward: 0 };
+// ── Tilt controls ─────────────────────
+let tiltX = 0;
+let tiltY = 0;
+let baseBeta = null;
+let baseGamma = null;
 
-function applyDrift(t){
-  input.strafe = (t.clientX - W * 0.5) / (W * 0.5);
-  input.forward = -(t.clientY - H * 0.5) / (H * 0.5);
+function handleOrientation(e){
+  if(baseBeta === null){
+    baseBeta = e.beta || 0;
+    baseGamma = e.gamma || 0;
+  }
+  const db = (e.beta || 0) - baseBeta;
+  const dg = (e.gamma || 0) - baseGamma;
+
+  tiltY = Math.max(-1, Math.min(1, db / 30));
+  tiltX = Math.max(-1, Math.min(1, dg / 30));
 }
 
-canvas.addEventListener('touchstart', e => {
-  revealHud();
-  if (e.touches[0]) applyDrift(e.touches[0]);
-}, { passive: true });
-
-canvas.addEventListener('touchmove', e => {
-  if (e.touches[0]) applyDrift(e.touches[0]);
-}, { passive: true });
-
-canvas.addEventListener('touchend', () => {
-  input.strafe = 0;
-  input.forward = 0;
-});
-
-let hudTimer = null;
-function revealHud(ms = 2500){
-  const hud = document.getElementById('hud');
-  hud.classList.add('on');
-  clearTimeout(hudTimer);
-  hudTimer = setTimeout(() => hud.classList.remove('on'), ms);
+function requestOrientation(){
+  if(typeof DeviceOrientationEvent !== 'undefined' &&
+     typeof DeviceOrientationEvent.requestPermission === 'function'){
+    DeviceOrientationEvent.requestPermission().then(s=>{
+      if(s === 'granted'){
+        window.addEventListener('deviceorientation', handleOrientation, true);
+      }
+    });
+  } else {
+    window.addEventListener('deviceorientation', handleOrientation, true);
+  }
 }
 
-let statusTimer = null;
-function showStatus(msg){
-  const el = document.getElementById('status');
-  el.textContent = msg;
-  el.classList.add('on');
-  clearTimeout(statusTimer);
-  statusTimer = setTimeout(() => el.classList.remove('on'), 1200);
-  revealHud(1500);
-}
+// trigger permission
+window.addEventListener('touchstart', requestOrientation, {once:true});
 
-const ENGINE = String.raw`
+// ── Python engine ─────────────────────
+const ENGINE = `
 import random
 from dataclasses import dataclass
 
-WORLD = None
+WORLD=None
 
-MISSPELLED = [
-    ("recieve","receive",20),("occured","occurred",20),("untill","until",30),
-    ("wierd","weird",30),("accomodate","accommodate",30),("existance","existence",20),
-    ("grammer","grammar",20),("occassion","occasion",20),("neccessary","necessary",30),
-    ("seperate","separate",20),("definately","definitely",30),("persue","pursue",20),
-    ("embarass","embarrass",20),("reccomend","recommend",30),("belive","believe",20),
-    ("begining","beginning",30),("arguement","argument",30),("truely","truly",20),
-    ("comming","coming",20),("intresting","interesting",30),("maintainance","maintenance",30),
-    ("parralel","parallel",30),("privelege","privilege",30),("recieved","received",20),
-    ("relevent","relevant",20),("resistence","resistance",30),("resteraunt","restaurant",40),
-    ("riddiculous","ridiculous",30),("succesfull","successful",30),("tounge","tongue",20),
-    ("vaccum","vacuum",20),("writting","writing",20),("freind","friend",20),
-    ("beleive","believe",30),("calender","calendar",20),("catagory","category",20),
-    ("collegue","colleague",20),("concious","conscious",20),("dependant","dependent",20),
-    ("dilemna","dilemma",20),("enviroment","environment",20),("febuary","february",20),
-    ("goverment","government",20),("harrass","harass",20),("immediatly","immediately",30),
-    ("innoculate","inoculate",20),("liason","liaison",20),("miniscule","minuscule",20),
-    ("perseverence","perseverance",20),("pronounciation","pronunciation",30),
-    ("shedule","schedule",20),("supercede","supersede",20),("tatoo","tattoo",20),
-    ("tendancy","tendency",20),("tyrany","tyranny",20),("unforseen","unforeseen",20),
-    ("vegeterian","vegetarian",20),("wether","whether",20),("aquire","acquire",20),
-    ("publically","publicly",20),("technicly","technically",30),("payed","paid",20),
-]
-
-CORRECT = [
-    "necessary","accommodate","occurrence","particularly","definitely",
-    "separate","beautiful","beginning","conscience","millennium",
-    "privilege","threshold","apparent","tendency","discipline",
-    "embarrass","equipment","exaggerate","immediately","independent",
-    "leisure","lieutenant","maintenance","noticeable","parallel",
-    "persistent","relevant","resistance","restaurant","ridiculous",
-    "silhouette","successful","technically","temperature","throughout",
-    "guarantee","manoeuvre","fahrenheit","theoretical","unfortunately",
-    "rhythm","liaison","questionnaire","bureaucracy","conscientious",
-    "Mediterranean","miscellaneous","commemorate","chrysanthemum",
+WORDS=[
+("recieve",True),("definately",True),("seperate",True),
+("necessary",False),("beautiful",False),("parallel",False)
 ]
 
 @dataclass
-class Ent:
-    id: int
-    x: float
-    y: float
-    z: float
-    r: float
-    word: str
-    bad: bool
-    pts: int
-    alive: bool = True
+class E:
+  id:int; x:float; y:float; z:float; r:float; word:str; bad:bool; alive:bool=True
 
 def reset():
-    global WORLD
-    WORLD = {
-        "ents": {},
-        "next": 1,
-        "score": 0,
-        "time": 0.0,
-        "status": ""
-    }
-    spawn(22)
-    return True
+  global WORLD
+  WORLD={"ents":{}, "next":1, "score":0}
+  spawn(25)
 
 def spawn(n):
-    for _ in range(int(n)):
-        if random.random() < 0.58:
-            word, correct, pts = random.choice(MISSPELLED)
-            bad = True
-        else:
-            word = random.choice(CORRECT)
-            pts = 0
-            bad = False
-
-        eid = WORLD["next"]
-        WORLD["ents"][eid] = Ent(
-            id=eid,
-            x=random.uniform(-12, 12),
-            y=random.uniform(-7, 7),
-            z=-(12 + random.random() * 70),
-            r=random.uniform(0.9, 2.2),
-            word=word,
-            bad=bad,
-            pts=pts,
-        )
-        WORLD["next"] += 1
+  for _ in range(n):
+    w=random.choice(WORDS)
+    WORLD["ents"][WORLD["next"]] = E(
+      WORLD["next"],
+      random.uniform(-10,10),
+      random.uniform(-6,6),
+      -(10+random.random()*50),
+      random.uniform(1.0,2.0),
+      w[0],
+      w[1]
+    )
+    WORLD["next"]+=1
 
 def step(inp):
-    if hasattr(inp, "to_py"):
-        inp = inp.to_py()
-    if inp is None:
-        inp = {}
+  for e in WORLD["ents"].values():
+    if not e.alive: continue
 
-    dt = float(inp.get("dt", 1.0/60.0))
-    sx = float(inp.get("strafe", 0.0))
-    sy = float(inp.get("forward", 0.0))
+    e.z += 0.4
 
-    px_delta = sx * 5.5 * dt
-    py_delta = -sy * 4.0 * dt
+    if e.z > 2:
+      e.z = -(10+random.random()*50)
+      e.x = random.uniform(-10,10)
+      e.y = random.uniform(-6,6)
 
-    WORLD["time"] += dt
-
-    alive = [e for e in WORLD["ents"].values() if e.alive]
-    if len(alive) < 12:
-        spawn(10)
-
-    for e in alive:
-        e.z += 3.5 * dt
-        e.x -= px_delta
-        e.y -= py_delta
-        e.x *= 0.998
-        e.y *= 0.998
-
-        if e.z > 2.5:
-            e.z = -(15 + random.random() * 60)
-            e.x = random.uniform(-12, 12)
-            e.y = random.uniform(-7, 7)
-
-    return {
-        "score": WORLD["score"],
-        "status": WORLD["status"],
-        "time": WORLD["time"],
-        "ents": [
-            {
-                "id": e.id,
-                "x": e.x,
-                "y": e.y,
-                "z": e.z,
-                "r": e.r,
-                "word": e.word,
-                "bad": e.bad,
-                "pts": e.pts
-            }
-            for e in alive if e.alive
-        ]
-    }
+  return {
+    "score":WORLD["score"],
+    "ents":[e.__dict__ for e in WORLD["ents"].values() if e.alive]
+  }
 
 def pop(eid):
-    eid = int(eid)
-    e = WORLD["ents"].get(eid)
-    if not e or not e.alive or not e.bad:
-        return 0
-    e.alive = False
-    WORLD["score"] += int(e.pts)
-    WORLD["status"] = f'+{e.pts}'
-    return int(e.pts)
+  e = WORLD["ents"].get(eid)
+  if not e or not e.alive or not e.bad: return
+  e.alive=False
+  WORLD["score"]+=1
 
 reset()
 `;
 
-let py = null;
-let pyReady = false;
+let py;
+let pyReady=false;
 
-async function pyCall(expr, globals = {}){
-  if (!pyReady) return null;
-  for (const [k, v] of Object.entries(globals)) {
-    py.globals.set(k, v);
-  }
-  try {
-    const r = await py.runPythonAsync(expr);
-    if (r && typeof r.toJs === 'function') {
-      return r.toJs({ dict_converter: Object.fromEntries });
-    }
-    return r;
-  } finally {
-    for (const k of Object.keys(globals)) {
-      py.globals.delete(k);
-    }
-  }
+// helper
+async function pyCall(expr, globals={}){
+  for(const k in globals) py.globals.set(k, globals[k]);
+  const r = await py.runPythonAsync(expr);
+  for(const k in globals) py.globals.delete(k);
+  return r.toJs({dict_converter:Object.fromEntries});
 }
 
-function project(x, y, z){
-  if (z > -0.2) return null;
-  const f = Math.min(W, H) * 1.1;
-  const s = f / (-z + 0.001);
-  return { x: W * 0.5 + x * s, y: H * 0.5 + y * s, s, depth: -z };
+// ── Projection ─────────────────────────
+function project(dx,dy,dz){
+  if(dz>-0.2) return null;
+  const f = Math.min(W,H)*1.1;
+  const s = f/(-dz+0.001);
+  return {x:W/2+dx*s, y:H/2+dy*s, s};
 }
 
-let starTime = 0;
-function drawStars(){
-  for (let i = 0; i < 460; i++) {
-    const seed = i * 17.123 + 9.331;
-    const sx = ((((Math.sin(seed * .91) * 43758.5) % 1) + 1) % 1) - .5;
-    const sy = ((((Math.sin(seed * 1.37) * 12345.6) % 1) + 1) % 1) - .5;
-    const sz = ((((Math.sin(seed * 2.17) * 98765.4) % 1) + 1) % 1);
-    const lay = .3 + (i % 7) / 7;
-    const z = -(((sz * 130 + starTime * (18 + lay * 55)) % 130) + 2);
-    const p = project(sx * 170, sy * 100, z);
-    if (!p) continue;
-    const size = Math.max(.5, Math.min(2.2, p.s * .013 * lay));
-    const alpha = Math.max(.07, Math.min(.85, 1 / ((-z) * .052)));
-    ctx.fillStyle = `rgba(125,255,141,${alpha})`;
-    ctx.fillRect(p.x, p.y, size, size);
-  }
-}
-
-const recentlyPopped = new Set();
-
-async function tryPop(id, pts){
-  if (recentlyPopped.has(id)) return;
-  recentlyPopped.add(id);
-  setTimeout(() => recentlyPopped.delete(id), 180);
-
-  const gained = await pyCall('pop(EID)', { EID: id });
-  if (gained) {
-    showStatus('+' + gained);
-  }
-}
-
-let lastTs = 0;
+// ── Loop ───────────────────────────────
+let last=0;
 
 async function loop(ts){
-  if (!pyReady) {
-    requestAnimationFrame(loop);
-    return;
-  }
+  if(!pyReady){requestAnimationFrame(loop);return;}
+  if(!last) last=ts;
+  last=ts;
 
-  if (!lastTs) lastTs = ts;
-  const dt = Math.min(0.05, (ts - lastTs) / 1000);
-  lastTs = ts;
-  starTime += dt;
+  const state = await pyCall("step({})");
 
-  let state;
-  try {
-    state = await pyCall('step(INP)', { INP: { ...input, dt } });
-  } catch (err) {
-    showStatus('engine error');
-    requestAnimationFrame(loop);
-    return;
-  }
+  ctx.fillStyle="#000";
+  ctx.fillRect(0,0,W,H);
 
-  ctx.fillStyle = '#000';
-  ctx.fillRect(0, 0, W, H);
-  drawStars();
+  for(const e of state.ents){
+    const p = project(e.x - tiltX*5, e.y - tiltY*5, e.z);
+    if(!p) continue;
 
-  const drawables = [];
-  for (const e of state.ents) {
-    const p = project(e.x, e.y, e.z);
-    if (!p) continue;
     const r = e.r * p.s;
-    drawables.push({ e, p, r });
-  }
 
-  drawables.sort((a, b) => b.p.depth - a.p.depth);
-
-  for (const { e, p, r } of drawables) {
-    const alpha = Math.max(.3, Math.min(.92, 1.5 / ((-e.z) * .072)));
-
-    ctx.shadowColor = `rgba(125,255,141,${Math.min(.5, alpha * .6)})`;
-    ctx.shadowBlur = r * .28;
-    ctx.strokeStyle = `rgba(125,255,141,${alpha})`;
-    ctx.lineWidth = Math.max(1, r * .04);
+    ctx.strokeStyle="rgba(125,255,141,0.8)";
     ctx.beginPath();
-    ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+    ctx.arc(p.x,p.y,r,0,Math.PI*2);
     ctx.stroke();
-    ctx.shadowBlur = 0;
 
-    if (r > 14) {
-      ctx.strokeStyle = `rgba(125,255,141,${alpha * .17})`;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, r * (.70 + Math.sin(starTime * 3.1 + e.id * 1.7) * .05), 0, Math.PI * 2);
-      ctx.stroke();
-    }
-
-    if (r > 9) {
-      const fs = Math.max(9, Math.min(19, r * .33));
-      ctx.font = `${fs}px Consolas,monospace`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = `rgba(202,255,207,${alpha})`;
+    if(r>10){
+      ctx.fillStyle="#caffcf";
+      ctx.textAlign="center";
+      ctx.textBaseline="middle";
+      ctx.font=`${Math.min(22,r*0.4)}px monospace`;
       ctx.fillText(e.word, p.x, p.y);
     }
 
-    if (e.bad) {
-      const dx = p.x - W * 0.5;
-      const dy = p.y - H * 0.5;
-      const hitR = r * 1.22;
-      if (dx * dx + dy * dy < hitR * hitR) {
-        tryPop(e.id, e.pts);
+    // PERFECT COLLISION (center screen)
+    if(e.bad){
+      const dx = p.x - W/2;
+      const dy = p.y - H/2;
+
+      if(dx*dx + dy*dy < (r*1.6)*(r*1.6)){
+        pyCall("pop(EID)", {EID:e.id});
       }
     }
   }
 
-  document.getElementById('score').textContent = state.score;
+  document.getElementById("score").textContent = state.score;
 
   requestAnimationFrame(loop);
 }
 
-(async () => {
-  try {
-    py = await loadPyodide();
-    await py.runPythonAsync(ENGINE);
-    pyReady = true;
-    document.getElementById('loader').style.display = 'none';
-    revealHud(4000);
-    requestAnimationFrame(loop);
-  } catch (err) {
-    document.querySelector('#loader div:nth-child(2)').textContent = 'Error loading engine';
-    console.error(err);
-  }
+// ── Boot ──────────────────────────────
+(async ()=>{
+  py = await loadPyodide();
+  await py.runPythonAsync(ENGINE);
+  pyReady=true;
+  requestAnimationFrame(loop);
 })();
 </script>
 </body>
