@@ -114,7 +114,7 @@ def step(inp):
   for e in WORLD["ents"].values():
     if not e.alive: continue
 
-    e.z += 0.4
+    e.z += 0.04
 
     if e.z > 2:
       e.z = -(10+random.random()*50)
@@ -168,7 +168,7 @@ async function loop(ts){
   ctx.fillRect(0,0,W,H);
 
   for(const e of state.ents){
-    const p = project(e.x - tiltX*5, e.y - tiltY*5, e.z);
+    const p = project(e.x - tiltX*0.5, e.y - tiltY*0.5, e.z);
     if(!p) continue;
 
     const r = e.r * p.s;
