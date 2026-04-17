@@ -1,0 +1,28 @@
+# Tests
+
+blender --background --python generate_tree.py -- --output test_tree.blend --seed 0
+
+blender --background --python generate_landscape.py -- \
+    --output test_landscape.blend \
+    --seed 0 \
+    --resolution 64
+
+blender --background --python generate_scene.py -- \
+    --output test_scene.blend \
+    --seed 0 \
+    --tree-count 8 \
+    --resolution 32
+
+./rsvp_batch.sh
+
+python3 build_registry.py
+
+python3 probe_fields.py --preset make_tree_operators --samples 1000 > test_tree_operators.txt
+
+python3 select_interesting.py --registry registry.json --metric random --emit-batch > test_interesting.txt
+
+./rsvp_batch.sh -g tree -s "0:1" -r
+
+(Camera image too close)
+
+./rsvp_batch.sh -g tree -s "0:1" -r -p "--look-at-fraction 0.4 --distance-factor 3.0"

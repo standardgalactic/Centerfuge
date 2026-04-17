@@ -1,0 +1,10 @@
+[probe] preset=make_default_rsvp_field  seed=0  bounds=±1.2
+
+  Random samples (n=1000):
+  phi                   min= -0.22467  max=  1.48386  mean=  0.62340  std= 0.34192  n=1000
+  closure               min= -0.23508  max=  0.96423  mean=  0.60541  std= 0.26056  n=1000
+  div(v)                min= -0.00022  max=  0.00013  mean= -0.00000  std= 0.00001  n=1000
+
+  Growth path (40 steps from origin):
+  z-range               min=-0.0586  max=0.1213  final=(1.775, 0.438, 0.021)
+

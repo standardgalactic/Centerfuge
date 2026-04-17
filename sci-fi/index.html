@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RSVP Space Scope</title>
+
+<style>
+body{
+margin:0;
+background:#000;
+color:#7cff7c;
+font-family:monospace;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+min-height:100vh;
+text-align:center;
+overflow:hidden;
+-webkit-tap-highlight-color:transparent;
+}
+
+/* canvas */
+
+#viz{
+width:min(420px,82vw);
+height:min(420px,82vw);
+display:block;
+border-radius:50%;
+box-shadow:0 0 30px #00ff0030 inset;
+touch-action:manipulation;
+}
+
+/* controls */
+
+.controls{
+margin-top:15px;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+button{
+background:#001400;
+border:1px solid #00ff00;
+color:#7cff7c;
+padding:8px 14px;
+cursor:pointer;
+font:inherit;
+}
+
+/* subtitles */
+
+.subs{
+margin-top:10px;
+max-width:min(600px,90vw);
+min-height:2em;
+opacity:.85;
+padding:0 12px;
+line-height:1.35;
+}
+
+/* stars background */
+
+#bg{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+display:block;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+<canvas id="viz"></canvas>
+
+<div class="controls">
+<button id="toggle">Play</button>
+<button id="subsBtn">Subs On</button>
+</div>
+
+<div id="subs" class="subs"></div>
+
+<audio id="audio" playsinline webkit-playsinline>
+<source src="Society_is_communication_not_people.mp3" type="audio/mpeg">
+<track kind="subtitles" src="Society_is_communication_not_people.vtt" default>
+</audio>
+
+<script>
+
+/* ===== elements ===== */
+
+const audio = document.getElementById("audio")
+const toggle = document.getElementById("toggle")
+const subsBtn = document.getElementById("subsBtn")
+const subs = document.getElementById("subs")
+
+let subsOn = true
+
+/* ===== subtitles ===== */
+
+audio.addEventListener("loadedmetadata", ()=>{
+  const t = audio.textTracks[0]
+  if(!t) return
+  t.mode = "hidden"
+  t.oncuechange = ()=>{
+    if(!subsOn){
+      subs.textContent = ""
+      return
+    }
+    const cue = t.activeCues[0]
+    subs.textContent = cue ? cue.text : ""
+  }
+})
+
+subsBtn.onclick = ()=>{
+  subsOn = !subsOn
+  subsBtn.textContent = subsOn ? "Subs On" : "Subs Off"
+  if(!subsOn) subs.textContent = ""
+}
+
+/* ===== audio ===== */
+
+let ctx, analyser, buf
+
+function initAudio(){
+  if(ctx) return
+
+  ctx = new (window.AudioContext||window.webkitAudioContext)()
+  analyser = ctx.createAnalyser()
+  analyser.fftSize = 2048
+  analyser.smoothingTimeConstant = 0.88
+
+  const src = ctx.createMediaElementSource(audio)
+  src.connect(analyser)
+  analyser.connect(ctx.destination)
+
+  buf = new Uint8Array(analyser.fftSize)
+}
+
+async function togglePlayback(){
+  initAudio()
+
+  if(ctx.state === "suspended"){
+    await ctx.resume()
+  }
+
+  if(audio.paused){
+    await audio.play()
+    toggle.textContent = "Pause"
+  }else{
+    audio.pause()
+    toggle.textContent = "Play"
+  }
+}
+
+toggle.onclick = ()=>{
+  togglePlayback().catch(()=>{
+    subs.textContent = "Audio failed to play"
+  })
+}
+
+/* ===== canvases ===== */
+
+const bg = document.getElementById("bg")
+const bgc = bg.getContext("2d")
+
+const viz = document.getElementById("viz")
+const c = viz.getContext("2d")
+
+function resize(){
+  bg.width = innerWidth
+  bg.height = innerHeight
+
+  const rect = viz.getBoundingClientRect()
+  const dpr = devicePixelRatio || 1
+  viz.width = Math.round(rect.width * dpr)
+  viz.height = Math.round(rect.height * dpr)
+  c.setTransform(dpr,0,0,dpr,0,0)
+}
+resize()
+window.addEventListener("resize",resize)
+
+/* ===== stars ===== */
+
+let stars = []
+
+function initStars(){
+  stars = []
+  for(let i=0;i<320;i++){
+    stars.push({
+      x:Math.random()*bg.width,
+      y:Math.random()*bg.height,
+      z:Math.random(),
+      speed:0.015 + Math.random()*0.03
+    })
+  }
+}
+initStars()
+window.addEventListener("resize",initStars)
+
+/* ===== draw ===== */
+
+let phase = 0
+
+function draw(){
+
+  /* ===== audio energy ===== */
+
+  let energy = 0
+  if(analyser){
+    analyser.getByteTimeDomainData(buf)
+    for(let i=0;i<buf.length;i++){
+      let d = buf[i]-128
+      energy += d*d
+    }
+    energy /= buf.length
+  }
+  let e = Math.min(energy/7000,1)
+
+  /* ===== background stars ===== */
+
+  bgc.fillStyle = "black"
+  bgc.fillRect(0,0,bg.width,bg.height)
+
+  for(let s of stars){
+
+    /* much slower than before */
+    s.z += s.speed * (0.015 + e*0.08)
+
+    if(s.z > 1){
+      s.z = 0
+      s.x = Math.random()*bg.width
+      s.y = Math.random()*bg.height
+    }
+
+    let k = 1/(1 - s.z + 0.001)
+
+    let x = (s.x - bg.width/2) * k + bg.width/2
+    let y = (s.y - bg.height/2) * k + bg.height/2
+
+    /* keep them dot-like */
+    let size = 0.5 + k*0.9
+    if(size > 2.2) size = 2.2
+
+    bgc.fillStyle = `rgba(150,255,150,${0.10 + s.z*0.45})`
+    bgc.fillRect(x,y,size,size)
+  }
+
+  /* ===== foreground scope ===== */
+
+  const w = viz.clientWidth
+  const h = viz.clientHeight
+  const cx = w/2
+  const cy = h/2
+
+  c.fillStyle = "rgba(0,0,0,0.12)"
+  c.fillRect(0,0,w,h)
+
+  if(analyser){
+
+    c.beginPath()
+    c.lineJoin = "round"
+    c.lineCap = "round"
+
+    for(let i=0;i<buf.length;i++){
+
+      let t = i/buf.length*2*Math.PI
+      let a = (buf[i]-128)/128
+
+      /* slightly calmer figure */
+      let x = Math.sin(2.5*t + phase)*a*160*(1+e*0.22)
+      let y = Math.sin(3.5*t)*a*160*(1+e*0.22)
+
+      let px = cx + x
+      let py = cy + y
+
+      if(i===0) c.moveTo(px,py)
+      else c.lineTo(px,py)
+    }
+
+    c.strokeStyle = `rgba(0,255,120,${0.62+e*0.25})`
+    c.lineWidth = 1.2 + e*0.9
+    c.shadowColor = "#00ff88"
+    c.shadowBlur = 10 + e*10
+    c.stroke()
+    c.shadowBlur = 0
+  }
+
+  /* slower drift */
+  phase += 0.0012
+
+  requestAnimationFrame(draw)
+}
+
+draw()
+
+</script>
+
+</body>
+</html>

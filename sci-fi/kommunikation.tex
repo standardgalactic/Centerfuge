@@ -1,0 +1,1106 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=1.2in, bottom=1.2in, left=1.5in, right=1.2in]{geometry}
+\usepackage{fontspec}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{titlesec}
+
+% LuaLaTeX font setup — fontspec default (Latin Modern)
+% To use EB Garamond: install the font and uncomment:
+% \setmainfont{EB Garamond}[Numbers=OldStyle, Ligatures=TeX]
+
+\setstretch{1.15}
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{0pt}
+
+% Act headings
+\titleformat{\section}{\centering\bfseries\large}{}{0pt}{}
+\titlespacing{\section}{0pt}{18pt}{12pt}
+
+% Scene headings and transitions — centered
+\newcommand{\sceneheading}[1]{%
+  \vspace{10pt}%
+  \noindent\textbf{#1}%
+  \vspace{6pt}%
+}
+
+\newcommand{\trans}[1]{%
+  \vspace{8pt}%
+  \begin{flushright}\textbf{#1}\end{flushright}%
+  \vspace{4pt}%
+}
+
+% Character name — centered, above dialogue
+\newcommand{\character}[1]{%
+  \vspace{8pt}%
+  \begin{center}\textbf{#1}\end{center}%
+  \vspace{-4pt}%
+}
+
+% Parenthetical
+\newcommand{\paren}[1]{%
+  \begin{center}\textit{(#1)}\end{center}%
+  \vspace{-4pt}%
+}
+
+% Dialogue block — indented both sides
+\newenvironment{dialogue}{%
+  \begin{center}%
+  \begin{minipage}{0.62\textwidth}%
+}{%
+  \end{minipage}%
+  \end{center}%
+  \vspace{4pt}%
+}
+
+% Action / description paragraphs
+\newenvironment{action}{%
+  \vspace{4pt}%
+  \noindent\ignorespaces%
+}{%
+  \vspace{6pt}%
+}
+
+\begin{document}
+
+% ─── TITLE PAGE ────────────────────────────────────────────────────────────────
+
+\begin{titlepage}
+\vspace*{2in}
+\begin{center}
+{\LARGE\bfseries KOMMUNIKATION}\\[1.5em]
+{\large\itshape written by}\\[0.5em]
+{\large\itshape Flyxion}\\[2em]
+{\normalsize\itshape Based on the life of Niklas Luhmann}\\[0.5em]
+{\normalsize\itshape 2400 — 2464}\\[3em]
+\rule{3in}{0.4pt}\\[1em]
+{\itshape ``Society is not made of people. It is made of communication.''}\\[0.3em]
+{\small — Niklas Luhmann}
+\end{center}
+\end{titlepage}
+
+\newpage
+
+% ─── ACT ONE ───────────────────────────────────────────────────────────────────
+
+\section*{ACT ONE: THE SUBSTRATE}
+
+\textbf{FADE IN:}
+
+\bigskip
+
+\sceneheading{INT. FERMENTATION PLANT — LÜNEBURG STATION — DAY — 2410}
+
+\begin{action}
+Black.
+
+\medskip
+
+A low mechanical hum. Not loud — constant.
+
+Air moving through ducts.
+
+A faint wet organic sound beneath everything.
+
+\medskip
+
+Then: light.
+
+\medskip
+
+Large cylindrical tanks. Semi-translucent. Green-brown biomass circulates in slow spirals. Condensation gathers and releases in irregular intervals along overhead pipes. The surfaces are not clean. Nothing is sharply defined. Edges soften into each other as if the entire structure has been slowly reworked over time rather than built.
+
+The space feels less constructed than maintained.
+
+\medskip
+
+A wide frame. The system fills the image. Human figures, when they appear, will be inside it — not at its center.
+
+\medskip
+
+THE FATHER (50s) moves between tanks without urgency. His actions are precise, habitual, and entirely without emphasis. He checks gauges with the economy of someone who has done this ten thousand times. His movements are slow and confident and without drama.
+
+\medskip
+
+Nearby, LUHMANN (10) watches.
+
+Not the tanks.
+
+The relations between them.
+
+\medskip
+
+The father opens a panel. Inside: a dense network of tubing, regulators, filtration loops. No single center.
+\end{action}
+
+\character{FATHER}
+\begin{dialogue}
+It keeps itself going.
+\end{dialogue}
+
+\begin{action}
+He adjusts a valve a half-turn. Closes the panel.
+\end{action}
+
+\character{FATHER (CONT'D)}
+\begin{dialogue}
+You just correct it.
+\end{dialogue}
+
+\begin{action}
+Luhmann nods. But he is not watching his father's hands.
+
+\medskip
+
+On the far side of the room, a gauge fluctuates. Slightly. Repeatedly.
+
+\medskip
+
+The father ignores it.
+
+\medskip
+
+The fluctuation stabilizes on its own.
+
+\medskip
+
+Luhmann watches the stabilization. Not as resolution. As behavior.
+
+\medskip
+
+The hum continues.
+\end{action}
+
+\trans{CUT TO:}
+
+\sceneheading{EXT. LÜNEBURG STATION — ORBIT — 2410}
+
+\begin{action}
+A massive ring station above a gas giant. The planet's storm systems churn below — oranges and browns, slow enormous violence. The station rotates. Unhurried. Consistent.
+
+Its surface shows the accumulation of repair: different panels at different stages of maintenance, each generation of work distinct from the last, the whole structure the record of its own continued existence.
+\end{action}
+
+\trans{CUT TO:}
+
+\sceneheading{INT. CLASSROOM — GYMNASIUM — LÜNEBURG STATION — DAY — 2413}
+
+\begin{action}
+Rows of students. A TEACHER speaks — we hear the tone but not the words. The lesson is indistinct.
+
+\medskip
+
+LUHMANN, now 13, writes something in a small notebook. We do not see what.
+
+\medskip
+
+He pauses. Looks up — but not at the teacher.
+
+\medskip
+
+He looks at the classroom itself. The rows of seats and who sits in them. The direction of attention, all vectors pointing forward. The teacher speaking, students receiving, the loop of question and response completing and beginning again.
+
+\medskip
+
+For an instant — held exactly long enough to be felt but not named — the room's geometry seems to simplify. The human arrangement makes visible something structural: a pattern of flow. It lasts two seconds and does not repeat.
+
+\medskip
+
+He writes again.
+
+\medskip
+
+He is watching the structure of communication. Not its content.
+\end{action}
+
+\trans{CUT TO:}
+
+% ─── ACT TWO ───────────────────────────────────────────────────────────────────
+
+\section*{ACT TWO: THE WAR}
+
+\sceneheading{INT. SHIELD CONTROL — LÜNEBURG STATION — NIGHT — 2416}
+
+\begin{action}
+A room that exists entirely inside something larger. The walls press close. Every surface emits a single color — green, spectral, sourceless — so that faces are lit from below and all shadow falls upward.
+
+\medskip
+
+Operators at consoles speak in clipped procedural phrases. A low electrical hum beneath everything, distinct from but continuous with the one in the fermentation plant.
+
+\medskip
+
+Luhmann, now 16, sits at a console among older operators. He is the youngest in the room by a decade.
+\end{action}
+
+\character{OPERATOR (O.S.)}
+\begin{dialogue}
+Sector four, drift correction.
+\end{dialogue}
+
+\character{OPERATOR 2 (O.S.)}
+\begin{dialogue}
+Acknowledged.
+\end{dialogue}
+
+\begin{action}
+Luhmann watches numbers update. He repeats his section quietly into a headset.
+\end{action}
+
+\character{LUHMANN}
+\begin{dialogue}
+Sector seven stable.
+\end{dialogue}
+
+\begin{action}
+He does not look at anyone. Only at the system. A warning flickers on his display — then disappears.
+
+No one reacts.
+
+The system absorbs it.
+\end{action}
+
+\trans{CUT TO:}
+
+\sceneheading{EXT. SPACE — NEAR LÜNEBURG STATION — NIGHT — 2417}
+
+\begin{action}
+Light distortions far in the distance. No clear ships. Just disturbances in the dark — the suggestion of enormous force being applied somewhere. The station continues rotating. Indifferent.
+\end{action}
+
+\trans{CUT TO:}
+
+\sceneheading{INT. SHIELD CONTROL — CONTINUOUS}
+
+\begin{action}
+Alarms begin. Not loud — multiplying.
+
+\medskip
+
+The operators speak faster but remain procedural. The COMMANDING OFFICER (40s) moves through the room issuing instructions in the same precise, unemotional register he uses in calm. He does not raise his voice.
+\end{action}
+
+\character{COMMANDING OFFICER}
+\begin{dialogue}
+Signal saturation in sectors two through five. Reroute.
+\end{dialogue}
+
+\character{OPERATOR}
+\begin{dialogue}
+Rerouting.
+\end{dialogue}
+
+\character{COMMANDING OFFICER}
+\begin{dialogue}
+Sectors nine and ten, increase sensitivity threshold.
+\end{dialogue}
+
+\begin{action}
+Luhmann watches as multiple inputs flood his display simultaneously. He tries to track them. He cannot — not because of fear, but because of complexity. The system has exceeded the capacity of any single observer.
+
+\medskip
+
+The screens begin to show their own structure under pressure: overlapping data, conflicting signals, the architecture of the system becoming legible precisely as it fails. Not chaos — something more unsettling. A geometry of fragmentation. Each element following its own logic while the whole comes apart.
+
+\medskip
+
+Luhmann takes a small scrap of paper from his pocket.
+
+Even now — in the middle of the station failing — he writes something.
+\end{action}
+
+\trans{CUT TO BLACK.}
+
+\begin{action}
+Silence.
+\end{action}
+
+\sceneheading{INT. DETENTION VESSEL — HOLD — 2417–2418}
+
+\begin{action}
+Grey. Uniform. A cargo hold converted to housing. Bunks extend in long perspective lines — the same unit repeated, each worn slightly differently, each carrying the specific history of whoever has occupied it. The overhead lights do not change with any natural cycle. They simply remain on, or off, according to schedule.
+
+\medskip
+
+A low machinery sound. Constant. The hum, transposed down.
+
+\medskip
+
+Luhmann, 17, sits on a lower bunk. He is older than he was six months ago in a way that is not about time.
+
+\medskip
+
+He reads a worn technical manual — the only book he could find aboard. He has read it three times. He closes it.
+
+\medskip
+
+Takes the back of a ration card. Writes.
+
+\medskip
+
+We do not see the text clearly. We see that there is a number in the corner. Then an arrow to another number. A cross-reference.
+
+The beginning of the system.
+
+\medskip
+
+He looks up.
+
+\medskip
+
+Watches guards rotate positions at the end of the hold. New guards arrive; old guards depart. The procedure of watching over prisoners continues unchanged. The function is indifferent to its personnel.
+
+\medskip
+
+THE LIBRARIAN — a designation rather than a name, a prisoner who has volunteered to manage the ship's small collection of materials — passes with a cart. Checks out a manual to a prisoner. Notes it in a ledger.
+
+\medskip
+
+The ledger is the important thing.
+
+\medskip
+
+Luhmann watches the ledger.
+
+He writes again.
+\end{action}
+
+\trans{CUT TO:}
+
+% ─── ACT THREE ─────────────────────────────────────────────────────────────────
+
+\section*{ACT THREE: THE ADMINISTRATION}
+
+\sceneheading{INT. COLONIAL ADMINISTRATION — LÜNEBURG STATION — DAY — 2422–2432}
+
+\begin{action}
+A compressed sequence — not rushed. Each image held long enough to register.
+
+\medskip
+
+Luhmann at a desk. Stamping permits. The stamp falls. Falls again. Falls again. The rhythm of it — mechanical, indifferent, continuous.
+
+\medskip
+
+A REGISTRAR (60s) shows Luhmann a procedure. Not the reason for it — the procedure itself. The form must be completed in this order. The copies must be filed in this sequence. Because this is how it is processed.
+
+\medskip
+
+The light here is warm and practical — entirely different from the cold green of shield control, different from the grey uniformity of the detention hold. But the camera holds its logic: static wide shots, figures within a larger structure. The institution contains the people. The people execute the institution.
+
+\medskip
+
+Luhmann watches the Registrar retire. A new person sits at the same desk the next day. Uses the same stamp. The same form. In the same sequence.
+
+\medskip
+
+Luhmann's desk, accumulating small cards. Numbers in corners. Arrows. Cross-references multiplying.
+
+At no point does anyone ask what the cards are for.
+\end{action}
+
+\character{REGISTRAR}
+\begin{dialogue}
+You take a lot of notes.
+\end{dialogue}
+
+\character{LUHMANN}
+\begin{dialogue}
+I'm studying how the system maintains itself.
+\end{dialogue}
+
+\begin{action}
+The Registrar considers this.
+\end{action}
+
+\character{REGISTRAR}
+\begin{dialogue}
+The system maintains itself because we follow the procedures.
+\end{dialogue}
+
+\character{LUHMANN}
+\paren{quietly}
+\begin{dialogue}
+Yes.
+\end{dialogue}
+
+\begin{action}
+A beat.
+\end{action}
+
+\character{LUHMANN (CONT'D)}
+\begin{dialogue}
+That's what I mean.
+\end{dialogue}
+
+\trans{CUT TO:}
+
+% ─── ACT FOUR ──────────────────────────────────────────────────────────────────
+
+\section*{ACT FOUR: THE DIRECTOR}
+
+\sceneheading{INT. SEMINAR ROOM — HARVARD STATION — DAY — 2432}
+
+\begin{action}
+The architecture here communicates: this is the center of things. Higher ceilings. Materials that suggest permanence. Light that falls warmly and with evident intention, from sources designed to suggest that illumination itself endorses what occurs beneath it.
+
+\medskip
+
+The building is a system. It contains figures. The camera holds the same logic it has held everywhere.
+
+\medskip
+
+THE DIRECTOR (70s) speaks to a small group of students and visitors. He is commanding without effort. His framework is fully formed, its language precise. He speaks of social systems as open networks of action, of equilibrium, of integration — how parts contribute to the functioning of the whole.
+
+\medskip
+
+Luhmann, 32, sits at the edge of the room. He listens with total attention.
+
+He writes nothing.
+
+\medskip
+
+After the seminar. A corridor. The Director and Luhmann walk.
+\end{action}
+
+\character{THE DIRECTOR}
+\begin{dialogue}
+You're from the mid-ring stations.
+\end{dialogue}
+
+\character{LUHMANN}
+\begin{dialogue}
+Lüneburg Station.
+\end{dialogue}
+
+\character{THE DIRECTOR}
+\begin{dialogue}
+What draws you to systems theory?
+\end{dialogue}
+
+\character{LUHMANN}
+\begin{dialogue}
+I worked in colonial administration for nine years. I wanted to understand why the administration continued functioning regardless of who was in it.
+\end{dialogue}
+
+\character{THE DIRECTOR}
+\paren{pleased}
+\begin{dialogue}
+And the answer is integration. The parts contribute to the maintenance of the whole. Coordination. Shared values. A common orientation toward function.
+\end{dialogue}
+
+\begin{action}
+A pause.
+\end{action}
+
+\character{LUHMANN}
+\begin{dialogue}
+I'm not sure that's what I observed.
+\end{dialogue}
+
+\character{THE DIRECTOR}
+\begin{dialogue}
+What did you observe?
+\end{dialogue}
+
+\character{LUHMANN}
+\begin{dialogue}
+The parts didn't coordinate. They continued regardless of each other. The administration didn't maintain itself through integration.
+\end{dialogue}
+
+\begin{action}
+A beat.
+\end{action}
+
+\character{LUHMANN (CONT'D)}
+\begin{dialogue}
+It maintained itself through closure.
+\end{dialogue}
+
+\begin{action}
+The Director looks at him. Not hostile. Something more interesting — he recognizes that this man is not wrong in an obvious way.
+\end{action}
+
+\character{THE DIRECTOR}
+\begin{dialogue}
+Closure is a failure state. Open systems—
+\end{dialogue}
+
+\character{LUHMANN}
+\begin{dialogue}
+They don't integrate. They differentiate.
+\end{dialogue}
+
+\begin{action}
+Silence in the corridor.
+
+The Director nods slowly — not in agreement, but in acknowledgment that a real disagreement has occurred.
+\end{action}
+
+\trans{CUT TO:}
+
+\sceneheading{INT. FACULTY DINING ROOM — FRANKFURT INSTITUTE — EVENING — 2439}
+
+\begin{action}
+Luhmann sits across from THE CRITICAL THEORIST (50s). The Theorist is animated, articulate, and morally serious in a way that generates heat. Around them, faculty dinner continues — indifferent to the content of their exchange.
+\end{action}
+
+\character{THE CRITICAL THEORIST}
+\begin{dialogue}
+Sociology must be normative. It must say something about how society ought to function. Otherwise what is it for?
+\end{dialogue}
+
+\character{LUHMANN}
+\begin{dialogue}
+Description.
+\end{dialogue}
+
+\character{THE CRITICAL THEORIST}
+\begin{dialogue}
+Pure description in the service of what?
+\end{dialogue}
+
+\character{LUHMANN}
+\begin{dialogue}
+Accuracy.
+\end{dialogue}
+
+\character{THE CRITICAL THEORIST}
+\begin{dialogue}
+You're describing a society that produces inequality, environmental destruction, the suppression of rational discourse — and you want to describe it accurately? Not criticize it?
+\end{dialogue}
+
+\character{LUHMANN}
+\paren{without irritation}
+\begin{dialogue}
+Criticism requires a position outside the system from which to criticize it. I don't believe that position exists.
+\end{dialogue}
+
+\character{THE CRITICAL THEORIST}
+\begin{dialogue}
+That's a politics of resignation.
+\end{dialogue}
+
+\character{LUHMANN}
+\begin{dialogue}
+It's an epistemology of honesty.
+\end{dialogue}
+
+\begin{action}
+The Theorist shakes their head — not dismissively, but in genuine frustration that this is where the argument ends. It always ends here.
+
+Luhmann picks up his fork. Continues eating. The dinner continues around them, entirely indifferent to the conversation's content.
+\end{action}
+
+\trans{CUT TO:}
+
+% ─── ACT FIVE ──────────────────────────────────────────────────────────────────
+
+\section*{ACT FIVE: BIELEFELD}
+
+\sceneheading{INT. BIELEFELD ACADEMY — APPOINTMENT OFFICE — DAY — 2440}
+
+\begin{action}
+Luhmann, 40, sits before an appointment committee. Five administrators. The room is functional, mid-ring quality — not prestigious, but real. Same camera logic as every other institutional space in the film. The building contains figures. One of the figures is being processed.
+\end{action}
+
+\character{COMMITTEE CHAIR}
+\begin{dialogue}
+Your research programme. For the record.
+\end{dialogue}
+
+\begin{action}
+Luhmann pauses. Not because he doesn't know. Because the answer is large.
+\end{action}
+
+\character{LUHMANN}
+\begin{dialogue}
+The theory of modern society.
+\end{dialogue}
+
+\character{COMMITTEE CHAIR}
+\begin{dialogue}
+Duration?
+\end{dialogue}
+
+\character{LUHMANN}
+\begin{dialogue}
+Thirty years.
+\end{dialogue}
+
+\begin{action}
+A beat across the committee. Someone almost smiles.
+\end{action}
+
+\character{COMMITTEE CHAIR}
+\begin{dialogue}
+And the budget you're requesting?
+\end{dialogue}
+
+\character{LUHMANN}
+\begin{dialogue}
+No costs.
+\end{dialogue}
+
+\begin{action}
+Silence.
+
+The committee chair writes something down.
+\end{action}
+
+\trans{CUT TO:}
+
+\sceneheading{INT. LUHMANN'S OFFICE — BIELEFELD ACADEMY — VARIOUS — 2440–2463}
+
+\begin{action}
+A fixed camera position.
+
+The same room, seen repeatedly.
+
+\medskip
+
+A desk. A window opening onto the dark exterior of the station. The suggestion of distant motion beyond the glass, slow and continuous.
+
+\medskip
+
+At first:
+
+A single wooden box on the desk. Inside it, a few hundred index cards. Ordered. Legible. Contained.
+\end{action}
+
+\textbf{CUT.}
+
+\begin{action}
+The same frame.
+
+Nothing has moved.
+
+Except:
+
+There are now two boxes. The cards fill them completely. A few rest beside them, as if the boundary of the container has already been exceeded.
+\end{action}
+
+\textbf{CUT.}
+
+\begin{action}
+The same frame.
+
+Three boxes now. Cards accumulate in small stacks outside them. Some are marked with red ink — numbers, arrows, references that point elsewhere. The system has begun to refer beyond its immediate contents.
+\end{action}
+
+\textbf{CUT.}
+
+\begin{action}
+The same frame.
+
+Time has passed, but only the system records it.
+
+The boxes have multiplied. They extend along the wall. The desk is no longer the center; it is one surface among many. The cards are no longer simply stored. They are connected.
+
+From a distance, the pattern is visible: clusters, lines, recursions. A geometry of reference.
+
+\medskip
+
+THE COLLEAGUE (40s) stands in the doorway.
+
+Watches.
+
+Does not enter.
+\end{action}
+
+\character{THE COLLEAGUE}
+\begin{dialogue}
+What's in it now?
+\end{dialogue}
+
+\character{LUHMANN}
+\begin{dialogue}
+Sixty thousand cards. Approximately.
+\end{dialogue}
+
+\begin{action}
+The colleague studies the structure. Not the individual cards. The accumulation.
+\end{action}
+
+\character{THE COLLEAGUE}
+\begin{dialogue}
+And you can find anything in it?
+\end{dialogue}
+
+\begin{action}
+Luhmann considers the question.
+\end{action}
+
+\character{LUHMANN}
+\begin{dialogue}
+I can follow the references.
+\end{dialogue}
+
+\begin{action}
+A pause.
+\end{action}
+
+\character{LUHMANN (CONT'D)}
+\begin{dialogue}
+It's less like finding something than—
+\end{dialogue}
+
+\begin{action}
+He searches for the word.
+\end{action}
+
+\character{LUHMANN (CONT'D)}
+\begin{dialogue}
+Receiving a reply.
+\end{dialogue}
+
+\begin{action}
+The colleague absorbs this, unsettled in a way that is not immediately visible.
+\end{action}
+
+\character{THE COLLEAGUE}
+\begin{dialogue}
+A reply from whom?
+\end{dialogue}
+
+\begin{action}
+Luhmann looks — not at a specific location — but at the system as a whole.
+\end{action}
+
+\character{LUHMANN}
+\begin{dialogue}
+The system.
+\end{dialogue}
+
+\textbf{CUT.}
+
+\begin{action}
+The same frame.
+
+Later.
+
+The wall is now entirely covered. Drawers extend beyond what the room should reasonably contain. The density of cards has reached the point where individual units no longer define the structure. Only their relations do.
+
+\medskip
+
+Light in the room has changed. Not brighter. More saturated. As if the accumulation of matter has altered the way illumination behaves within the space. Shadows soften. Edges blur. The interior becomes thick with presence.
+
+\medskip
+
+The colleague stands again in the doorway.
+
+Older now.
+\end{action}
+
+\character{THE COLLEAGUE}
+\begin{dialogue}
+Seventy books.
+\end{dialogue}
+
+\begin{action}
+A beat.
+\end{action}
+
+\character{THE COLLEAGUE (CONT'D)}
+\begin{dialogue}
+People are starting to notice.
+\end{dialogue}
+
+\begin{action}
+Luhmann does not look up. He writes. Places a card.
+\end{action}
+
+\character{THE COLLEAGUE (CONT'D)}
+\begin{dialogue}
+They say your prose is deliberately impenetrable.
+\end{dialogue}
+
+\begin{action}
+Luhmann stops.
+
+Not in defense.
+
+In precision.
+\end{action}
+
+\character{LUHMANN}
+\begin{dialogue}
+Comprehension that arrives too quickly produces only sophisticated misunderstanding.
+\end{dialogue}
+
+\begin{action}
+The colleague considers this.
+\end{action}
+
+\character{THE COLLEAGUE}
+\begin{dialogue}
+Is that a defense of your writing style or a theory of communication?
+\end{dialogue}
+
+\begin{action}
+Luhmann resumes writing.
+\end{action}
+
+\character{LUHMANN}
+\begin{dialogue}
+Yes.
+\end{dialogue}
+
+\textbf{CUT.}
+
+\begin{action}
+Final iteration of the frame.
+
+The system fills the room completely. There is no longer a meaningful distinction between container and contents. The drawers extend to every wall, pressing against the limits of the space.
+
+\medskip
+
+Luhmann sits within it. Not at its center. Inside its structure.
+
+\medskip
+
+He pauses.
+
+Looks across the entire system.
+
+\medskip
+
+No movement.
+
+\medskip
+
+But the duration of the shot introduces a perception: a continuity. A persistence beneath stillness.
+
+\medskip
+
+The same underlying quality heard elsewhere: the fermentation tanks, the shield control, the detention hold.
+
+\medskip
+
+The hum.
+
+\medskip
+
+It is not literal. But it is continuous.
+\end{action}
+
+\textbf{HOLD.}
+
+\trans{CUT TO:}
+
+\sceneheading{INT. SIGNAL ANALYSIS LAB — OUTER STATION — NIGHT — 2455}
+
+\begin{action}
+Blue-white light. A different register from every previous environment — the cold end of the spectrum, clinical, directional. It makes the room feel more exposed than the warm gold of Harvard, more awake than the green of shield control.
+
+\medskip
+
+A SIGNAL ANALYST sits before banks of monitors. A long waveform fills one display — transmission noise from the deep outer system. Its shape, if held in the mind alongside the cross-reference structure of the Zettelkasten, would resemble it. The film does not make this explicit.
+
+\medskip
+
+Luhmann passes through on some administrative errand. He pauses at the display.
+\end{action}
+
+\character{LUHMANN}
+\begin{dialogue}
+What is Ankyra?
+\end{dialogue}
+
+\character{SIGNAL ANALYST}
+\begin{dialogue}
+Peripheral station. Very far out. Barely operational.
+\end{dialogue}
+
+\character{LUHMANN}
+\begin{dialogue}
+These transmissions from that direction — you're marking them as noise.
+\end{dialogue}
+
+\character{SIGNAL ANALYST}
+\begin{dialogue}
+They don't match any known protocol.
+\end{dialogue}
+
+\character{LUHMANN}
+\paren{studying the waveform}
+\begin{dialogue}
+Not matching a protocol isn't the same as having no structure.
+\end{dialogue}
+
+\begin{action}
+The analyst looks at the waveform again. Looks at Luhmann.
+\end{action}
+
+\character{SIGNAL ANALYST}
+\begin{dialogue}
+What structure?
+\end{dialogue}
+
+\begin{action}
+Luhmann looks at it for another moment.
+\end{action}
+
+\character{LUHMANN}
+\begin{dialogue}
+That's what I don't know yet.
+\end{dialogue}
+
+\begin{action}
+He continues on his way. The analyst looks back at the waveform.
+
+Marks the next section as noise.
+\end{action}
+
+\trans{CUT TO:}
+
+% ─── ACT SIX ───────────────────────────────────────────────────────────────────
+
+\section*{ACT SIX: THE SOCIETY OF SOCIETY}
+
+\sceneheading{INT. LUHMANN'S OFFICE — BIELEFELD ACADEMY — NIGHT — 2463}
+
+\begin{action}
+Luhmann, 63. The office is entirely filled with the Zettelkasten now. Ninety thousand cards. The drawers extend along every wall. The system is larger than him, larger than the room seems able to contain.
+
+\medskip
+
+He places a final card. Reads it. Places it in a drawer.
+
+\medskip
+
+He writes on a sheet of paper. The title of the final book. We do not read it directly. We understand: it is finished.
+
+\medskip
+
+He sits.
+
+\medskip
+
+From within the mass of drawers, from the density of accumulated reference, comes a quality of light that the room did not have before. Not dramatic. Not pointed. A faint saturation from the interior of the system — as though the cards, packed that densely, have begun to alter the quality of the space they inhabit. Consistent with every other self-sustaining system in the film. The fermentation tanks generated their own atmosphere. The shield consoles generated their own light. The Zettelkasten generates its own.
+
+\medskip
+
+The film holds here for longer than is comfortable.
+
+\medskip
+
+Luhmann looks at the Zettelkasten. Nothing passes across his face that a camera could name. Something has completed. Or: something has continued to the point where an observer can call it completed.
+
+\medskip
+
+The hum. Not literal. Continuous.
+\end{action}
+
+\trans{CUT TO:}
+
+\sceneheading{INT. FERMENTATION PLANT — LÜNEBURG STATION — DAY — 2464}
+
+\begin{action}
+The exact framing of the opening shot. Same camera position. Same lens. The tanks. The biomass circling. The condensation gathering and releasing.
+
+\medskip
+
+LUHMANN, 64, stands where his father stood.
+
+\medskip
+
+The system runs.
+
+\medskip
+
+He does not adjust anything.
+
+He simply watches.
+
+\medskip
+
+A gauge fluctuates slightly. He watches it.
+
+It stabilizes on its own.
+
+\medskip
+
+He watches it stabilize.
+
+\medskip
+
+Not with more understanding, exactly. With more recognition.
+
+\medskip
+
+This is the emotional content of the film's ending.
+\end{action}
+
+\trans{CUT TO:}
+
+\sceneheading{CLOSE — BIOMASS FLOW}
+
+\begin{action}
+Circulation. Continuous. The same motion it has always been.
+\end{action}
+
+\character{LUHMANN (V.O.)}
+\begin{dialogue}
+Society is not made of people.
+\end{dialogue}
+
+\begin{action}
+A long breath.
+\end{action}
+
+\character{LUHMANN (V.O.) (CONT'D)}
+\begin{dialogue}
+It is made of communication.
+\end{dialogue}
+
+\trans{CUT TO:}
+
+\sceneheading{EXT. LÜNEBURG STATION — ORBIT}
+
+\begin{action}
+The station rotates. Unchanged. The gas giant churns below, as it has for longer than the station has existed, as it will for longer than the station will last.
+\end{action}
+
+\trans{CUT TO BLACK.}
+
+\begin{action}
+The hum continues for five seconds after the image disappears.
+
+Then silence.
+\end{action}
+
+\bigskip
+\bigskip
+
+\begin{center}
+\textit{Niklas Luhmann was born on December 8, 1927, and died on November 11, 1998.}
+
+\medskip
+
+\textit{He published more than 70 books and nearly 400 scholarly articles.}
+
+\medskip
+
+\textit{His Zettelkasten contained 90,000 cards.}\\
+\textit{It was digitized and made available online in 2019.}
+
+\medskip
+
+\textit{He completed his magnum opus,} Die Gesellschaft der Gesellschaft,\\
+\textit{the year before he died.}
+\end{center}
+
+\bigskip\bigskip
+
+\begin{center}
+\textbf{FADE OUT.}
+
+\bigskip
+
+\textbf{END}
+\end{center}
+
+\end{document}

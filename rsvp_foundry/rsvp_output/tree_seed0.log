@@ -1,0 +1,38 @@
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Info: Total files 0 | Changed 0 | Failed 0
+Info: Saved "tree_seed0.blend"
+[rsvp] trunk: 81 pts  branches: 4
+Info: Saved "tree_seed0.blend"
+[rsvp] saved to ./rsvp_output/tree_seed0.blend
+
+Blender quit
+Color management: using fallback mode for management
+Color management: Error could not find role data role.
+Blender 3.0.1
+Color management: scene view "Filmic" not found, setting default "Standard".
+/run/user/1000/gvfs/ non-existent directory
+Read blend: /mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/rsvp_foundry/rsvp_output/tree_seed0.blend
+Fra:1 Mem:29.19M (Peak 29.86M) | Time:00:01.14 | Syncing trunk
+Fra:1 Mem:29.57M (Peak 29.91M) | Time:00:01.18 | Syncing branch_000
+Fra:1 Mem:29.57M (Peak 29.91M) | Time:00:01.18 | Syncing branch_001
+Fra:1 Mem:29.57M (Peak 29.91M) | Time:00:01.18 | Syncing branch_002
+Fra:1 Mem:29.58M (Peak 29.91M) | Time:00:01.18 | Syncing branch_003
+Fra:1 Mem:29.58M (Peak 29.91M) | Time:00:01.18 | Syncing StillCamera
+Fra:1 Mem:29.58M (Peak 29.91M) | Time:00:01.18 | Syncing Key
+Fra:1 Mem:29.58M (Peak 29.91M) | Time:00:01.18 | Syncing Fill
+Fra:1 Mem:29.58M (Peak 29.91M) | Time:00:01.18 | Syncing Rim
+Fra:1 Mem:30.56M (Peak 30.84M) | Time:00:01.23 | Rendering 1 / 32 samples
+Fra:1 Mem:29.69M (Peak 30.84M) | Time:00:06.00 | Rendering 26 / 32 samples
+Fra:1 Mem:29.69M (Peak 30.84M) | Time:00:06.47 | Rendering 32 / 32 samples
+Saved: './rsvp_output/tree_seed0.png'
+ Time: 00:06.81 (Saving: 00:00.20)
+
+[render_still] width=1.30  height=5.68  span=5.68  look_at_z=1.98
+[render_still] camera at (9.47, 8.70, 7.41)  looking at (0.20, -0.57, 1.98)
+[render_still] → ./rsvp_output/tree_seed0.png
+
+Blender quit

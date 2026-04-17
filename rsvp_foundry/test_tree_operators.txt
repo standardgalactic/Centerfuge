@@ -1,0 +1,10 @@
+[probe] preset=make_tree_operators  seed=0  bounds=±1.2
+
+  Random samples (n=1000):
+  phi                   min= -0.16490  max=  1.10117  mean=  0.29964  std= 0.25355  n=1000
+  closure               min= -0.19526  max=  0.70642  mean=  0.14141  std= 0.20848  n=1000
+  div(v)                min= -0.00119  max=  0.00282  mean=  0.00000  std= 0.00012  n=1000
+
+  Growth path (40 steps from origin):
+  z-range               min=0.0000  max=1.9249  final=(-0.031, 0.075, 1.925)
+

@@ -1,0 +1,15 @@
+{
+  "schema": "rsvp-meta-v1",
+  "generator": "tree",
+  "script": "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/rsvp_foundry/generate_tree.py",
+  "seed": 0,
+  "timestamp": "2026-04-17T00:02:05Z",
+  "status": "ok",
+  "outputs": {
+    "blend": "./rsvp_output/tree_seed0.blend",
+    "log": "./rsvp_output/tree_seed0.log",
+    "png": "./rsvp_output/tree_seed0.png"
+  },
+  "render_seconds": 8.45,
+  "params": {}
+}

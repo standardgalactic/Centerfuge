@@ -1,0 +1,9 @@
+[select] metric=random  total=4  selected=4
+
+  [ 0]  tree                  seed=   0  render=n/a
+  [ 1]  tree                  seed=   1  render=n/a
+  [ 2]  tree                  seed=   2  render=n/a
+  [ 3]  tree                  seed=   3  render=n/a
+
+# --- batch commands ---
+./rsvp_batch.sh -g tree -s "0 1 2 3" -r

@@ -1,0 +1,12 @@
+[compose] auto_000  seed=1654615998
+  phi:    rsvp.HarmonicField(weights=(0.558, 0.983, 0.521), frequencies=(1.186, 2.525, 4.1
+  v:      rsvp.DirectionalBias(direction=(-0.044, -0.027, 0.692), strength=1.131, curl=0.1
+  steps:  112  attraction: 0.254
+[compose] auto_001  seed=1806341205
+  phi:    rsvp.HarmonicField(weights=(0.925, 0.814, 0.188), frequencies=(2.53, 4.503, 1.97
+  v:      rsvp.DirectionalBias(direction=(-0.072, 0.47, 1.093), strength=0.745, curl=0.299
+  steps:  73  attraction: 0.371
+[compose] auto_002  seed=173879092
+  phi:    rsvp.mul_scalar_fields(rsvp.add_scalar_fields(rsvp.Basin(center=(0.3642455855312
+  v:      rsvp.DirectionalBias(direction=(0.27, -0.184, 0.841), strength=0.577, curl=0.459
+  steps:  58  attraction: 0.364

@@ -1,0 +1,77 @@
+{
+  "schema": "rsvp-registry-v1",
+  "root": "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/rsvp_foundry",
+  "manifests_found": 1,
+  "count": 4,
+  "ok": 4,
+  "error": 0,
+  "generators": [
+    "tree"
+  ],
+  "entries": [
+    {
+      "schema": "rsvp-meta-v1",
+      "generator": "tree",
+      "script": "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/rsvp_foundry/generate_tree.py",
+      "seed": 0,
+      "timestamp": "2026-04-16T23:42:18Z",
+      "status": "ok",
+      "outputs": {
+        "blend": "./rsvp_output/tree_seed0.blend",
+        "log": "./rsvp_output/tree_seed0.log",
+        "png": "./rsvp_output/tree_seed0.png"
+      },
+      "render_seconds": null,
+      "params": {},
+      "_manifest": "rsvp_output/manifest.json"
+    },
+    {
+      "schema": "rsvp-meta-v1",
+      "generator": "tree",
+      "script": "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/rsvp_foundry/generate_tree.py",
+      "seed": 1,
+      "timestamp": "2026-04-16T23:42:21Z",
+      "status": "ok",
+      "outputs": {
+        "blend": "./rsvp_output/tree_seed1.blend",
+        "log": "./rsvp_output/tree_seed1.log",
+        "png": "./rsvp_output/tree_seed1.png"
+      },
+      "render_seconds": null,
+      "params": {},
+      "_manifest": "rsvp_output/manifest.json"
+    },
+    {
+      "schema": "rsvp-meta-v1",
+      "generator": "tree",
+      "script": "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/rsvp_foundry/generate_tree.py",
+      "seed": 2,
+      "timestamp": "2026-04-16T23:42:23Z",
+      "status": "ok",
+      "outputs": {
+        "blend": "./rsvp_output/tree_seed2.blend",
+        "log": "./rsvp_output/tree_seed2.log",
+        "png": "./rsvp_output/tree_seed2.png"
+      },
+      "render_seconds": null,
+      "params": {},
+      "_manifest": "rsvp_output/manifest.json"
+    },
+    {
+      "schema": "rsvp-meta-v1",
+      "generator": "tree",
+      "script": "/mnt/c/Users/Mechachleopteryx/OneDrive/Documents/GitHub/Centerfuge/rsvp_foundry/generate_tree.py",
+      "seed": 3,
+      "timestamp": "2026-04-16T23:42:25Z",
+      "status": "ok",
+      "outputs": {
+        "blend": "./rsvp_output/tree_seed3.blend",
+        "log": "./rsvp_output/tree_seed3.log",
+        "png": "./rsvp_output/tree_seed3.png"
+      },
+      "render_seconds": null,
+      "params": {},
+      "_manifest": "rsvp_output/manifest.json"
+    }
+  ]
+}
