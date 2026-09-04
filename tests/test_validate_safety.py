@@ -15,6 +15,20 @@ SPEC.loader.exec_module(validator)
 
 
 class SafetyValidatorTests(unittest.TestCase):
+    def test_operating_stop_and_service_records_are_valid(self):
+        problems = validator.Problems()
+        validator.validate_operating_states(
+            ROOT / "safety" / "operating-states.json", problems
+        )
+        hazards = validator.hazard_ids(ROOT / "safety" / "hazards.json", problems)
+        validator.validate_stop_recovery(
+            ROOT / "safety" / "stop-recovery.json", hazards, problems
+        )
+        validator.validate_service_maintenance(
+            ROOT / "safety" / "service-maintenance.json", problems
+        )
+        self.assertEqual([], problems.errors)
+
     def test_repository_records_are_structurally_valid_but_blocked(self):
         problems = validator.Problems()
         validator.validate_hazards(ROOT / "safety" / "hazards.json", problems)

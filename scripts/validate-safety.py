@@ -18,6 +18,9 @@ from typing import Any, Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
 HAZARDS = ROOT / "safety" / "hazards.json"
+OPERATING_STATES = ROOT / "safety" / "operating-states.json"
+STOP_RECOVERY = ROOT / "safety" / "stop-recovery.json"
+SERVICE_MAINTENANCE = ROOT / "safety" / "service-maintenance.json"
 MANIFEST_DIR = ROOT / "safety" / "manifests"
 SCHEMA_DIR = ROOT / "safety" / "schemas"
 
@@ -37,6 +40,9 @@ CONTROL_ID = re.compile(r"^CTRL-[0-9]{3}$")
 TRACE_ID = re.compile(r"^TR-[0-9]{3}$")
 DATUM_ID = re.compile(r"^DAT-[A-Z]+-[0-9]{3}$")
 SAFETY_ITEM_ID = re.compile(r"^(SNS|INT)-[0-9]{3}$")
+TRANSITION_ID = re.compile(r"^TX-[0-9]{3}$")
+EVENT_ID = re.compile(r"^EV-[0-9]{3}$")
+SERVICE_ID = re.compile(r"^SVC-[0-9]{3}$")
 
 
 class Problems:
@@ -139,6 +145,126 @@ def validate_hazards(path: Path, problems: Problems) -> None:
             }, tloc, "invalid trace status")
             problems.require(bool(str(trace.get("reference", "")).strip()), tloc,
                              "trace reference must be nonempty")
+
+
+def validate_operating_states(path: Path, problems: Problems) -> None:
+    data = read_json(path, problems)
+    if not isinstance(data, dict):
+        return
+    loc = str(path.relative_to(ROOT))
+    states = data.get("states")
+    problems.require(isinstance(states, list), loc, "states must be an array")
+    state_ids = {
+        item.get("id") for item in states if isinstance(item, dict)
+    } if isinstance(states, list) else set()
+    problems.require(state_ids == STATES, loc, "state set must exactly match the normative vocabulary")
+    for index, state in enumerate(states if isinstance(states, list) else []):
+        sloc = f"{loc}:states[{index}]"
+        problems.require(isinstance(state, dict), sloc, "state must be an object")
+        if isinstance(state, dict):
+            problems.require(bool(str(state.get("invariant", "")).strip()), sloc, "invariant is required")
+            problems.require(bool(str(state.get("access", "")).strip()), sloc, "access rule is required")
+    transitions = data.get("transitions")
+    problems.require(isinstance(transitions, list) and bool(transitions), loc, "transitions must be nonempty")
+    seen: set[str] = set()
+    coverage: set[str] = set()
+    for index, transition in enumerate(transitions if isinstance(transitions, list) else []):
+        tloc = f"{loc}:transitions[{index}]"
+        if not isinstance(transition, dict):
+            problems.errors.append(f"{tloc}: transition must be an object")
+            continue
+        unique_id(transition.get("id"), TRANSITION_ID, seen, tloc, problems)
+        source, target = transition.get("from"), transition.get("to")
+        problems.require(source in STATES or source == "*", tloc, "unknown source state")
+        problems.require(target in STATES, tloc, "unknown target state")
+        if source in STATES:
+            coverage.add(source)
+        for field in ("guards", "actions", "completion_evidence", "ledger"):
+            problems.require(nonempty_strings(transition.get(field)), tloc, f"{field} must be nonempty")
+        problems.require(transition.get("timeout_fallback") in STATES, tloc, "invalid timeout fallback")
+        problems.require(transition.get("reset_authority") in {
+            "automatic", "user", "trained_service", "protected_service",
+        }, tloc, "invalid reset authority")
+    problems.require("RUN" in coverage and "FAULT_LATCHED" in coverage, loc,
+                     "RUN and FAULT_LATCHED require explicit outgoing recovery transitions")
+
+
+def hazard_ids(path: Path, problems: Problems) -> set[str]:
+    data = read_json(path, problems)
+    if not isinstance(data, dict) or not isinstance(data.get("hazards"), list):
+        return set()
+    return {item.get("id") for item in data["hazards"] if isinstance(item, dict)}
+
+
+def validate_stop_recovery(path: Path, known_hazards: set[str], problems: Problems) -> None:
+    data = read_json(path, problems)
+    if not isinstance(data, dict):
+        return
+    loc = str(path.relative_to(ROOT))
+    events = data.get("events")
+    problems.require(isinstance(events, list) and bool(events), loc, "events must be nonempty")
+    seen: set[str] = set()
+    covered: set[str] = set()
+    for index, event in enumerate(events if isinstance(events, list) else []):
+        eloc = f"{loc}:events[{index}]"
+        if not isinstance(event, dict):
+            problems.errors.append(f"{eloc}: event must be an object")
+            continue
+        unique_id(event.get("id"), EVENT_ID, seen, eloc, problems)
+        refs = event.get("hazards")
+        problems.require(nonempty_strings(refs), eloc, "hazards must be nonempty")
+        if isinstance(refs, list):
+            problems.require(set(refs) <= known_hazards, eloc, "event references an unknown hazard")
+            covered.update(refs)
+        actions = event.get("actions")
+        required_actions = {"feed", "drive", "brake", "extraction", "cooling", "gates", "alarm", "latch"}
+        problems.require(isinstance(actions, dict) and set(actions) == required_actions,
+                         eloc, "actions must contain the complete action vocabulary")
+        problems.require(nonempty_strings(event.get("access_release")), eloc,
+                         "access_release must be nonempty")
+        problems.require(event.get("status") in {"modeled", "apparatus_specific_open", "verified"},
+                         eloc, "invalid status")
+        if event.get("status") == "verified":
+            problems.require(not event.get("open_questions"), eloc,
+                             "verified event may not retain open questions")
+    problems.require({"HZ-001", "HZ-002", "HZ-004", "HZ-005", "HZ-006", "HZ-007",
+                      "HZ-008", "HZ-010", "HZ-011", "HZ-012", "HZ-013", "HZ-014",
+                      "HZ-017"} <= covered, loc,
+                     "stop matrix does not cover every hazard requiring an active response")
+
+
+def validate_service_maintenance(path: Path, problems: Problems) -> None:
+    data = read_json(path, problems)
+    if not isinstance(data, dict):
+        return
+    loc = str(path.relative_to(ROOT))
+    components = data.get("components")
+    problems.require(isinstance(components, list) and bool(components), loc,
+                     "components must be nonempty")
+    seen: set[str] = set()
+    classes: set[str] = set()
+    for index, component in enumerate(components if isinstance(components, list) else []):
+        cloc = f"{loc}:components[{index}]"
+        if not isinstance(component, dict):
+            problems.errors.append(f"{cloc}: component must be an object")
+            continue
+        unique_id(component.get("id"), SERVICE_ID, seen, cloc, problems)
+        service_class = component.get("service_class")
+        classes.add(service_class)
+        problems.require(service_class in {"USER", "TRAINED", "PROTECTED_REPLACE_ONLY"},
+                         cloc, "invalid service class")
+        expected_access = "USER_ACCESS" if service_class == "USER" else "SERVICE_LOCKOUT"
+        problems.require(component.get("access_state") == expected_access, cloc,
+                         "access state is inconsistent with service class")
+        for field in ("tasks", "interval_basis", "return_to_service"):
+            problems.require(nonempty_strings(component.get(field)), cloc, f"{field} must be nonempty")
+        problems.require(component.get("status") in {"modeled", "apparatus_specific_open", "verified"},
+                         cloc, "invalid status")
+        if component.get("status") == "verified":
+            problems.require(not component.get("open_questions"), cloc,
+                             "verified component may not retain open questions")
+    problems.require(classes == {"USER", "TRAINED", "PROTECTED_REPLACE_ONLY"}, loc,
+                     "register must exercise all service classes")
 
 
 def manifest_readiness(data: dict[str, Any]) -> list[str]:
@@ -260,6 +386,10 @@ def main(argv: list[str] | None = None) -> int:
     for schema in sorted(SCHEMA_DIR.glob("*.json")):
         read_json(schema, problems)
     validate_hazards(HAZARDS, problems)
+    validate_operating_states(OPERATING_STATES, problems)
+    known_hazards = hazard_ids(HAZARDS, problems)
+    validate_stop_recovery(STOP_RECOVERY, known_hazards, problems)
+    validate_service_maintenance(SERVICE_MAINTENANCE, problems)
     paths = manifest_paths(args.manifests)
     problems.require(bool(paths), "safety/manifests", "no manifests found")
     for path in paths:

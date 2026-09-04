@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://standardgalactic.github.io/Centerfuge/safety/schemas/operating-states.schema.json",
+  "title": "Centerfuge operating-state model",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "model_version", "states", "transitions"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "model_version": {"type": "string", "minLength": 1},
+    "states": {
+      "type": "array",
+      "minItems": 9,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "invariant", "access"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "invariant": {"type": "string", "minLength": 1},
+          "access": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "transitions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "from", "to", "trigger", "guards", "actions", "completion_evidence", "timeout_fallback", "reset_authority", "ledger"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^TX-[0-9]{3}$"},
+          "from": {"type": "string", "minLength": 1},
+          "to": {"type": "string", "minLength": 1},
+          "trigger": {"type": "string", "minLength": 1},
+          "guards": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+          "actions": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+          "completion_evidence": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+          "timeout_fallback": {"type": "string", "minLength": 1},
+          "reset_authority": {"enum": ["automatic", "user", "trained_service", "protected_service"]},
+          "ledger": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    }
+  }
+}
