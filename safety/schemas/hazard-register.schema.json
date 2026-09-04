@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://standardgalactic.github.io/Centerfuge/safety/schemas/hazard-register.schema.json",
+  "title": "Centerfuge hazard register",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "register_version", "evidence_status", "hazards"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "register_version": {"type": "string", "minLength": 1},
+    "evidence_status": {"enum": ["V", "M", "S", "D", "Q"]},
+    "hazards": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/hazard"}
+    }
+  },
+  "$defs": {
+    "trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "status", "reference"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^TR-[0-9]{3}$"},
+        "kind": {"enum": ["requirement", "standard", "calculation", "inspection", "test", "demonstration", "open_question"]},
+        "status": {"enum": ["planned", "open", "passing", "failing", "not_applicable"]},
+        "reference": {"type": "string", "minLength": 1}
+      }
+    },
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "description", "type", "required", "verification"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^CTRL-[0-9]{3}$"},
+        "description": {"type": "string", "minLength": 1},
+        "type": {"enum": ["inherent", "passive", "mechanical", "electrical", "electronic", "software", "procedural"]},
+        "required": {"type": "boolean"},
+        "verification": {"type": "string", "minLength": 1}
+      }
+    },
+    "hazard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "title", "subsystems", "operating_states", "initiating_events",
+        "consequences", "severity", "likelihood_basis", "detection",
+        "controls", "response", "verification", "evidence_status",
+        "residual_risk", "open_questions"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^HZ-[0-9]{3}$"},
+        "title": {"type": "string", "minLength": 1},
+        "subsystems": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "operating_states": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"enum": ["OFF", "QUARANTINE", "READY", "RUN", "CONTROLLED_REFUSAL", "COOLDOWN_CLEARING", "USER_ACCESS", "SERVICE_LOCKOUT", "FAULT_LATCHED"]}
+        },
+        "initiating_events": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "consequences": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "severity": {"enum": ["minor", "serious", "critical", "catastrophic"]},
+        "likelihood_basis": {"type": "string", "minLength": 1},
+        "detection": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "controls": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/control"}},
+        "response": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "verification": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/trace"}},
+        "evidence_status": {"enum": ["V", "M", "S", "D", "Q"]},
+        "residual_risk": {"type": "string", "minLength": 1},
+        "open_questions": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}

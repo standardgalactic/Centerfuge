@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://standardgalactic.github.io/Centerfuge/safety/schemas/apparatus-manifest.schema.json",
+  "title": "Centerfuge apparatus safety manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "manifest_version", "apparatus_id", "configuration_id",
+    "intended_process", "evidence_status", "approved_for_run", "categories",
+    "required_sensors", "required_interlocks", "blockers"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "manifest_version": {"type": "string", "minLength": 1},
+    "apparatus_id": {"type": "string", "minLength": 1},
+    "configuration_id": {"type": "string", "minLength": 1},
+    "intended_process": {"type": "string", "minLength": 1},
+    "evidence_status": {"enum": ["V", "M", "S", "D", "Q"]},
+    "approved_for_run": {"type": "boolean"},
+    "categories": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mechanical", "air_pressure", "thermal", "electrical", "material", "stop_behavior", "access_service", "installation"],
+      "properties": {
+        "mechanical": {"$ref": "#/$defs/category"},
+        "air_pressure": {"$ref": "#/$defs/category"},
+        "thermal": {"$ref": "#/$defs/category"},
+        "electrical": {"$ref": "#/$defs/category"},
+        "material": {"$ref": "#/$defs/category"},
+        "stop_behavior": {"$ref": "#/$defs/category"},
+        "access_service": {"$ref": "#/$defs/category"},
+        "installation": {"$ref": "#/$defs/category"}
+      }
+    },
+    "required_sensors": {"type": "array", "items": {"$ref": "#/$defs/safety_item"}},
+    "required_interlocks": {"type": "array", "items": {"$ref": "#/$defs/safety_item"}},
+    "blockers": {"type": "array", "items": {"type": "string", "minLength": 1}}
+  },
+  "$defs": {
+    "datum": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "status", "value", "unit", "provenance", "verified_at", "evidence"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^DAT-[A-Z]+-[0-9]{3}$"},
+        "name": {"type": "string", "minLength": 1},
+        "status": {"enum": ["unknown", "provisional", "verified", "not_applicable"]},
+        "value": {},
+        "unit": {"type": ["string", "null"]},
+        "tolerance": {"type": ["number", "string", "null"]},
+        "provenance": {"type": ["string", "null"]},
+        "verified_at": {"type": ["string", "null"], "format": "date-time"},
+        "evidence": {"type": ["string", "null"]}
+      }
+    },
+    "category": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["applicable", "data"],
+      "properties": {
+        "applicable": {"type": "boolean"},
+        "data": {"type": "array", "items": {"$ref": "#/$defs/datum"}}
+      }
+    },
+    "safety_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "required", "status", "verification"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(SNS|INT)-[0-9]{3}$"},
+        "name": {"type": "string", "minLength": 1},
+        "required": {"type": "boolean"},
+        "status": {"enum": ["missing", "installed", "verified", "not_applicable"]},
+        "verification": {"type": ["string", "null"]}
+      }
+    }
+  }
+}
