@@ -144,6 +144,10 @@ A **screen baseline** separates the same input with available sieves. It measure
 
 A **magnetic baseline** extracts steel with a magnet. It may outperform the vortex for steel recovery, and that is useful. Centerfuge is compared with the simplest mechanism appropriate to each material, not only with deliberately weak alternatives.
 
+A **cyclone baseline** passes the same mixture through a conventional inertial cyclone separator operated at a documented inlet velocity and geometry. It measures how much of the vortex's apparent classification is reproducible with a simpler, unheated, non-rotor-driven inertial device rather than the Centerfuge's contained rotating assembly.
+
+A **manual-sorting baseline** has a person visually and manually separate a timed, weighed replicate of the same mixture under normal lighting without mechanical aids. It records sorting time, purity, recovery, and fatigue-related error, and serves as the practical reference against which any claimed automation benefit must be justified.
+
 ## 7. Run procedure
 
 Before each run, the chamber and collectors are inspected, cleaned, dried, and assigned a cleanliness status. The rotor, collection bands, filters, seals, and instrumentation are checked. Empty collection vessels are weighed.
@@ -303,7 +307,7 @@ A completed physical run may validly produce an epistemic result of inconclusive
 
 ## 13. Experimental progression
 
-The immediate progression is commissioning with individual materials, followed by the nine-condition airflow-and-speed screen, replication of promising conditions, confirmatory trials with frozen outlet assignments, and comparisons against gravity, screening, magnetic extraction, airflow-only operation, and rotation-only operation.
+The immediate progression is commissioning with individual materials, followed by the nine-condition airflow-and-speed screen, replication of promising conditions, confirmatory trials with frozen outlet assignments, and comparisons against gravity, screening, magnetic extraction, cyclone separation, manual sorting, airflow-only operation, and rotation-only operation.
 
 Only afterward should experiments vary feed rate, residence time, outlet geometry, particle-size distribution, mixture ratio, and humidity. Changing all of them initially would make successful results difficult to explain and failed results difficult to repair.
 

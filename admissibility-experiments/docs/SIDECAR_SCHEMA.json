@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Admissibility Experiment Sidecar",
+  "type": "object",
+  "required": ["scene_id", "generator", "framework", "primitive", "parameters", "render", "checks", "outputs", "status"],
+  "properties": {
+    "scene_id": {"type": "string", "minLength": 1},
+    "generator": {"type": "string", "pattern": "^scenes/.+\\.py$"},
+    "framework": {"type": "string"},
+    "primitive": {"type": "string"},
+    "parameters": {"type": "object"},
+    "render": {
+      "type": "object",
+      "required": ["blender_version", "engine", "resolution", "samples", "seed", "camera"]
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "expected", "observed", "passed"],
+        "properties": {"name": {"type": "string"}, "passed": {"type": "boolean"}}
+      }
+    },
+    "evidence": {"type": "object"},
+    "outputs": {"type": "array", "items": {"type": "string"}},
+    "status": {"enum": ["pass", "fail"]}
+  }
+}

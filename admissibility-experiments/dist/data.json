@@ -1,0 +1,1195 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-04T21:38:47.443562+00:00",
+  "suite_name": "admissibility-experiments",
+  "source_output": "/home/bonobo/Centerfuge/admissibility-experiments/output",
+  "totals": {
+    "scenes": 16,
+    "pass": 16,
+    "fail": 0,
+    "error": 0,
+    "checks": 40,
+    "checks_passed": 40,
+    "missing_images": 0
+  },
+  "frameworks": [
+    "admissibility-across-substrates",
+    "city-of-brutes",
+    "distinction-holonomy",
+    "fluid-flashcards",
+    "fusion-viability",
+    "industrial-ecologies",
+    "narrative-infrastructure",
+    "non-collapse",
+    "repair",
+    "rsvp",
+    "spherepop",
+    "sproll",
+    "tartan"
+  ],
+  "scenes": [
+    {
+      "scene_id": "aniara_whale_cutaway",
+      "framework": "narrative-infrastructure",
+      "primitive": "non-occluding-cutaway",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/aniara_whale_cutaway.py",
+      "checks": [
+        {
+          "name": "all_interior_modules_present",
+          "expected": 7,
+          "observed": 7,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "cutaway_preserves_sightline_targets",
+          "expected": true,
+          "observed": true,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "hull_ribs": 13,
+        "interior_modules": 7,
+        "cutaway_angle_degrees": 105
+      },
+      "evidence": {
+        "occlusion_contract": "hull represented by ribs; no closed exterior surface crosses camera rays"
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 42,
+        "camera": {
+          "location": [
+            12.0,
+            -17.0,
+            9.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/aniara_whale_cutaway-01-a8363dc8.png",
+          "label": "aniara_whale_cutaway_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "aniara_whale_cutaway.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "city_of_brutes_triad",
+      "framework": "city-of-brutes",
+      "primitive": "administrative-animal-performative-triad",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/city_of_brutes_triad.py",
+      "checks": [
+        {
+          "name": "triad_zone_count",
+          "expected": 3,
+          "observed": 3,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "pairwise_interface_count",
+          "expected": 3,
+          "observed": 3,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "zones": 3,
+        "pairwise_interfaces": 3
+      },
+      "evidence": {
+        "claim_under_test": "No zone is spatially or relationally reducible to either other zone."
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 42,
+        "camera": {
+          "location": [
+            11.0,
+            -15.0,
+            11.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/city_of_brutes_triad-01-a9972bc5.png",
+          "label": "city_of_brutes_triad_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "city_of_brutes_triad.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "data_center_substrate",
+      "framework": "industrial-ecologies",
+      "primitive": "compute-substrate",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/data_center_substrate.py",
+      "checks": [
+        {
+          "name": "rack_power_sum",
+          "expected": 96,
+          "observed": 96,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "energy_balance",
+          "expected": 129.60000000000002,
+          "observed": 129.60000000000002,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "racks": 8,
+        "kw_per_rack": 12,
+        "pue": 1.35,
+        "liters_per_kwh": 1.2
+      },
+      "evidence": {
+        "it_kw": 96,
+        "facility_kw": 129.60000000000002,
+        "heat_rejection_kw": 129.60000000000002,
+        "water_liters_per_hour": 155.52,
+        "scope": "declared accounting model"
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 42,
+        "camera": {
+          "location": [
+            11.0,
+            -15.0,
+            11.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/data_center_substrate-01-a404653a.png",
+          "label": "data_center_substrate_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "data_center_substrate.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "distinction_holonomy",
+      "framework": "distinction-holonomy",
+      "primitive": "closed-transport",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/distinction_holonomy.py",
+      "checks": [
+        {
+          "name": "trivial_loop_residual",
+          "expected": 0.0,
+          "observed": 0.0,
+          "passed": true,
+          "tolerance": 1e-06,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "nontrivial_loop_residual",
+          "expected": 0.6108652381980153,
+          "observed": 0.6108652353286743,
+          "passed": true,
+          "tolerance": 1e-06,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "loop_radius": 2.2,
+        "declared_drift_degrees": 35,
+        "tolerance": 1e-06
+      },
+      "evidence": {
+        "residual_units": "radians"
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 42,
+        "camera": {
+          "location": [
+            11.0,
+            -15.0,
+            11.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/distinction_holonomy-01-f816e079.png",
+          "label": "distinction_holonomy_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "distinction_holonomy.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "fluid_flashcards",
+      "framework": "fluid-flashcards",
+      "primitive": "state-owned-by-card",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/fluid_flashcards.py",
+      "checks": [
+        {
+          "name": "single_state_record_per_card",
+          "expected": 12,
+          "observed": 12,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "views_hold_identifiers_not_state_copies",
+          "expected": 0,
+          "observed": 0,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "cards": 12,
+        "views": 3
+      },
+      "evidence": {
+        "view_memberships": {
+          "due": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "topic": [
+            0,
+            2,
+            4,
+            6,
+            8,
+            10
+          ],
+          "difficult": [
+            2,
+            3,
+            6,
+            9
+          ]
+        }
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 42,
+        "camera": {
+          "location": [
+            11.0,
+            -15.0,
+            11.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/fluid_flashcards-01-5fc59685.png",
+          "label": "fluid_flashcards_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "fluid_flashcards.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "fusion_reactor_comparison",
+      "framework": "fusion-viability",
+      "primitive": "comparative-confinement",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/fusion_reactor_comparison.py",
+      "checks": [
+        {
+          "name": "caldera_cell_count",
+          "expected": 24,
+          "observed": 24,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "metrics_labeled_schematic",
+          "expected": true,
+          "observed": true,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "caldera_cells": 24,
+        "tokamak_segments": 24,
+        "schematic": true
+      },
+      "evidence": {
+        "proxy_loss_index": {
+          "tokamak": 0.259878,
+          "caldera": 0.041667
+        },
+        "warning": "Proxy comparison only; not a Lawson-criterion calculation."
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 42,
+        "camera": {
+          "location": [
+            11.0,
+            -15.0,
+            11.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/fusion_reactor_comparison-01-a667ea80.png",
+          "label": "fusion_reactor_comparison_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "fusion_reactor_comparison.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "molecular_manufacturing",
+      "framework": "admissibility-across-substrates",
+      "primitive": "staged-assembly",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/molecular_manufacturing.py",
+      "checks": [
+        {
+          "name": "component_conservation",
+          "expected": 12,
+          "observed": 12,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "visible_refusal",
+          "expected": 3,
+          "observed": 3,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "stages": 4,
+        "components": 12,
+        "schematic": true
+      },
+      "evidence": {
+        "admitted": 9,
+        "refused": 3,
+        "warning": "Topological assembly schematic, not molecular dynamics."
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 42,
+        "camera": {
+          "location": [
+            11.0,
+            -15.0,
+            11.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/molecular_manufacturing-01-8b369099.png",
+          "label": "molecular_manufacturing_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "molecular_manufacturing.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "persistence_cone_tidal_torque",
+      "framework": "rsvp",
+      "primitive": "angular-memory-cone",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/persistence_cone_tidal_torque.py",
+      "checks": [
+        {
+          "name": "cone_widens_monotonically",
+          "expected": true,
+          "observed": true,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "angular_memory_accumulates",
+          "expected": true,
+          "observed": true,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "rings": 9,
+        "torque_increment": 0.12
+      },
+      "evidence": {
+        "ring_radii": [
+          0.45,
+          0.67,
+          0.89,
+          1.11,
+          1.33,
+          1.55,
+          1.77,
+          1.99,
+          2.21
+        ]
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 42,
+        "camera": {
+          "location": [
+            11.0,
+            -15.0,
+            11.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/persistence_cone_tidal_torque-01-5bddd5da.png",
+          "label": "persistence_cone_tidal_torque_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "persistence_cone_tidal_torque.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "pop_refuse_bind_collapse",
+      "framework": "spherepop",
+      "primitive": "pop-refuse-bind-collapse",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/pop_refuse_bind_collapse.py",
+      "checks": [
+        {
+          "name": "pop_extraction_axis",
+          "expected": "z",
+          "observed": "z",
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "refuse_count_matches_predicate",
+          "expected": 5,
+          "observed": 5,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "bind_edge_count",
+          "expected": 1,
+          "observed": 1,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "collapse_irreversible",
+          "expected": true,
+          "observed": true,
+          "passed": true,
+          "tolerance": null,
+          "reversible": false,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "n_candidates": 16,
+        "seed": 7,
+        "predicate_range": [
+          0.2,
+          0.8
+        ]
+      },
+      "evidence": {
+        "moved_existing_objects": 6,
+        "collapsed_source_count": 8
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 7,
+        "camera": {
+          "location": [
+            11.0,
+            -15.0,
+            11.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/pop_refuse_bind_collapse-01-87f4b820.png",
+          "label": "pop_refuse_bind_collapse_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "pop_refuse_bind_collapse.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "record_admit_commit",
+      "framework": "non-collapse",
+      "primitive": "record-admit-commit",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/record_admit_commit.py",
+      "checks": [
+        {
+          "name": "monotonic_commitment",
+          "expected": true,
+          "observed": true,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "no_silent_rewrite",
+          "expected": 0,
+          "observed": 0,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "branching_completeness",
+          "expected": 24,
+          "observed": 24,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "frames": 6,
+        "batch_size": 4,
+        "policy": "value>=0.5",
+        "seed": 13
+      },
+      "evidence": {
+        "snapshot_sizes": [
+          2,
+          4,
+          6,
+          8,
+          10,
+          13
+        ]
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 13,
+        "camera": {
+          "location": [
+            11.0,
+            -15.0,
+            11.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/record_admit_commit-01-729ce483.png",
+          "label": "record_admit_commit_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "record_admit_commit.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "render_ledger",
+      "framework": "non-collapse",
+      "primitive": "reflexive-provenance",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/render_ledger.py",
+      "checks": [
+        {
+          "name": "expected_sidecars_present",
+          "expected": 15,
+          "observed": 15,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "all_referenced_files_exist",
+          "expected": 0,
+          "observed": 0,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "all_sidecars_have_status",
+          "expected": 0,
+          "observed": 0,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "no_orphan_generators",
+          "expected": 0,
+          "observed": 0,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "graph_break_count",
+          "expected": 0,
+          "observed": 0,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "scanned_dir": "output",
+        "expected_scene_count": 15
+      },
+      "evidence": {
+        "missing_outputs": [],
+        "missing_status": [],
+        "orphan_generators": []
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 42,
+        "camera": {
+          "location": [
+            12.0,
+            -18.0,
+            15.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/render_ledger-01-ed00667d.png",
+          "label": "render_ledger_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "render_ledger.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "rsvp_field",
+      "framework": "rsvp",
+      "primitive": "scalar-vector-entropy-field",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/rsvp_field.py",
+      "checks": [
+        {
+          "name": "scalar_entropy_complement",
+          "expected": 0.0,
+          "observed": 0.0,
+          "passed": true,
+          "tolerance": 1e-12,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "distinction_concentrates_at_center",
+          "expected": true,
+          "observed": true,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "grid": [
+          11,
+          7
+        ],
+        "field": "phi=exp(-r^2/8), v=(-y,x), S=1-phi"
+      },
+      "evidence": {
+        "sample_count": 77,
+        "phi_range": [
+          0.014264233908999256,
+          1.0
+        ]
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 42,
+        "camera": {
+          "location": [
+            10.0,
+            -15.0,
+            13.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/rsvp_field-01-df65c2f8.png",
+          "label": "rsvp_field_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "rsvp_field.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "sheaf_gluing",
+      "framework": "tartan",
+      "primitive": "local-to-global-consistency",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/sheaf_gluing.py",
+      "checks": [
+        {
+          "name": "successful_overlaps_compatible",
+          "expected": true,
+          "observed": true,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "obstruction_detected",
+          "expected": true,
+          "observed": true,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "defects_match_incompatible_edges",
+          "expected": 2,
+          "observed": 2,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "patches_per_case": 4,
+        "overlap_tolerance": 0.05,
+        "perturbation": 0.35
+      },
+      "evidence": {
+        "incompatible_edge_indices": [
+          1,
+          2
+        ]
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 42,
+        "camera": {
+          "location": [
+            11.0,
+            -15.0,
+            11.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/sheaf_gluing-01-56929e60.png",
+          "label": "sheaf_gluing_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "sheaf_gluing.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "sproll_manipulatives",
+      "framework": "sproll",
+      "primitive": "graspable-spherepop-primitives",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/sproll_manipulatives.py",
+      "checks": [
+        {
+          "name": "four_distinct_shape_signatures",
+          "expected": 4,
+          "observed": 4,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "color_independent_identity",
+          "expected": true,
+          "observed": true,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "audience": "children",
+        "objects": 4
+      },
+      "evidence": {
+        "shape_signatures": {
+          "pop": "single-round",
+          "refuse": "open-gate",
+          "bind": "bridge",
+          "collapse": "nested"
+        }
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 42,
+        "camera": {
+          "location": [
+            11.0,
+            -15.0,
+            11.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/sproll_manipulatives-01-769aac83.png",
+          "label": "sproll_manipulatives_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "sproll_manipulatives.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "tartan_weave",
+      "framework": "tartan",
+      "primitive": "weave-as-computation",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/tartan_weave.py",
+      "checks": [
+        {
+          "name": "junction_count",
+          "expected": 49,
+          "observed": 49,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "every_crossing_computed",
+          "expected": true,
+          "observed": true,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "warp": 7,
+        "weft": 7,
+        "junction_rule": "(i+j)%2"
+      },
+      "evidence": {
+        "junctions": 49
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 42,
+        "camera": {
+          "location": [
+            9.0,
+            -14.0,
+            12.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/tartan_weave-01-b8d4d09e.png",
+          "label": "tartan_weave_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "tartan_weave.json",
+      "load_error": null
+    },
+    {
+      "scene_id": "vertical_horizontal_repair",
+      "framework": "repair",
+      "primitive": "vertical-horizontal-difference",
+      "status": "pass",
+      "computed_status": "pass",
+      "status_consistent": true,
+      "generator": "scenes/vertical_horizontal_repair.py",
+      "checks": [
+        {
+          "name": "vertical_matches_local_constraint",
+          "expected": 1.0,
+          "observed": 1.0,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "horizontal_consensus_between_inputs",
+          "expected": true,
+          "observed": true,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        },
+        {
+          "name": "mechanisms_distinct",
+          "expected": true,
+          "observed": true,
+          "passed": true,
+          "tolerance": null,
+          "reversible": null,
+          "case": null
+        }
+      ],
+      "parameters": {
+        "local_tolerance": 0.1,
+        "reconciliation_tolerance": 0.15
+      },
+      "evidence": {
+        "damaged_height": 0.62,
+        "local_target": 1.0,
+        "consensus": 0.050000000000000044
+      },
+      "render": {
+        "blender_version": "4.0.2",
+        "engine": "BLENDER_EEVEE",
+        "resolution": [
+          960,
+          540
+        ],
+        "samples": 32,
+        "seed": 42,
+        "camera": {
+          "location": [
+            11.0,
+            -15.0,
+            11.0
+          ],
+          "lens": 52.0
+        }
+      },
+      "images": [
+        {
+          "src": "renders/vertical_horizontal_repair-01-03698f84.png",
+          "label": "vertical_horizontal_repair_main.png"
+        }
+      ],
+      "missing_images": [],
+      "source_sidecar": "vertical_horizontal_repair.json",
+      "load_error": null
+    }
+  ]
+}

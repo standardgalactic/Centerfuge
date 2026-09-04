@@ -401,7 +401,26 @@ The experiment fails if it cannot beat a simple baseline such as screening, grav
 
 This test would not demonstrate fabrication, repair, food production, clothing manufacture, or hyperbolation as a whole. It would establish the first trustworthy transition upon which those subsystems depend.
 
-## 12. Common notation
+## 12. Glossary
+
+| Term | Meaning |
+| --- | --- |
+| **Admission** | The process-relative decision that a material's known properties are compatible with a named process and within its hazard limit; distinct from mere identification. |
+| **AUDIT** | An intake decision requesting additional observation or human identification before admission, divert, or refusal. |
+| **Batch** | A tracked quantity of material sharing one custody record from presentation through routing or release. |
+| **Custody state** | One stage of the Presented → Quarantined → Characterized → Admitted → Processed → Verified → Released sequence that a batch occupies. |
+| **DIVERT** | An intake decision that sends an intact, unprocessed object to a protected collection route instead of the rotating core. |
+| **Epistemic ledger (\(L_{\mathrm{epi}}\))** | The record of what observations warrant: claimed identity, confidence, tests performed, unresolved ambiguity, authorized and prohibited uses, and evidence status. |
+| **Evidence status** | The V/M/S/D/Q classification (Vision, Modeled, Simulated, Demonstrated, Qualified) describing how strongly a claim is supported; see Section 10. |
+| **Fraction** | A collected output of the separation stage, carrying a provisional class, estimated purity, uncertainty, and set of authorized downstream uses. |
+| **Hyperbolation** | A terminal custody protocol that wraps a parcel in protective/functional envelope layers with a label, provenance, and permitted future transitions, without certifying its purity. |
+| **Physical ledger (\(L_{\mathrm{phys}}\))** | The record of what happened: measured mass, energy, angular speed, temperature, pressure, residence time, valve states, and measured destinations. |
+| **Refusal** | An active, recorded machine state that stops feed, isolates the affected chamber, and preserves material identifiability rather than a generic error condition. |
+| **Release** | Authorization for a fabricated or repaired output to be used for a specific purpose, requiring material admissibility, geometry verification, and functional testing together. |
+| **Residue** | Material that does not proceed to a certified fraction, including chamber holdup, exhaust-filter capture, and unrecovered mass; retained in the mass balance rather than discarded from it. |
+| **Safe state** | The lowest-risk state reachable from an observed condition, which is not necessarily total power loss and may require continued braking, extraction, or cooling. |
+
+## 13. Common notation
 
 | Symbol | Meaning |
 | --- | --- |

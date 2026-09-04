@@ -1,7 +1,9 @@
 # Centerfuge
 
 [Boundary-Aware Operating Architecture](docs/operating-model.md)  
-[Safety and Maintenance Specification](docs/safety-maintenance-spec.md)
+[Safety and Maintenance Specification](docs/safety-maintenance-spec.md)  
+[Headless Blender Scenes](headless_blender/README.md)  
+[Admissibility Experiments — First Suite Specification](admissibility-experiments.md) — [suite README](admissibility-experiments/README.md) · [prototype visualizer](https://standardgalactic.github.io/Centerfuge/admissibility-experiments/dist/)
 
 [Architecture of Communication](https://standardgalactic.github.io/Centerfuge/sci-fi/kommunikation.pdf) — *Screenplay*
 * [Audio Overview](https://standardgalactic.github.io/Centerfuge/sci-fi/)
@@ -10,7 +12,7 @@ Basically a centerfuge is a big spinning cylindrical vortex in the center of you
 
 Hyperbolation is the process of labeling and wrapping materials in layered yarn-balls (also known as gnotobiotic hyperballs or cognets). 
 
-[Fast Solids Lab](https://standardgalactic.github.io/Centerfuge/experiments/fast_solids_lab/)
+[Fast Solids Lab](https://standardgalactic.github.io/Centerfuge/experiments/fast_solids_lab/) — [protocol](experiments/fast_solids_lab/protocols/experiment-001.md)
 
 ## Tetraorthodrome
 

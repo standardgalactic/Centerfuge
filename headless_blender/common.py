@@ -1,10 +1,13 @@
 """Shared, asset-free helpers for the Centerfuge headless Blender scenes."""
 
 import argparse
+import json
 import math
 import os
 import random
+import subprocess
 import sys
+import time
 from pathlib import Path
 
 import bpy
@@ -21,6 +24,17 @@ PALETTE = {
     "paper": (0.72, 0.76, 0.72, 1.0),
 }
 
+# Continuation: PALETTE above is frozen, by reference, as STYLE_PRESETS["original"]
+# so that a future stylistic change to PALETTE (or an added alternate preset) does
+# not silently change what "original" means for images already rendered and
+# committed under that name. What is preserved across such a change is the exact
+# color mapping named "original"; what is explicitly NOT preserved is any
+# guarantee that the *default* PALETTE global still equals it once a second
+# preset is added -- at that point, scenes must select "original" explicitly via
+# --style to remain comparable to earlier renders, and this dict is the
+# authoritative source of that comparison, not the current PALETTE global.
+STYLE_PRESETS = {"original": dict(PALETTE)}
+
 
 def arguments(default_name):
     argv = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
@@ -35,6 +49,7 @@ def arguments(default_name):
         choices=("AUTO", "BLENDER_EEVEE", "BLENDER_EEVEE_NEXT", "CYCLES"),
         default="AUTO",
     )
+    parser.add_argument("--style", choices=tuple(STYLE_PRESETS), default="original")
     parser.add_argument("--no-render", action="store_true")
     return parser.parse_args(argv)
 
@@ -42,6 +57,15 @@ def arguments(default_name):
 def begin(args):
     random.seed(args.seed)
     bpy.ops.wm.read_factory_settings(use_empty=True)
+    # Apply the requested style preset in place, before any scene-building code
+    # runs. Every scene script calls begin(args) first and only then reads
+    # PALETTE["..."] while constructing materials, so mutating this module's
+    # PALETTE dict here (rather than rebinding the name to a new dict) is what
+    # makes every later `PALETTE["cyan"]` lookup in the calling script resolve
+    # to the selected preset. STYLE_PRESETS["original"] itself is never
+    # mutated, so it remains the fixed reference for future comparison.
+    PALETTE.clear()
+    PALETTE.update(STYLE_PRESETS[args.style])
     scene = bpy.context.scene
     width, height = (int(v) for v in args.resolution.lower().split("x", 1))
     engines = {item.identifier for item in scene.render.bl_rna.properties["engine"].enum_items}
@@ -201,16 +225,268 @@ def floor(size=28, z=-0.03):
     return apply(bpy.context.object, material("Floor", (0.018, 0.026, 0.038, 1), metallic=0.1, roughness=0.32))
 
 
-def finish(args):
+def open_cylindrical_housing(name, outer_radius, inner_radius, height, mat, collection, segments=72,
+                              start_deg=-45, sweep_deg=270):
+    """Build a thick shell with a real angular gap, not a full solid with a hole implied by camera angle.
+
+    The returned mesh only has faces for `sweep_deg` degrees of the full
+    circle (default 270 of 360), so the missing 90 degrees is a structural
+    absence -- there is no geometry there for any ray to hit -- rather than a
+    closed cylinder that merely happens to face away from the camera. This is
+    the housing half of the non-occlusion invariant: pair it with
+    tag_role(housing, EXTERIOR_SHELL_ROLE) and pass every object that should
+    be visible through the gap to verify_visibility via finish()'s
+    interior_objects argument, so the claim is checked, not assumed.
+    """
+    start = math.radians(start_deg)
+    sweep = math.radians(sweep_deg)
+    vertices = []
+    faces = []
+    for index in range(segments + 1):
+        angle = start + sweep * index / segments
+        c, s = math.cos(angle), math.sin(angle)
+        vertices.extend(((outer_radius * c, outer_radius * s, 0),
+                         (outer_radius * c, outer_radius * s, height),
+                         (inner_radius * c, inner_radius * s, 0),
+                         (inner_radius * c, inner_radius * s, height)))
+    for index in range(segments):
+        a, b = index * 4, (index + 1) * 4
+        faces.extend(((a, b, b + 1, a + 1),
+                      (a + 3, b + 3, b + 2, a + 2),
+                      (a + 1, b + 1, b + 3, a + 3),
+                      (a + 2, b + 2, b, a)))
+    last = segments * 4
+    faces.extend(((0, 1, 3, 2), (last + 2, last + 3, last + 1, last)))
+    mesh = bpy.data.meshes.new(name)
+    mesh.from_pydata(vertices, [], faces)
+    mesh.update()
+    obj = bpy.data.objects.new(name, mesh)
+    collection.objects.link(obj)
+    apply(obj, mat)
+    bevel = obj.modifiers.new("Soft housing edges", "BEVEL")
+    bevel.width = 0.045
+    bevel.segments = 2
+    return obj
+
+
+# --- Non-occlusion invariant --------------------------------------------------
+#
+# A scene may claim to be a "cutaway", "cross-section", or "interior view" only
+# if its interior geometry is actually reachable by light/camera rays through a
+# real subtractive or open opening in the enclosing shell -- not because an
+# opaque object merely happens not to sit in the way for one camera angle. This
+# tags objects by role and then empirically verifies visibility with ray casts
+# from the camera, rather than trusting the scene's construction to have been
+# done correctly.
+
+INTERIOR_ROLE = "interior"
+EXTERIOR_SHELL_ROLE = "exterior_shell"
+
+
+def tag_role(obj, role):
+    """Mark obj as playing `role` ("interior" or "exterior_shell") for verify_visibility."""
+    obj["cutaway_role"] = role
+    return obj
+
+
+def verify_visibility(camera, interior_objects, min_fraction=0.6, samples_per_object=24):
+    """Ray-cast from the camera to sampled points on each interior object.
+
+    Returns a report dict. Raises RuntimeError if too few interior objects are
+    actually reachable by an unobstructed ray from the camera -- this is what
+    distinguishes a real cutaway (structurally open) from an opaque occluder
+    that merely happens to be out of frame (visually obscured only).
+    """
+    depsgraph = bpy.context.evaluated_depsgraph_get()
+    origin = camera.matrix_world.translation.copy()
+    per_object = {}
+    for obj in interior_objects:
+        mesh_eval = obj.evaluated_get(depsgraph)
+        if obj.type == "CURVE":
+            # Curve objects (common.curve()) have no .vertices; their actual
+            # geometry lives in spline.points, authored in this codebase as
+            # already-world-space coordinates with obj.matrix_world left at
+            # identity. Falling back to a single object-origin sample here
+            # would silently check visibility of an arbitrary (0,0,0) point
+            # instead of the duct/spoke/trajectory the curve actually draws --
+            # a false pass or fail that this invariant exists to prevent.
+            verts = [obj.matrix_world @ Vector(point.co[:3])
+                     for spline in mesh_eval.data.splines for point in spline.points]
+        else:
+            try:
+                verts = [obj.matrix_world @ Vector(v.co) for v in mesh_eval.data.vertices]
+            except AttributeError:
+                verts = [obj.matrix_world @ Vector((0, 0, 0))]
+        if not verts:
+            continue
+        step = max(1, len(verts) // samples_per_object)
+        sample_points = verts[::step][:samples_per_object] or verts[:1]
+        hits, total = 0, 0
+        for point in sample_points:
+            direction = (point - origin)
+            distance = direction.length
+            if distance < 1e-6:
+                continue
+            direction.normalize()
+            success, location, _normal, _index, hit_obj, _matrix = bpy.context.scene.ray_cast(
+                depsgraph, origin + direction * 1e-4, direction, distance=distance * 0.999
+            )
+            total += 1
+            # A clear ray (no hit before reaching the target) or a ray that
+            # terminates on the target object itself counts as visible.
+            if not success or hit_obj == obj:
+                hits += 1
+        fraction = hits / total if total else 0.0
+        per_object[obj.name] = {"hits": hits, "samples": total, "fraction": fraction}
+
+    overall = [r["fraction"] for r in per_object.values()]
+    overall_fraction = sum(overall) / len(overall) if overall else 0.0
+    report = {
+        "min_fraction_required": min_fraction,
+        "overall_fraction": overall_fraction,
+        "objects": per_object,
+    }
+    failing = {name: r for name, r in per_object.items() if r["fraction"] < min_fraction}
+    if failing or not per_object:
+        raise RuntimeError(
+            "Non-occlusion invariant failed: interior geometry is not reachable by "
+            f"camera rays (report={json.dumps(report)}). A scene claiming a cutaway "
+            "must expose interior objects through an actual opening, not merely "
+            "position an opaque shell out of the camera's immediate line of sight."
+        )
+    return report
+
+
+# --- Fail-loud invariant -------------------------------------------------------
+#
+# Success is defined at the level of a verified, non-degenerate rendered image
+# and a written provenance record -- not merely a zero process exit code. A
+# render that silently produces a blank/near-uniform image (wrong camera, dead
+# lighting, fully transparent material) must still fail the build.
+
+def verify_image_not_degenerate(image_path, min_stddev=1.5, sample_stride=7):
+    """Load the rendered PNG back through Blender's image API and check contrast.
+
+    Raises RuntimeError if the image is missing, unreadable, or has pixel
+    variance below `min_stddev` (a near-blank/uniform image), which would
+    otherwise let a broken scene report success merely because Blender's
+    render operator did not raise an exception.
+    """
+    image_path = Path(image_path)
+    if not image_path.exists() or image_path.stat().st_size == 0:
+        raise RuntimeError(f"Fail-loud invariant failed: {image_path} was not written.")
+    image = bpy.data.images.load(str(image_path), check_existing=False)
+    try:
+        pixels = list(image.pixels[:: sample_stride * 4])
+        if not pixels:
+            raise RuntimeError(f"Fail-loud invariant failed: {image_path} has no readable pixels.")
+        mean = sum(pixels) / len(pixels)
+        variance = sum((p - mean) ** 2 for p in pixels) / len(pixels)
+        stddev = variance ** 0.5 * 255.0
+        if stddev < min_stddev:
+            raise RuntimeError(
+                f"Fail-loud invariant failed: {image_path} is near-uniform "
+                f"(stddev={stddev:.3f} < {min_stddev}); rendering likely failed "
+                "silently (blank frame, dead lighting, or fully transparent scene)."
+            )
+        return {"stddev": stddev, "sampled_pixels": len(pixels)}
+    finally:
+        bpy.data.images.remove(image)
+
+
+# --- Provenance completeness ---------------------------------------------------
+#
+# Every generated artifact must be traceable to the exact code state, the
+# parameters used to produce it, and whether it passed verification.
+
+def _git_commit():
+    """Return the checked-out commit SHA, or None if it cannot be determined.
+
+    This is the "exact code state" half of the provenance record written by
+    write_manifest_entry: a manifest entry with git_commit=None is not a
+    failure (a shallow checkout or missing git binary is common in CI
+    artifacts), but it is a documented gap in provenance, not silently
+    equivalent to a resolved commit.
+    """
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=str(Path(__file__).resolve().parent), text=True
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+
+def write_manifest_entry(output_dir, name, args, blend_path, image_path, verification):
+    """Record this scene's provenance in <output_dir>/manifest.json.
+
+    This performs Record only, not Admit: it writes what generation
+    parameters and verification results occurred for `name`, keyed by scene
+    name, without itself deciding whether the scene counts as passing. That
+    admission decision belongs to check_manifest.py, which reads this file
+    and treats a scene as admitted only if verification["visibility"] (when
+    applicable) and verification["image"] are both present and did not raise
+    -- i.e. finish() completed without RuntimeError. A scene missing from
+    this file, or present with an empty verification dict for a check that
+    should have run, is not admitted and must fail check_manifest.py.
+    """
+    manifest_path = Path(output_dir) / "manifest.json"
+    manifest = {"schema_version": 1, "scenes": {}}
+    if manifest_path.exists():
+        try:
+            manifest = json.loads(manifest_path.read_text())
+        except (json.JSONDecodeError, OSError):
+            pass
+    manifest.setdefault("scenes", {})[name] = {
+        "generator": f"headless_blender/{name}.py",
+        "git_commit": _git_commit(),
+        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "blender_version": ".".join(str(v) for v in bpy.app.version),
+        "parameters": {
+            "seed": args.seed,
+            "resolution": args.resolution,
+            "samples": args.samples,
+            "engine": bpy.context.scene.render.engine,
+            "style": args.style,
+            "rendered": not args.no_render,
+        },
+        "outputs": {
+            "blend": str(blend_path),
+            "image": str(image_path) if not args.no_render else None,
+        },
+        "verification": verification,
+    }
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+    return manifest_path
+
+
+def finish(args, interior_objects=None):
+    """Save the .blend, render (unless --no-render), verify, and record provenance.
+
+    If `interior_objects` is given, the non-occlusion invariant is checked
+    against the scene's active camera before anything is considered to have
+    succeeded. Any failed check raises, which -- combined with
+    `--python-exit-code 1` in render_all.sh -- makes the whole pipeline fail
+    loudly instead of reporting success on a broken scene.
+    """
     scene = bpy.context.scene
     output = Path(bpy.path.abspath(args.output)).resolve()
     output.mkdir(parents=True, exist_ok=True)
     blend_path = output / f"{args.name}.blend"
     image_path = output / f"{args.name}.png"
     scene.render.filepath = str(image_path)
+
+    verification = {}
+    if interior_objects:
+        verification["visibility"] = verify_visibility(scene.camera, interior_objects)
+
     bpy.ops.wm.save_as_mainfile(filepath=str(blend_path))
     if not args.no_render:
         bpy.ops.render.render(write_still=True)
+        verification["image"] = verify_image_not_degenerate(image_path)
+
+    write_manifest_entry(output, args.name, args, blend_path, image_path, verification)
+
     print(f"CENTERFUGE_BLEND={blend_path}")
     if not args.no_render:
         print(f"CENTERFUGE_RENDER={image_path}")
+    print(f"CENTERFUGE_VERIFIED={json.dumps(verification)}")

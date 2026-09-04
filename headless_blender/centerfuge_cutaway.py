@@ -19,57 +19,36 @@ matter = [material("Organic", PALETTE["green"], emission=0.5),
 
 body = collection("Housing and rotors")
 
+housing = open_cylindrical_housing("Open ceramic housing", 3.35, 2.85, 6.0, shell, body)
+tag_role(housing, EXTERIOR_SHELL_ROLE)
 
-def open_cylindrical_housing(name, outer_radius, inner_radius, height, mat, segments=72):
-    """Create a thick 270-degree shell with its open wedge facing the camera."""
-    start = math.radians(-45)
-    sweep = math.radians(270)
-    vertices = []
-    faces = []
-    for index in range(segments + 1):
-        angle = start + sweep * index / segments
-        c, s = math.cos(angle), math.sin(angle)
-        vertices.extend(((outer_radius * c, outer_radius * s, 0),
-                         (outer_radius * c, outer_radius * s, height),
-                         (inner_radius * c, inner_radius * s, 0),
-                         (inner_radius * c, inner_radius * s, height)))
-    for index in range(segments):
-        a, b = index * 4, (index + 1) * 4
-        faces.extend(((a, b, b + 1, a + 1),
-                      (a + 3, b + 3, b + 2, a + 2),
-                      (a + 1, b + 1, b + 3, a + 3),
-                      (a + 2, b + 2, b, a)))
-    last = segments * 4
-    faces.extend(((0, 1, 3, 2), (last + 2, last + 3, last + 1, last)))
-    mesh = bpy.data.meshes.new(name)
-    mesh.from_pydata(vertices, [], faces)
-    mesh.update()
-    obj = bpy.data.objects.new(name, mesh)
-    body.objects.link(obj)
-    apply(obj, mat)
-    bevel = obj.modifiers.new("Soft housing edges", "BEVEL")
-    bevel.width = 0.045
-    bevel.segments = 2
-    return obj
-
-
-open_cylindrical_housing("Open ceramic housing", 3.35, 2.85, 6.0, shell)
+interior_objects = []
 for z, radius in ((0.35, 2.75), (1.7, 2.35), (3.05, 1.95), (4.4, 1.55), (5.65, 1.15)):
-    torus(f"Rotor {z:.2f}", radius, 0.09, (0, 0, z), edge, collection=body)
+    interior_objects.append(tag_role(torus(f"Rotor {z:.2f}", radius, 0.09, (0, 0, z), edge, collection=body), INTERIOR_ROLE))
     for arm in range(4):
         a = arm * math.pi / 2 + z * 0.3
-        curve("Rotor spoke", ((0, 0, z), (radius * math.cos(a), radius * math.sin(a), z)), edge, 0.035, collection=body)
+        spoke = curve("Rotor spoke", ((0, 0, z), (radius * math.cos(a), radius * math.sin(a), z)), edge, 0.035, collection=body)
+        interior_objects.append(tag_role(spoke, INTERIOR_ROLE))
 
-cylinder("Hyperbolation spindle", 0.34, 5.2, (0, 0, 3.0), hot, collection=body)
+interior_objects.append(tag_role(cylinder("Hyperbolation spindle", 0.34, 5.2, (0, 0, 3.0), hot, collection=body), INTERIOR_ROLE))
 for i in range(45):
     z = 0.55 + i * 0.11
     radius = 2.55 - 0.27 * z
     angle = i * 0.9
-    sphere(f"Material packet {i:02d}", 0.09 + (i % 3) * 0.025,
-           (radius * math.cos(angle), radius * math.sin(angle), z), matter[i % 3], collection=body)
+    packet = sphere(f"Material packet {i:02d}", 0.09 + (i % 3) * 0.025,
+                     (radius * math.cos(angle), radius * math.sin(angle), z), matter[i % 3], collection=body)
+    interior_objects.append(tag_role(packet, INTERIOR_ROLE))
+
 
 floor()
 label("CENTERFUGE / DOMESTIC MATERIAL ORGAN", (0, -4.2, 0.08), 0.27)
 add_camera((13.5, -16.5, 10.5), (0, 0, 2.65), 58)
 add_lighting()
-finish(args)
+# Non-occlusion invariant (see common.verify_visibility): this scene's name and
+# label claim a "cutaway" that exposes the rotor stack and hyperbolation
+# spindle. That claim is admissible only if those interior_objects are proven
+# reachable by an unobstructed camera ray through the housing's open wedge --
+# not merely because the housing was authored with an opening. finish() raises
+# if fewer than 60% of sampled interior points are actually visible, which
+# would mean the "cutaway" is really an opaque occluder placed out of frame.
+finish(args, interior_objects=interior_objects)
