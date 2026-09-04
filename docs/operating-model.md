@@ -1,5 +1,7 @@
 # Centerfuge: Boundary-Aware Operating Architecture
 
+**Safety contract:** [Safety and Maintenance Specification](safety-maintenance-spec.md)
+
 ## 1. Architectural claim
 
 The Centerfuge is not one universal machine that accepts undifferentiated household matter and converts it directly into useful goods. It is a federation of physically and epistemically isolated subsystems organized around a shared intake, characterization, separation, and routing core.

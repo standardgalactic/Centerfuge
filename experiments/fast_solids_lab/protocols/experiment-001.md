@@ -5,7 +5,9 @@
 **Protocol status:** Proposed  
 **Evidence status:** M — Modeled  
 **Related issues:** [#8](https://github.com/standardgalactic/Centerfuge/issues/8), [#9](https://github.com/standardgalactic/Centerfuge/issues/9)  
-**Parent architecture:** [Boundary-Aware Operating Architecture](../../../docs/operating-model.md)
+**Parent architecture:** [Boundary-Aware Operating Architecture](../../../docs/operating-model.md)  
+**Safety contract:** [Safety and Maintenance Specification](../../../docs/safety-maintenance-spec.md)  
+**Apparatus manifest:** [Experiment 001 safety manifest](../../../safety/manifests/experiment-001.json)
 
 ## 1. Experimental question
 
