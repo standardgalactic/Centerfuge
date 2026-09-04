@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0.0",
+  "model_version": "0.1.0",
+  "states": [
+    {"id": "OFF", "invariant": "No commanded motion; stored energy may remain.", "access": "No access permission is implied."},
+    {"id": "QUARANTINE", "invariant": "Input is enclosed and destructive processing is inhibited.", "access": "Presentation interface only under its access contract."},
+    {"id": "READY", "invariant": "One named process and configuration has passed every admission guard.", "access": "Hazardous and routing boundaries remain closed."},
+    {"id": "RUN", "invariant": "The admitted process remains inside its verified apparatus envelope.", "access": "No access to hazardous motion, pressure, atmosphere, or routing."},
+    {"id": "CONTROLLED_REFUSAL", "invariant": "New feed is inhibited and an event-specific safe-stop sequence is active.", "access": "All affected access remains locked."},
+    {"id": "COOLDOWN_CLEARING", "invariant": "Residual motion, pressure, temperature, atmosphere, or material prevents access.", "access": "Only non-exposing observations are allowed."},
+    {"id": "USER_ACCESS", "invariant": "Every user-access residual-hazard criterion is directly verified.", "access": "Only designated low-energy compartments are unlocked."},
+    {"id": "SERVICE_LOCKOUT", "invariant": "Hazardous energy is isolated and independently verified.", "access": "Only the authorized service scope is exposed."},
+    {"id": "FAULT_LATCHED", "invariant": "Restart is prohibited pending the recorded recovery path.", "access": "Access follows the event-specific stop and service boundary."}
+  ],
+  "transitions": [
+    {
+      "id": "TX-001", "from": "OFF", "to": "QUARANTINE", "trigger": "Local start request",
+      "guards": ["Controller self-test passes", "No latched fault", "Quarantine enclosure is available"],
+      "actions": ["Initialize physical and epistemic ledgers", "Keep destructive actuators inhibited"],
+      "completion_evidence": ["Configuration identity recorded", "Protective channels report available"],
+      "timeout_fallback": "FAULT_LATCHED", "reset_authority": "user",
+      "ledger": ["startup observations", "configuration identity", "self-test results"]
+    },
+    {
+      "id": "TX-002", "from": "QUARANTINE", "to": "READY", "trigger": "Named process requested",
+      "guards": ["Input knowledge contract passes", "Process compatibility passes", "Applicable manifest is complete", "Required sensors and interlocks are verified", "No open run blocker"],
+      "actions": ["Bind batch, process, apparatus, and manifest versions", "Arm only the named route"],
+      "completion_evidence": ["Admission decision recorded", "All guard results current"],
+      "timeout_fallback": "QUARANTINE", "reset_authority": "user",
+      "ledger": ["admission evidence", "unresolved uncertainty", "authorized process"]
+    },
+    {
+      "id": "TX-003", "from": "READY", "to": "RUN", "trigger": "Local run command",
+      "guards": ["Every closure and collector is proved seated", "Safety data remain fresh", "Start sequence is valid"],
+      "actions": ["Start extraction or cooling prerequisites", "Start drive under bounded acceleration", "Enable feed only after stable state"],
+      "completion_evidence": ["Speed, airflow, pressure, vibration, and temperature lie within startup envelope"],
+      "timeout_fallback": "CONTROLLED_REFUSAL", "reset_authority": "user",
+      "ledger": ["commanded and observed startup sequence", "initial process measurements"]
+    },
+    {
+      "id": "TX-004", "from": "RUN", "to": "CONTROLLED_REFUSAL", "trigger": "Protective limit, containment fault, sensor invalidity, or emergency stop",
+      "guards": ["None; refusal has priority over production"],
+      "actions": ["Inhibit feed", "Select the registered event response", "Preserve raw observations"],
+      "completion_evidence": ["Feed isolation observed", "Stop-matrix actions acknowledged"],
+      "timeout_fallback": "FAULT_LATCHED", "reset_authority": "trained_service",
+      "ledger": ["trip source", "raw pre-trip history", "commands and feedback"]
+    },
+    {
+      "id": "TX-005", "from": "RUN", "to": "COOLDOWN_CLEARING", "trigger": "Normal stop or batch completion",
+      "guards": ["No protective event is active"],
+      "actions": ["Inhibit feed", "Execute normal stop", "Clear admitted material through designated routes"],
+      "completion_evidence": ["Drive no longer commanded", "Batch destinations and residue recorded"],
+      "timeout_fallback": "FAULT_LATCHED", "reset_authority": "user",
+      "ledger": ["normal stop measurements", "batch closure status"]
+    },
+    {
+      "id": "TX-006", "from": "CONTROLLED_REFUSAL", "to": "COOLDOWN_CLEARING", "trigger": "Active stop actions complete",
+      "guards": ["No escalation requires evacuation or continued fault response"],
+      "actions": ["Maintain required extraction or cooling", "Continue residual-hazard observation"],
+      "completion_evidence": ["Event response has reached its defined clearing phase"],
+      "timeout_fallback": "FAULT_LATCHED", "reset_authority": "trained_service",
+      "ledger": ["stop timing", "residual-hazard trajectory"]
+    },
+    {
+      "id": "TX-007", "from": "COOLDOWN_CLEARING", "to": "USER_ACCESS", "trigger": "User-access request",
+      "guards": ["Zero hazardous motion independently verified", "Pressure and atmosphere safe", "Accessible temperatures safe", "No event requires trained service"],
+      "actions": ["Unlock only the named user-service compartment"],
+      "completion_evidence": ["All access criteria current at unlock", "Unlocked compartment identity recorded"],
+      "timeout_fallback": "FAULT_LATCHED", "reset_authority": "user",
+      "ledger": ["access evidence", "lock state"]
+    },
+    {
+      "id": "TX-008", "from": "FAULT_LATCHED", "to": "SERVICE_LOCKOUT", "trigger": "Authorized service entry",
+      "guards": ["Event-specific service scope identified", "Hazardous-energy isolation procedure selected"],
+      "actions": ["Isolate energy", "Verify residual energy independently", "Record service authority"],
+      "completion_evidence": ["Every isolation point and verification result recorded"],
+      "timeout_fallback": "FAULT_LATCHED", "reset_authority": "trained_service",
+      "ledger": ["isolation points", "verification measurements", "service authority"]
+    },
+    {
+      "id": "TX-009", "from": "SERVICE_LOCKOUT", "to": "QUARANTINE", "trigger": "Return-to-service request",
+      "guards": ["Service record complete", "Configuration identity updated", "Guards and interlocks pass", "Required recommissioning tests pass"],
+      "actions": ["Close protected access", "Run self-test without destructive processing", "Clear only resolved fault latch"],
+      "completion_evidence": ["Return-to-service evidence linked", "No unresolved blocker permits RUN"],
+      "timeout_fallback": "FAULT_LATCHED", "reset_authority": "trained_service",
+      "ledger": ["work performed", "parts and configuration", "test results"]
+    },
+    {
+      "id": "TX-010", "from": "*", "to": "FAULT_LATCHED", "trigger": "Power restoration, controller restart, impossible state, or unhandled transition",
+      "guards": ["None; no automatic return to prior hazardous state"],
+      "actions": ["Keep feed and hazardous actuation inhibited", "Reconstruct observed state without asserting prior safety"],
+      "completion_evidence": ["Restart cause and available evidence recorded"],
+      "timeout_fallback": "FAULT_LATCHED", "reset_authority": "trained_service",
+      "ledger": ["restart event", "last durable state", "current sensor availability"]
+    }
+  ]
+}

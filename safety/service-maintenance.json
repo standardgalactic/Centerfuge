@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0.0",
+  "register_version": "0.1.0",
+  "components": [
+    {
+      "id": "SVC-001", "component": "Sealed product and residue bins", "service_class": "USER", "access_state": "USER_ACCESS",
+      "tasks": ["Inspect seating and damage", "Exchange or empty without opening the process boundary", "Clean external contact surfaces"],
+      "interval_basis": ["Before every run", "Capacity indication", "Every removal"],
+      "event_triggers": ["Collector detachment", "Leak", "Impact", "Incorrect destination"],
+      "return_to_service": ["Correct bin identity verified", "Seal and seating proof passes", "Tare or capacity state recorded"],
+      "consumables": ["Approved liner or sealed container where the process requires it"], "status": "modeled",
+      "open_questions": ["What maximum bin mass and grip geometry permit accessible removal without spill?"]
+    },
+    {
+      "id": "SVC-002", "component": "Exhaust filter cassette", "service_class": "USER", "access_state": "USER_ACCESS",
+      "tasks": ["Exchange as a sealed cassette", "Inspect gasket and keyed seating", "Route spent cassette according to captured material"],
+      "interval_basis": ["Differential-pressure condition", "Captured-mass or batch limit", "Material-specific maximum time"],
+      "event_triggers": ["Capture loss", "Wet loading", "Tear", "Unknown or hazardous capture"],
+      "return_to_service": ["Cassette identity and rating match manifest", "Seating interlock passes", "Baseline pressure-flow check passes"],
+      "consumables": ["Process-rated sealed filter cassette"], "status": "apparatus_specific_open",
+      "open_questions": ["Which captures make the cassette trained-service rather than user-service?"]
+    },
+    {
+      "id": "SVC-003", "component": "Presentation and quarantine chamber", "service_class": "USER", "access_state": "USER_ACCESS",
+      "tasks": ["Remove intact refused material", "Inspect cleanable surfaces", "Clean using the admitted method"],
+      "interval_basis": ["Every batch", "Visible residue", "Material-change cleaning rule"],
+      "event_triggers": ["Unknown spill", "Biological contamination", "Broken or leaking input"],
+      "return_to_service": ["No trapped inventory", "Required cleanliness status recorded", "Closure and observation channels pass"],
+      "consumables": ["Material-compatible wipes or removable liner"], "status": "modeled",
+      "open_questions": ["Which contamination classes require trained decontamination or replacement?"]
+    },
+    {
+      "id": "SVC-004", "component": "Internal ducts, gates, and screens", "service_class": "TRAINED", "access_state": "SERVICE_LOCKOUT",
+      "tasks": ["Inspect blockage, abrasion, deposits, seals, and actuator linkage", "Recover and assign trapped material", "Clean by the validated dry or wet method"],
+      "interval_basis": ["Condition monitoring", "Operating hours or batches", "Material-change rule"],
+      "event_triggers": ["Jam", "Pressure trip", "Routing disagreement", "Mass-closure failure", "Containment loss"],
+      "return_to_service": ["Isolation released only after reassembly", "Gate motion and position proof pass", "Leak and blank-run checks pass"],
+      "consumables": ["Approved seals", "Cleaning capture media"], "status": "apparatus_specific_open",
+      "open_questions": ["Can duct modules be removed intact to avoid in-place hazardous cleaning?"]
+    },
+    {
+      "id": "SVC-005", "component": "Rotor and high-energy drive assembly", "service_class": "PROTECTED_REPLACE_ONLY", "access_state": "SERVICE_LOCKOUT",
+      "tasks": ["Inspect only under protected procedure", "Replace life-limited or fault-affected module", "Preserve retired part and event provenance where analysis is required"],
+      "interval_basis": ["Operating cycles and hours", "Vibration and temperature trend", "Verified retirement life"],
+      "event_triggers": ["Overspeed", "Severe imbalance", "Impact", "Bearing distress", "Fire or flood", "Containment event"],
+      "return_to_service": ["Correct module and fastener configuration verified", "Containment closed", "No-material and increasing-speed recommissioning passes"],
+      "consumables": ["Manufacturer-controlled rotor, bearings, fasteners, and retention parts"], "status": "apparatus_specific_open",
+      "open_questions": ["Which items are replace-only versus inspectable by trained service?"]
+    },
+    {
+      "id": "SVC-006", "component": "Containment enclosure and guards", "service_class": "PROTECTED_REPLACE_ONLY", "access_state": "SERVICE_LOCKOUT",
+      "tasks": ["Inspect deformation, cracks, fasteners, hinges, locks, and impact evidence", "Replace damaged containment-critical elements"],
+      "interval_basis": ["Pre-run external inspection", "Periodic protected inspection", "Defined service life"],
+      "event_triggers": ["Impact", "Overspeed", "Fragment event", "Tip-over", "Fire", "Unauthorized modification"],
+      "return_to_service": ["Configuration matches containment basis", "Locks and interlocks pass", "Required proof or inspection evidence attached"],
+      "consumables": ["Controlled fasteners, seals, and complete containment modules"], "status": "apparatus_specific_open",
+      "open_questions": ["What damage may be inspected versus requiring automatic retirement?"]
+    },
+    {
+      "id": "SVC-007", "component": "Safety sensors and protective controller", "service_class": "PROTECTED_REPLACE_ONLY", "access_state": "SERVICE_LOCKOUT",
+      "tasks": ["Calibrate or replace sensors", "Verify channel freshness and plausibility", "Apply controlled software or configuration update"],
+      "interval_basis": ["Calibration expiry", "Self-test result", "Configuration revision"],
+      "event_triggers": ["Sensor disagreement", "Watchdog trip", "Data corruption", "Controller restart during operation"],
+      "return_to_service": ["Calibration and identity recorded", "Fault-injection regression passes", "Independent fallback verified"],
+      "consumables": ["Configuration-controlled sensor or controller module"], "status": "apparatus_specific_open",
+      "open_questions": ["Which protective channels require independent third-party calibration?"]
+    },
+    {
+      "id": "SVC-008", "component": "Food-only subsystem boundary", "service_class": "TRAINED", "access_state": "SERVICE_LOCKOUT",
+      "tasks": ["Inspect air, drainage, surface, tool, and storage separation", "Perform process-specific cleaning validation", "Quarantine material after any boundary failure"],
+      "interval_basis": ["Before food-process release", "Material and cleaning schedule", "Boundary-monitoring result"],
+      "event_triggers": ["Routing fault", "Shared-air or drainage indication", "General-recovery residue", "Unknown cleanliness"],
+      "return_to_service": ["Contamination scope bounded", "Cleaning validation passes", "Food-domain authorization independently restored"],
+      "consumables": ["Food-process-specific filters, seals, cleaning materials, and contact parts"], "status": "apparatus_specific_open",
+      "open_questions": ["Can any proposed integrated housing preserve adequate physical isolation?"]
+    },
+    {
+      "id": "SVC-009", "component": "Electrical enclosure, cabling, bonding, and isolation", "service_class": "TRAINED", "access_state": "SERVICE_LOCKOUT",
+      "tasks": ["Inspect damage, ingress, protective devices, grounding, bonding, and isolation", "Perform applicable electrical safety tests"],
+      "interval_basis": ["Jurisdictional requirement", "Condition and operating environment", "Configuration change"],
+      "event_triggers": ["Protection trip", "Moisture ingress", "Fire", "Flood", "Damaged cable", "Unexpected actuation"],
+      "return_to_service": ["Inspection and electrical tests pass", "Enclosure integrity restored", "Power-restoration behavior verified"],
+      "consumables": ["Rated protective devices, glands, cables, seals, and complete modules"], "status": "apparatus_specific_open",
+      "open_questions": ["Which product category and jurisdiction determine the test program?"]
+    },
+    {
+      "id": "SVC-010", "component": "Installation, anchoring, room interface, and emergency controls", "service_class": "TRAINED", "access_state": "SERVICE_LOCKOUT",
+      "tasks": ["Inspect anchoring, clearances, drainage, exhaust, building supply, and emergency access", "Measure transmitted vibration and noise"],
+      "interval_basis": ["Initial installation", "Relocation", "Periodic inspection", "Building modification"],
+      "event_triggers": ["Tip or impact", "Abnormal building vibration", "Flood", "External fire", "Power disturbance"],
+      "return_to_service": ["Installation manifest matches the site", "Anchoring and utilities verified", "Exclusion and emergency access restored"],
+      "consumables": ["Installation-specific anchors, ducts, seals, and labels"], "status": "apparatus_specific_open",
+      "open_questions": ["What installation classes define the domestic deployment envelope?"]
+    }
+  ]
+}

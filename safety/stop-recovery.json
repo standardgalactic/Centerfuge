@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0.0",
+  "matrix_version": "0.1.0",
+  "events": [
+    {
+      "id": "EV-001", "hazards": ["HZ-001"], "trigger": "Vibration exceeds the commissioned magnitude, persistence, or trend limit", "stop_class": "protective",
+      "actions": {"feed": "inhibit", "drive": "controlled_deceleration", "brake": "apparatus_specific", "extraction": "maintain", "cooling": "maintain", "gates": "hold", "alarm": "local_and_remote", "latch": true},
+      "access_release": ["Zero hazardous motion independently verified", "Containment remains intact", "Rotor and load inspected"],
+      "reset_authority": "trained_service", "verification": "Bounded imbalance tests across the admitted speed envelope", "status": "apparatus_specific_open",
+      "open_questions": ["Does braking increase bearing or containment load above a controlled coast?"]
+    },
+    {
+      "id": "EV-002", "hazards": ["HZ-002", "HZ-011"], "trigger": "Overspeed channel trips or speed observations disagree", "stop_class": "emergency",
+      "actions": {"feed": "inhibit", "drive": "remove_torque", "brake": "apparatus_specific", "extraction": "maintain", "cooling": "maintain", "gates": "hold", "alarm": "local_and_remote", "latch": true},
+      "access_release": ["Motion independently verified absent", "Overspeed protection and sensors inspected", "Maximum observed or bounded speed reconciled with containment basis"],
+      "reset_authority": "protected_service", "verification": "Primary-control and speed-sensor fault injection", "status": "apparatus_specific_open",
+      "open_questions": ["What independent energy source operates the selected brake during drive or building-power failure?"]
+    },
+    {
+      "id": "EV-003", "hazards": ["HZ-004", "HZ-008"], "trigger": "Feed motion, torque, airflow, or pressure indicates a jam or blockage", "stop_class": "protective",
+      "actions": {"feed": "inhibit", "drive": "controlled_deceleration", "brake": "apparatus_specific", "extraction": "apparatus_specific", "cooling": "maintain", "gates": "apparatus_specific", "alarm": "local", "latch": true},
+      "access_release": ["Motion and pressure verified safe", "Material position and stored energy bounded", "No-reach clearing method selected"],
+      "reset_authority": "trained_service", "verification": "Deliberate bounded jams and filter or outlet blockages", "status": "apparatus_specific_open",
+      "open_questions": ["Which gate movements relieve the blockage without releasing pressure or material?"]
+    },
+    {
+      "id": "EV-004", "hazards": ["HZ-005", "HZ-007"], "trigger": "Dust capture, filter loading, airflow, or containment evidence becomes invalid", "stop_class": "protective",
+      "actions": {"feed": "inhibit", "drive": "controlled_deceleration", "brake": "apparatus_specific", "extraction": "apparatus_specific", "cooling": "maintain", "gates": "isolate", "alarm": "local_and_remote", "latch": true},
+      "access_release": ["Atmosphere and deposited material assessed", "Capture boundary restored", "Contained cleanup procedure authorized"],
+      "reset_authority": "trained_service", "verification": "Capture-loss, filter-loading, and containment fault tests with nonhazardous surrogate", "status": "apparatus_specific_open",
+      "open_questions": ["When does continued extraction spread a release rather than contain it?"]
+    },
+    {
+      "id": "EV-005", "hazards": ["HZ-006"], "trigger": "Fire, smoke, or rapid abnormal temperature rise", "stop_class": "emergency",
+      "actions": {"feed": "inhibit", "drive": "remove_torque", "brake": "apparatus_specific", "extraction": "apparatus_specific", "cooling": "apparatus_specific", "gates": "isolate", "alarm": "local_and_remote", "latch": true},
+      "access_release": ["Emergency re-entry authority declares the area safe", "Fire cause and affected boundaries identified", "Apparatus recommissioned or retired"],
+      "reset_authority": "protected_service", "verification": "Independently reviewed fire-scenario plan; no live test without appropriate facilities", "status": "apparatus_specific_open",
+      "open_questions": ["Which ventilation and suppression response is compatible with each admitted material and fire location?"]
+    },
+    {
+      "id": "EV-006", "hazards": ["HZ-007"], "trigger": "Collector detaches, closure opens, seal fails, or material appears outside a designated boundary", "stop_class": "emergency",
+      "actions": {"feed": "inhibit", "drive": "controlled_deceleration", "brake": "apparatus_specific", "extraction": "apparatus_specific", "cooling": "maintain", "gates": "isolate", "alarm": "local_and_remote", "latch": true},
+      "access_release": ["Motion and atmosphere verified safe", "Released material characterized", "Boundary repaired and leak-tested"],
+      "reset_authority": "trained_service", "verification": "Deliberate closure, seal, collector, and duct faults using safe surrogate material", "status": "apparatus_specific_open",
+      "open_questions": ["Which single boundary failures require room exclusion or evacuation?"]
+    },
+    {
+      "id": "EV-007", "hazards": ["HZ-010", "HZ-017"], "trigger": "Building power fails or supply becomes invalid during RUN or stopping", "stop_class": "emergency",
+      "actions": {"feed": "inhibit", "drive": "remove_torque", "brake": "apparatus_specific", "extraction": "apparatus_specific", "cooling": "apparatus_specific", "gates": "apparatus_specific", "alarm": "local", "latch": true},
+      "access_release": ["Residual motion and energy independently verified safe", "Power-event history retained", "Protective channels pass restart self-test"],
+      "reset_authority": "trained_service", "verification": "Power interruption at each operating and stop phase", "status": "apparatus_specific_open",
+      "open_questions": ["Which protective functions require stored or independent energy?"]
+    },
+    {
+      "id": "EV-008", "hazards": ["HZ-011", "HZ-012"], "trigger": "Required sensor, controller, actuator feedback, watchdog, or communications becomes unavailable, stale, or implausible", "stop_class": "protective",
+      "actions": {"feed": "inhibit", "drive": "controlled_deceleration", "brake": "apparatus_specific", "extraction": "apparatus_specific", "cooling": "apparatus_specific", "gates": "hold", "alarm": "local_and_remote", "latch": true},
+      "access_release": ["Missing safety evidence restored or independently replaced", "Raw observations and clock quality preserved", "Fault injection repeated after repair"],
+      "reset_authority": "trained_service", "verification": "Missing, frozen, delayed, biased, contradictory, and restarted-channel injection", "status": "apparatus_specific_open",
+      "open_questions": ["Which loss scenarios require immediate torque removal rather than controlled deceleration?"]
+    },
+    {
+      "id": "EV-009", "hazards": ["HZ-013", "HZ-014"], "trigger": "Input or collected material violates its admission or destination contract", "stop_class": "protective",
+      "actions": {"feed": "inhibit", "drive": "controlled_deceleration", "brake": "apparatus_specific", "extraction": "apparatus_specific", "cooling": "apparatus_specific", "gates": "isolate", "alarm": "local", "latch": true},
+      "access_release": ["Affected material quarantined", "Credible hazard and contaminated routes bounded", "Authorized intact diversion or cleanup selected"],
+      "reset_authority": "trained_service", "verification": "Adversarial admission and routing tests without destructive treatment of hazardous specimens", "status": "apparatus_specific_open",
+      "open_questions": ["Which uncertainty classes require external emergency response rather than local quarantine?"]
+    },
+    {
+      "id": "EV-010", "hazards": ["HZ-001", "HZ-003", "HZ-007"], "trigger": "Emergency-stop actuator is used", "stop_class": "emergency",
+      "actions": {"feed": "inhibit", "drive": "remove_torque", "brake": "apparatus_specific", "extraction": "apparatus_specific", "cooling": "apparatus_specific", "gates": "apparatus_specific", "alarm": "local_and_remote", "latch": true},
+      "access_release": ["Cause of emergency-stop use recorded", "All residual hazards independently verified safe", "Event-specific inspection completed"],
+      "reset_authority": "trained_service", "verification": "Emergency stop from every operating phase and under loss of normal control", "status": "apparatus_specific_open",
+      "open_questions": ["Which hazards make immediate energy removal less safe than the protective-stop sequence?"]
+    }
+  ]
+}
