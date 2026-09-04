@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://standardgalactic.github.io/Centerfuge/safety/schemas/domestic-boundaries.schema.json",
+  "title": "Centerfuge domestic cleaning, accessibility, and installation boundaries",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "register_version", "cleaning_zones", "accessibility_requirements", "installation_requirements"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "register_version": {"type": "string", "minLength": 1},
+    "cleaning_zones": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/cleaning"}},
+    "accessibility_requirements": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/requirement"}},
+    "installation_requirements": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/requirement"}}
+  },
+  "$defs": {
+    "cleaning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "zone", "service_class", "soil_or_carryover", "method", "verification", "prohibited_methods", "residue_custody", "status", "open_questions"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^CLN-[0-9]{3}$"},
+        "zone": {"type": "string", "minLength": 1},
+        "service_class": {"enum": ["USER", "TRAINED", "PROTECTED_REPLACE_ONLY"]},
+        "soil_or_carryover": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "method": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "verification": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "prohibited_methods": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "residue_custody": {"type": "string", "minLength": 1},
+        "status": {"enum": ["modeled", "apparatus_specific_open", "verified"]},
+        "open_questions": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "subject", "requirement", "verification", "status", "open_questions"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(ACC|INST)-[0-9]{3}$"},
+        "subject": {"type": "string", "minLength": 1},
+        "requirement": {"type": "string", "minLength": 1},
+        "verification": {"type": "string", "minLength": 1},
+        "status": {"enum": ["modeled", "apparatus_specific_open", "verified"]},
+        "open_questions": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}
