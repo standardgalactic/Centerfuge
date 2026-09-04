@@ -2,6 +2,7 @@ import importlib.util
 import json
 import tempfile
 import unittest
+import subprocess
 from pathlib import Path
 
 
@@ -15,6 +16,20 @@ SPEC.loader.exec_module(validator)
 
 
 class SafetyValidatorTests(unittest.TestCase):
+    def test_domestic_boundaries_and_generated_index_are_current(self):
+        problems = validator.Problems()
+        validator.validate_domestic_boundaries(
+            ROOT / "safety" / "domestic-boundaries.json", problems
+        )
+        self.assertEqual([], problems.errors)
+        result = subprocess.run(
+            ["python3", str(ROOT / "scripts" / "render-safety.py"), "--check"],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+
     def test_operating_stop_and_service_records_are_valid(self):
         problems = validator.Problems()
         validator.validate_operating_states(

@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0.0",
+  "register_version": "0.1.0",
+  "cleaning_zones": [
+    {
+      "id": "CLN-001", "zone": "Presentation and quarantine chamber", "service_class": "USER",
+      "soil_or_carryover": ["surface dirt", "moisture", "residue from refused intact objects"],
+      "method": ["Remove material intact", "Use the material-compatible documented surface method", "Inspect seams and removable liner"],
+      "verification": ["No visible or measured residue above the process-specific limit", "Closure and observation channels pass after cleaning"],
+      "prohibited_methods": ["Uncontrolled compressed-air blowdown", "Cleaning that drives matter into the processing core"],
+      "residue_custody": "Assign recovered matter to the presented batch or to an explicitly identified unknown-cleaning batch.",
+      "status": "modeled", "open_questions": ["Which contamination classes require replacement rather than user cleaning?"]
+    },
+    {
+      "id": "CLN-002", "zone": "Rotating chamber and internal separation surfaces", "service_class": "TRAINED",
+      "soil_or_carryover": ["adhered feed", "fines", "abrasion products", "moisture", "electrostatic deposits"],
+      "method": ["Enter SERVICE_LOCKOUT", "Recover loose inventory through a contained method", "Remove or clean modules using the material-specific validated method"],
+      "verification": ["Rotor path free of foreign matter", "Mass recovery recorded", "Blank run meets carryover and vibration criteria"],
+      "prohibited_methods": ["Reach-in clearing with residual motion or stored energy", "Wet cleaning without electrical, corrosion, drainage, and drying authorization"],
+      "residue_custody": "Cleaning recovery remains in the originating run mass balance; unidentified wear debris is separately quarantined.",
+      "status": "apparatus_specific_open", "open_questions": ["Can the rotor region be exchanged as a contained module?"]
+    },
+    {
+      "id": "CLN-003", "zone": "Ducts, gates, screens, and collectors", "service_class": "TRAINED",
+      "soil_or_carryover": ["trapped inventory", "cross-batch carryover", "abrasion", "blocked or wet deposits"],
+      "method": ["Isolate routes", "Remove accessible modules without dispersing deposits", "Clean from dirty side to captured destination"],
+      "verification": ["Inspection covers declared dead zones", "Gate position proof passes", "Leak and blank-run checks pass"],
+      "prohibited_methods": ["Returning residue to the nearest expected fraction", "Opening a pressurized or dusty path"],
+      "residue_custody": "Retain route, source-batch, and uncertainty labels for every recovered deposit.",
+      "status": "apparatus_specific_open", "open_questions": ["Which geometries eliminate otherwise inaccessible dead zones?"]
+    },
+    {
+      "id": "CLN-004", "zone": "Exhaust and filter boundary", "service_class": "USER",
+      "soil_or_carryover": ["captured fines", "aerosols", "unknown mixed dust", "loaded filter media"],
+      "method": ["Exchange a sealed keyed cassette", "Keep the dirty face contained", "Clean only external nonprocess surfaces"],
+      "verification": ["Correct cassette identity and seating", "Baseline pressure-flow test", "No bypass indication"],
+      "prohibited_methods": ["Shaking or vacuuming an uncharacterized filter in the room", "Reusing a filter outside its material and capacity contract"],
+      "residue_custody": "The sealed spent cassette inherits the captured material's hazard and destination status.",
+      "status": "apparatus_specific_open", "open_questions": ["Which captured materials prohibit user exchange?"]
+    },
+    {
+      "id": "CLN-005", "zone": "Fabrication and repair interfaces", "service_class": "TRAINED",
+      "soil_or_carryover": ["mixed polymer or metal residues", "lubricants", "thermal degradation products", "repair-object contamination"],
+      "method": ["Isolate each process tool", "Remove process-specific residues", "Verify the next material contract before release"],
+      "verification": ["Tool and route cleanliness meet the next process limit", "Recovered residue and consumables appear in the material ledger"],
+      "prohibited_methods": ["Treating geometric completion as cleanliness or material certification"],
+      "residue_custody": "Record fabrication and repair residues independently from accepted output.",
+      "status": "modeled", "open_questions": ["Which tool groups require permanently isolated material families?"]
+    },
+    {
+      "id": "CLN-006", "zone": "Food-only subsystem", "service_class": "TRAINED",
+      "soil_or_carryover": ["food residue", "allergens", "biological contamination", "unauthorized recovery-path matter"],
+      "method": ["Use food-process-specific tools, air, drainage, consumables, and validated cleaning", "Quarantine the whole affected boundary after an isolation failure"],
+      "verification": ["Process-specific cleaning validation", "No unauthorized air, drainage, surface, tool, storage, or routing connection"],
+      "prohibited_methods": ["Using general-recovery cleaning evidence as food-contact authorization", "Returning an isolation-faulted subsystem to use by visual inspection alone"],
+      "residue_custody": "Food residue remains outside recovered-material circulation; isolation-fault residue is quarantined.",
+      "status": "apparatus_specific_open", "open_questions": ["Can the integrated domestic design prove adequate isolation, or must food remain a separate appliance?"]
+    }
+  ],
+  "accessibility_requirements": [
+    {"id": "ACC-001", "subject": "Loading and unloading", "requirement": "Document reach, height, required force, grip, dexterity, removable mass, and spill behavior for every user interface.", "verification": "Measure interfaces and test representative users and foreseeable loads without exposing a hazardous boundary.", "status": "apparatus_specific_open", "open_questions": ["What target user population and jurisdiction define the envelope?"]},
+    {"id": "ACC-002", "subject": "Safety-critical status", "requirement": "Directly indicate motion, pressure, temperature, atmosphere, access permission, and latched fault through appropriate redundant sensory channels.", "verification": "Status-comprehension tests under noise, glare, limited vision, limited hearing, and interrupted attention.", "status": "apparatus_specific_open", "open_questions": ["Which states require tactile indication or physical lock position?"]},
+    {"id": "ACC-003", "subject": "Controls and emergency stop", "requirement": "Provide locally reachable controls with distinguishable purpose, bounded force, no dependence on remote service, and no unintended restart.", "verification": "Reach, force, identification, command-feedback, and power-restoration tests in the specified installation.", "status": "apparatus_specific_open", "open_questions": ["How many emergency-stop stations are required by enclosure size and approach paths?"]},
+    {"id": "ACC-004", "subject": "Children, pets, and visitors", "requirement": "Prevent reach, climbing instability, entrapment, unintended start, and opening of hazardous paths without relying solely on warnings or passwords.", "verification": "Dimensional reach, probe, entrapment, stability, and foreseeable-misuse evaluation against the final product category.", "status": "apparatus_specific_open", "open_questions": ["Which domestic product standards supply the applicable probes and loads?"]},
+    {"id": "ACC-005", "subject": "Fault recovery", "requirement": "Present the safe next action without requiring diagnosis, while preserving uncertainty and service boundaries.", "verification": "Scenario tests for jam, full bin, sensor fault, containment fault, power restoration, and refused input.", "status": "modeled", "open_questions": ["Which faults permit user recovery and which require service or evacuation?"]}
+  ],
+  "installation_requirements": [
+    {"id": "INST-001", "subject": "Anchoring and stability", "requirement": "Specify the foundation, anchors, leveling, center-of-mass envelope, tip and slide resistance, and transmitted dynamic loads.", "verification": "Structural calculation and installation inspection followed by bounded vibration and disturbance tests.", "status": "apparatus_specific_open", "open_questions": ["Which building constructions and seismic regions are admitted?"]},
+    {"id": "INST-002", "subject": "Clearance and exclusion", "requirement": "Preserve service, cooling, exhaust, emergency, and credible-fragment or release clearances without relying on movable household storage.", "verification": "Measured site inspection against the configuration-specific installation manifest.", "status": "apparatus_specific_open", "open_questions": ["Does the final containment basis require an occupied-area exclusion zone?"]},
+    {"id": "INST-003", "subject": "Electrical supply and isolation", "requirement": "Define supply, protection, grounding, bonding, isolation, ingress, emergency disconnection, and restart behavior for the target jurisdiction.", "verification": "Inspection and electrical tests mapped to the selected product category and installation rules.", "status": "apparatus_specific_open", "open_questions": ["What product classification and supply architecture apply?"]},
+    {"id": "INST-004", "subject": "Air and exhaust", "requirement": "Define makeup air, normal and emergency exhaust destination, backflow prevention, pressure interaction, filtration, noise, and forbidden shared paths.", "verification": "Air-balance, pressure, capture, leak, backflow, and noise tests in the installed configuration.", "status": "apparatus_specific_open", "open_questions": ["Which material classes prohibit recirculation or require external discharge?"]},
+    {"id": "INST-005", "subject": "Drainage and water", "requirement": "Physically segregate food, general process, hazardous quarantine, and building drainage; prevent uncontrolled cleaning discharge and backflow.", "verification": "Route inspection, tracer test, backflow test, and review of authorized effluent for each process.", "status": "apparatus_specific_open", "open_questions": ["Which processes must remain dry or use replaceable contained modules?"]},
+    {"id": "INST-006", "subject": "Environment and external events", "requirement": "Set admitted temperature, humidity, dust, flood, fire, vibration, altitude, and power-quality envelopes with post-event inspection rules.", "verification": "Environmental specification review and bounded tests appropriate to the final installation class.", "status": "apparatus_specific_open", "open_questions": ["Which external events are resisted, detected, or treated as retirement events?"]}
+  ]
+}

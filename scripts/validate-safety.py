@@ -21,6 +21,7 @@ HAZARDS = ROOT / "safety" / "hazards.json"
 OPERATING_STATES = ROOT / "safety" / "operating-states.json"
 STOP_RECOVERY = ROOT / "safety" / "stop-recovery.json"
 SERVICE_MAINTENANCE = ROOT / "safety" / "service-maintenance.json"
+DOMESTIC_BOUNDARIES = ROOT / "safety" / "domestic-boundaries.json"
 MANIFEST_DIR = ROOT / "safety" / "manifests"
 SCHEMA_DIR = ROOT / "safety" / "schemas"
 
@@ -43,6 +44,7 @@ SAFETY_ITEM_ID = re.compile(r"^(SNS|INT)-[0-9]{3}$")
 TRANSITION_ID = re.compile(r"^TX-[0-9]{3}$")
 EVENT_ID = re.compile(r"^EV-[0-9]{3}$")
 SERVICE_ID = re.compile(r"^SVC-[0-9]{3}$")
+DOMESTIC_ID = re.compile(r"^(CLN|ACC|INST)-[0-9]{3}$")
 
 
 class Problems:
@@ -267,6 +269,56 @@ def validate_service_maintenance(path: Path, problems: Problems) -> None:
                      "register must exercise all service classes")
 
 
+def validate_domestic_boundaries(path: Path, problems: Problems) -> None:
+    data = read_json(path, problems)
+    if not isinstance(data, dict):
+        return
+    loc = str(path.relative_to(ROOT))
+    seen: set[str] = set()
+    cleaning = data.get("cleaning_zones")
+    problems.require(isinstance(cleaning, list) and bool(cleaning), loc,
+                     "cleaning_zones must be nonempty")
+    for index, zone in enumerate(cleaning if isinstance(cleaning, list) else []):
+        zloc = f"{loc}:cleaning_zones[{index}]"
+        if not isinstance(zone, dict):
+            problems.errors.append(f"{zloc}: zone must be an object")
+            continue
+        unique_id(zone.get("id"), DOMESTIC_ID, seen, zloc, problems)
+        problems.require(str(zone.get("id", "")).startswith("CLN-"), zloc, "cleaning ID must use CLN")
+        problems.require(zone.get("service_class") in {"USER", "TRAINED", "PROTECTED_REPLACE_ONLY"},
+                         zloc, "invalid service class")
+        for field in ("soil_or_carryover", "method", "verification"):
+            problems.require(nonempty_strings(zone.get(field)), zloc, f"{field} must be nonempty")
+        problems.require(bool(str(zone.get("residue_custody", "")).strip()), zloc,
+                         "residue custody is required")
+        problems.require(zone.get("status") in {"modeled", "apparatus_specific_open", "verified"},
+                         zloc, "invalid status")
+    for collection, prefix in (
+        ("accessibility_requirements", "ACC-"),
+        ("installation_requirements", "INST-"),
+    ):
+        records = data.get(collection)
+        problems.require(isinstance(records, list) and bool(records), loc,
+                         f"{collection} must be nonempty")
+        for index, record in enumerate(records if isinstance(records, list) else []):
+            rloc = f"{loc}:{collection}[{index}]"
+            if not isinstance(record, dict):
+                problems.errors.append(f"{rloc}: requirement must be an object")
+                continue
+            unique_id(record.get("id"), DOMESTIC_ID, seen, rloc, problems)
+            problems.require(str(record.get("id", "")).startswith(prefix), rloc,
+                             f"identifier must use {prefix}")
+            for field in ("subject", "requirement", "verification"):
+                problems.require(bool(str(record.get(field, "")).strip()), rloc,
+                                 f"{field} must be nonempty")
+            problems.require(record.get("status") in {
+                "modeled", "apparatus_specific_open", "verified",
+            }, rloc, "invalid status")
+            if record.get("status") == "verified":
+                problems.require(not record.get("open_questions"), rloc,
+                                 "verified requirement may not retain open questions")
+
+
 def manifest_readiness(data: dict[str, Any]) -> list[str]:
     blockers: list[str] = []
     for name, category in data.get("categories", {}).items():
@@ -390,6 +442,7 @@ def main(argv: list[str] | None = None) -> int:
     known_hazards = hazard_ids(HAZARDS, problems)
     validate_stop_recovery(STOP_RECOVERY, known_hazards, problems)
     validate_service_maintenance(SERVICE_MAINTENANCE, problems)
+    validate_domestic_boundaries(DOMESTIC_BOUNDARIES, problems)
     paths = manifest_paths(args.manifests)
     problems.require(bool(paths), "safety/manifests", "no manifests found")
     for path in paths:
