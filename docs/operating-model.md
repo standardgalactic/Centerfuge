@@ -383,6 +383,8 @@ At present, the integrated architecture is predominantly V. Standard physical re
 
 ## 11. First falsifiable system model
 
+The concrete protocol for this stage is [Fast Solids Lab Experiment 001: Air-Assisted Classification of Polystyrene, Salt, and Steel](../experiments/fast_solids_lab/protocols/experiment-001.md).
+
 The complete vision remains in the architecture, but its first physical test should be narrow.
 
 A suitable specimen accepts a known, clean, dry mixture of three nonhazardous components with controlled size and shape. It measures mass before and after processing, records speed, airflow, power, vibration, and residence time, collects every fraction, and calculates purity and recovery:
