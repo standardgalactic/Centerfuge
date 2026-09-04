@@ -1,5 +1,7 @@
 # Centerfuge
 
+[Boundary-Aware Operating Architecture](docs/operating-model.md)
+
 [Architecture of Communication](https://standardgalactic.github.io/Centerfuge/sci-fi/kommunikation.pdf) — *Screenplay*
 * [Audio Overview](https://standardgalactic.github.io/Centerfuge/sci-fi/)
 
