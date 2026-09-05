@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Centerfuge Vortex Sorting Laboratory</title>
+<style>
+:root{--bg:#091014;--panel:#0d171c;--rule:#22343d;--ink:#d9e5e8;--dim:#78909a;--cyan:#62bfd0;--amber:#dfa95d;--red:#d46958;--mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;--serif:"Iowan Old Style",Georgia,serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);padding:24px 16px 50px}.wrap{max-width:1020px;margin:auto}h1{font-size:1.6rem;font-weight:400;margin:0 0 5px}.premise{color:var(--dim);max-width:70ch;margin:0 0 18px}.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.75fr);gap:14px}.card{background:var(--panel);border:1px solid var(--rule);padding:12px}.card h2{font:500 .72rem var(--mono);letter-spacing:.05em;color:var(--dim);margin:0 0 9px}#vortex{width:100%;aspect-ratio:1;display:block;background:#071014;touch-action:none}.readout{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:9px}.metric{border:1px solid var(--rule);padding:7px}.metric b{display:block;font:500 1rem var(--mono)}.metric span{font: .65rem var(--mono);color:var(--dim);text-transform:uppercase}.controls{display:grid;gap:15px}.slider label{display:flex;justify-content:space-between;font: .73rem var(--mono);color:var(--dim);margin-bottom:5px}.slider output{color:var(--ink)}input[type=range]{appearance:none;width:100%;height:2px;background:var(--rule);outline:none}input[type=range]::-webkit-slider-thumb{appearance:none;width:14px;height:14px;border-radius:50%;border:0;background:var(--amber)}input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;border:0;background:var(--amber)}button{font: .73rem var(--mono);color:var(--ink);background:transparent;border:1px solid var(--rule);padding:7px 10px;cursor:pointer}button:hover{border-color:var(--dim)}.buttons{display:flex;gap:7px}.legend{font: .7rem var(--mono);color:var(--dim);line-height:1.8;margin-top:4px}.swatch{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}.warning{font-size:.82rem;color:var(--dim);border-top:1px solid var(--rule);padding-top:10px;margin:10px 0 0}@media(max-width:760px){.layout{grid-template-columns:1fr}.readout{grid-template-columns:repeat(2,1fr)}}
+</style></head>
+<body><main class="wrap">
+<h1>Vortex sorting laboratory</h1>
+<p class="premise">A conceptual two-dimensional Centerfuge model. Particles enter at a middle radius; rotational drift, inward drag, and noise move them among three concentric outlet zones. Mass defines the intended destination, while the observed exit radius determines the measured result.</p>
+<div class="layout">
+<section class="card"><h2>ROTATING CHAMBER</h2><canvas id="vortex" width="720" height="720"></canvas>
+<div class="readout"><div class="metric"><b id="active">0</b><span>active</span></div><div class="metric"><b id="sorted">0</b><span>sampled</span></div><div class="metric"><b id="accuracy">—</b><span>accuracy</span></div><div class="metric"><b id="errors">0</b><span>errors</span></div></div></section>
+<aside class="card"><h2>OPERATING PARAMETERS</h2><div class="controls">
+<div class="slider"><label><span>rotation ω</span><output id="omegaOut"></output></label><input id="omega" type="range" min="20" max="180" value="92"></div>
+<div class="slider"><label><span>inward drag</span><output id="dragOut"></output></label><input id="drag" type="range" min="10" max="160" value="76"></div>
+<div class="slider"><label><span>turbulence</span><output id="noiseOut"></output></label><input id="noise" type="range" min="0" max="100" value="18"></div>
+<div class="slider"><label><span>spawn rate</span><output id="rateOut"></output></label><input id="rate" type="range" min="1" max="20" value="8"></div>
+<div class="slider"><label><span>light / medium threshold</span><output id="lowOut"></output></label><input id="low" type="range" min="10" max="70" value="34"></div>
+<div class="slider"><label><span>medium / heavy threshold</span><output id="highOut"></output></label><input id="high" type="range" min="30" max="90" value="67"></div>
+<div class="buttons"><button id="pause">Pause</button><button id="reset">Reset metrics</button></div>
+<div class="legend"><div><span class="swatch" style="background:var(--cyan)"></span>light → inner outlet</div><div><span class="swatch" style="background:var(--amber)"></span>medium → middle outlet</div><div><span class="swatch" style="background:var(--red)"></span>heavy → outer outlet</div></div>
+<p class="warning">This is an explanatory dynamical model, not a validated fluid or mechanical engineering simulation. Its purpose is to make parameter sensitivity and sorting error observable.</p>
+</div></aside></div></main>
+<script>
+(function(){
+const canvas=document.getElementById('vortex'),g=canvas.getContext('2d'),W=canvas.width,H=canvas.height,C=W/2,R=W*.43;
+const controls={omega:document.getElementById('omega'),drag:document.getElementById('drag'),noise:document.getElementById('noise'),rate:document.getElementById('rate'),low:document.getElementById('low'),high:document.getElementById('high')};
+let particles=[],running=true,last=performance.now(),spawnCarry=0,total=0,correct=0,errorCount=0;
+function values(){let low=+controls.low.value/100,high=+controls.high.value/100;if(low>high-.08){if(document.activeElement===controls.low)low=high-.08;else high=low+.08;controls.low.value=Math.round(low*100);controls.high.value=Math.round(high*100)}return{omega:+controls.omega.value/100,drag:+controls.drag.value/100,noise:+controls.noise.value/100,rate:+controls.rate.value,low,high}}
+function zoneForMass(m,v){return m<v.low?0:m<v.high?1:2}function zoneForRadius(r){return r<R*.43?0:r<R*.69?1:2}
+function spawn(v){const a=Math.random()*Math.PI*2,m=Math.random(),r=R*(.53+(Math.random()-.5)*.06);particles.push({a,r,vr:(Math.random()-.5)*.15,m,age:0,trail:[]})}
+function update(dt,v){spawnCarry+=dt*v.rate;while(spawnCarry>=1){spawn(v);spawnCarry--}for(const p of particles){p.age+=dt;const rn=p.r/R;const outward=v.omega*v.omega*(.18+.92*p.m)*(.35+rn);const inward=v.drag*(1.07-.62*p.m);p.vr+=(outward-inward)*32*dt+(Math.random()-.5)*v.noise*42*dt;p.vr*=Math.pow(.91,dt*60);p.r+=p.vr;p.r=Math.max(R*.12,Math.min(R*.94,p.r));p.a+=(v.omega*(1.3-.35*rn)+(.12+p.m*.1))*dt;p.trail.push([p.a,p.r]);if(p.trail.length>14)p.trail.shift()}
+ for(let i=particles.length-1;i>=0;i--){const p=particles[i];if(p.age>5.5){const intended=zoneForMass(p.m,v),observed=zoneForRadius(p.r);total++;if(intended===observed)correct++;else errorCount++;particles.splice(i,1)}}}
+function color(m,v){return m<v.low?'#62bfd0':m<v.high?'#dfa95d':'#d46958'}
+function ring(radius,color,label){g.strokeStyle=color;g.lineWidth=2;g.beginPath();g.arc(C,C,radius,0,Math.PI*2);g.stroke();g.fillStyle=color;g.font='12px monospace';g.fillText(label,C+8,C-radius+16)}
+function draw(v){g.fillStyle='#071014';g.fillRect(0,0,W,H);g.strokeStyle='#15262e';g.lineWidth=1;for(let r=R*.12;r<R;r+=R*.11){g.beginPath();g.arc(C,C,r,0,Math.PI*2);g.stroke()}g.fillStyle='rgba(98,191,208,.05)';g.beginPath();g.arc(C,C,R*.43,0,Math.PI*2);g.fill();g.strokeStyle='rgba(223,169,93,.05)';g.lineWidth=R*.26;g.beginPath();g.arc(C,C,R*.56,0,Math.PI*2);g.stroke();g.strokeStyle='rgba(212,105,88,.05)';g.lineWidth=R*.25;g.beginPath();g.arc(C,C,R*.815,0,Math.PI*2);g.stroke();ring(R*.43,'#315d67','INNER');ring(R*.69,'#6b5839','MIDDLE');ring(R*.94,'#693b34','OUTER');
+ g.setLineDash([5,8]);g.strokeStyle='#a4c1c744';g.beginPath();g.arc(C,C,R*.53,0,Math.PI*2);g.stroke();g.setLineDash([]);g.fillStyle='#78909a';g.font='11px monospace';g.fillText('SPAWN',C+R*.39,C-R*.36);
+ for(const p of particles){const col=color(p.m,v);if(p.trail.length>1){g.strokeStyle=col+'33';g.beginPath();p.trail.forEach((q,i)=>{const X=C+Math.cos(q[0])*q[1],Y=C+Math.sin(q[0])*q[1];i?g.lineTo(X,Y):g.moveTo(X,Y)});g.stroke()}const x=C+Math.cos(p.a)*p.r,y=C+Math.sin(p.a)*p.r;g.fillStyle=col;g.beginPath();g.arc(x,y,2.4+p.m*2.7,0,Math.PI*2);g.fill()}
+ g.save();g.translate(C,C);g.rotate(performance.now()*.00035*v.omega);g.strokeStyle='#8aa0a866';g.lineWidth=2;for(let i=0;i<6;i++){g.rotate(Math.PI/3);g.beginPath();g.moveTo(0,0);g.lineTo(R*.12,0);g.stroke()}g.restore()}
+function read(v){document.getElementById('omegaOut').textContent=v.omega.toFixed(2);document.getElementById('dragOut').textContent=v.drag.toFixed(2);document.getElementById('noiseOut').textContent=v.noise.toFixed(2);document.getElementById('rateOut').textContent=v.rate+'/s';document.getElementById('lowOut').textContent=v.low.toFixed(2);document.getElementById('highOut').textContent=v.high.toFixed(2);document.getElementById('active').textContent=particles.length;document.getElementById('sorted').textContent=total;document.getElementById('accuracy').textContent=total?Math.round(correct/total*100)+'%':'—';document.getElementById('errors').textContent=errorCount}
+function frame(now){const dt=Math.min(.035,(now-last)/1000);last=now;const v=values();if(running)update(dt,v);draw(v);read(v);requestAnimationFrame(frame)}
+document.getElementById('pause').onclick=e=>{running=!running;e.target.textContent=running?'Pause':'Resume'};document.getElementById('reset').onclick=()=>{total=correct=errorCount=0};requestAnimationFrame(frame);
+})();
+</script></body></html>
