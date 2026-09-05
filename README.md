@@ -14,6 +14,8 @@ Hyperbolation is the process of labeling and wrapping materials in layered yarn-
 
 [Fast Solids Lab](https://standardgalactic.github.io/Centerfuge/experiments/fast_solids_lab/) — [protocol](experiments/fast_solids_lab/protocols/experiment-001.md)
 
+[Vortex Sorting Laboratory](https://standardgalactic.github.io/Centerfuge/experiments/vortex_sorting_lab/) — *Interactive Conceptual Model*
+
 ## Tetraorthodrome
 
 ![Spinning cage](spinning-cage.gif)
