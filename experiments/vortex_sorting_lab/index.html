@@ -31,7 +31,7 @@ const bins={fines:{light:0,medium:0,heavy:0},overflow:{light:0,medium:0,heavy:0}
 function clampThresholds(){let a=+controls.t1.value,b=+controls.t2.value;if(b-a<25){if(document.activeElement===controls.t1){b=Math.min(175,a+25);controls.t2.value=b}else{a=Math.max(25,b-25);controls.t1.value=a}}}
 function labels(){Object.keys(vals).forEach(k=>vals[k].textContent=controls[k].value)}
 Object.values(controls).forEach(el=>el.addEventListener('input',()=>{clampThresholds();labels()}));labels();
-function counters(){fL.textContent=bins.fines.light;fM.textContent=bins.fines.medium;fH.textContent=bins.fines.heavy;oL.textContent=bins.overflow.light;oM.textContent=bins.overflow.medium;oH.textContent=bins.overflow.heavy;clean.textContent=bins.fines.light+bins.overflow.heavy;dirty.textContent=bins.fines.heavy+bins.overflow.light;ambig.textContent=bins.fines.medium+bins.overflow.medium}
+function counters(){const set=(id,value)=>document.getElementById(id).textContent=value;set('fL',bins.fines.light);set('fM',bins.fines.medium);set('fH',bins.fines.heavy);set('oL',bins.overflow.light);set('oM',bins.overflow.medium);set('oH',bins.overflow.heavy);set('clean',bins.fines.light+bins.overflow.heavy);set('dirty',bins.fines.heavy+bins.overflow.light);set('ambig',bins.fines.medium+bins.overflow.medium)}
 function clear(){particles=[];spawnAccumulator=0;for(const outlet of Object.values(bins))for(const k of names)outlet[k]=0;counters()}
 document.getElementById('resetBtn').addEventListener('click',clear);counters();
 function spawn(){if(particles.length>=MAX)return;const a=+controls.t1.value,b=+controls.t2.value,cls=names[Math.random()*names.length|0];particles.push({cls,r:(a+b)/2+(Math.random()-.5)*(b-a)*.3,theta:Math.random()*Math.PI*2,mass:classes[cls].mass})}
