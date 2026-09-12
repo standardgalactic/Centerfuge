@@ -10,6 +10,17 @@ Experiment 001 apparatus: **BLOCKED**
 Evidence status: **M**  
 Recorded blockers: **6**
 
+## Experiment 001 manifest readiness
+
+The manifest is fail-closed: every required datum must be present and verified; numeric values require tolerances; required sensors require current calibration, plausibility, and availability evidence; required interlocks require an independent fallback; and RUN requires separately recorded authorization.
+
+| Evidence class | Verified | Required | Current result |
+| --- | --- | --- | --- |
+| Apparatus data | 0 | 51 | BLOCKED |
+| Safety sensors | 0 | 5 | BLOCKED |
+| Protective interlocks | 0 | 5 | BLOCKED |
+| Run authorization | 0 | 1 | BLOCKED |
+
 ## Hazard register
 
 | ID | Hazard | Severity | Evidence | Controls | Open questions |

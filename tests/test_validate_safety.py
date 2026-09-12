@@ -77,6 +77,57 @@ class SafetyValidatorTests(unittest.TestCase):
         )
         self.assertTrue(any("not admitted for RUN" in error for error in problems.errors))
 
+    def test_required_experiment_datum_cannot_be_omitted(self):
+        source = json.loads(
+            (ROOT / "safety" / "manifests" / "experiment-001.json").read_text()
+        )
+        source["categories"]["mechanical"]["data"] = [
+            datum for datum in source["categories"]["mechanical"]["data"]
+            if datum["id"] != "DAT-MECH-007"
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "omitted.json"
+            path.write_text(json.dumps(source), encoding="utf-8")
+            problems = validator.Problems()
+            validator.validate_manifest(path, problems, require_runnable=False)
+        self.assertTrue(any("DAT-MECH-007" in error and "omits required" in error
+                            for error in problems.errors))
+
+    def test_sensor_record_requires_calibration_fields(self):
+        source = json.loads(
+            (ROOT / "safety" / "manifests" / "experiment-001.json").read_text()
+        )
+        del source["required_sensors"][0]["calibration_due_at"]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "missing-calibration-field.json"
+            path.write_text(json.dumps(source), encoding="utf-8")
+            problems = validator.Problems()
+            validator.validate_manifest(path, problems, require_runnable=False)
+        self.assertTrue(any("sensor record requires calibration_due_at" in error
+                            for error in problems.errors))
+
+    def test_stale_calibration_is_a_readiness_blocker(self):
+        source = json.loads(
+            (ROOT / "safety" / "manifests" / "experiment-001.json").read_text()
+        )
+        sensor = source["required_sensors"][0]
+        sensor.update({
+            "status": "verified",
+            "verification": "tests/evidence/sns-001.json",
+            "instrument_id": "tachometer-example",
+            "location": "drive shaft",
+            "range": "0 to 100 rad/s",
+            "accuracy": "+/- 1 rad/s",
+            "sample_rate_hz": 100,
+            "calibrated_at": "2020-01-01T00:00:00Z",
+            "calibration_due_at": "2020-02-01T00:00:00Z",
+            "calibration_record": "tests/evidence/calibration-example.json",
+            "plausibility_test": "tests/evidence/plausibility-example.json",
+            "availability_test": "tests/evidence/availability-example.json",
+        })
+        blockers = validator.manifest_readiness(source)
+        self.assertIn("SNS-001: calibration is stale", blockers)
+
 
 if __name__ == "__main__":
     unittest.main()

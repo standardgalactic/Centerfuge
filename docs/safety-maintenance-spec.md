@@ -151,6 +151,23 @@ To require a manifest to be admitted for operation rather than merely valid as a
 
 The checked-in Experiment 001 manifest is intentionally blocked until apparatus-specific values and verification evidence exist. A successful structural validation must not convert those unknowns into permission to run.
 
+For Experiment 001, structural completeness includes the complete, versioned
+datum-ID inventory enforced by the validator. Removing a required datum is a
+validation failure rather than a way to make an unknown disappear. A datum
+with a physical unit requires a recorded tolerance before it can contribute to
+RUN readiness. Every required safety sensor shall identify its instrument and
+installed location, range, accuracy, sampling rate, calibration interval and
+record, plausibility test, and current-availability test. Expired calibration
+is a refusal condition. Every required interlock shall identify an independent
+fallback so that a software interpretation is not the sole protection against
+a high-consequence event.
+
+RUN authorization remains a separate admission act after the evidence record
+is complete. It shall identify the authority, timestamp, exact authorized
+scope, and evidence record. Setting `approved_for_run` without that record, or
+while any datum, sensor, interlock, calibration, fallback, or explicit blocker
+remains unresolved, shall fail the runnable validation gate.
+
 ## 14. Reference constraints
 
 The following sources establish constraints used by the architecture; their presence does not itself establish conformity:

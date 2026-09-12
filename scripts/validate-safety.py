@@ -9,6 +9,7 @@ shape; these checks enforce repository invariants and readiness semantics.
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
 import json
 import re
 import sys
@@ -33,6 +34,38 @@ STATES = {
 CATEGORIES = {
     "mechanical", "air_pressure", "thermal", "electrical", "material",
     "stop_behavior", "access_service", "installation",
+}
+EXPERIMENT_001_REQUIRED_DATA = {
+    "mechanical": {
+        "DAT-MECH-001", "DAT-MECH-002", "DAT-MECH-003", "DAT-MECH-004",
+        "DAT-MECH-005", "DAT-MECH-006", "DAT-MECH-007", "DAT-MECH-008",
+        "DAT-MECH-009",
+    },
+    "air_pressure": {
+        "DAT-AIR-001", "DAT-AIR-002", "DAT-AIR-003", "DAT-AIR-004",
+        "DAT-AIR-005", "DAT-AIR-006", "DAT-AIR-007",
+    },
+    "thermal": {
+        "DAT-THERM-001", "DAT-THERM-002", "DAT-THERM-003",
+        "DAT-THERM-004", "DAT-THERM-005", "DAT-THERM-006",
+    },
+    "electrical": {
+        "DAT-ELEC-001", "DAT-ELEC-002", "DAT-ELEC-003",
+        "DAT-ELEC-004", "DAT-ELEC-005", "DAT-ELEC-006",
+    },
+    "material": {
+        "DAT-MAT-001", "DAT-MAT-002", "DAT-MAT-003", "DAT-MAT-004",
+        "DAT-MAT-005", "DAT-MAT-006", "DAT-MAT-007",
+    },
+    "stop_behavior": {
+        "DAT-STOP-001", "DAT-STOP-002", "DAT-STOP-003", "DAT-STOP-004",
+        "DAT-STOP-005", "DAT-STOP-006", "DAT-STOP-007", "DAT-STOP-008",
+    },
+    "access_service": {
+        "DAT-ACCESS-001", "DAT-ACCESS-002", "DAT-ACCESS-003",
+        "DAT-ACCESS-004", "DAT-ACCESS-005",
+    },
+    "installation": {"DAT-INST-001", "DAT-INST-002", "DAT-INST-003"},
 }
 DATUM_STATES = {"unknown", "provisional", "verified", "not_applicable"}
 ITEM_STATES = {"missing", "installed", "verified", "not_applicable"}
@@ -335,12 +368,36 @@ def manifest_readiness(data: dict[str, Any]) -> list[str]:
             for field in ("value", "provenance", "verified_at", "evidence"):
                 if datum.get(field) is None or datum.get(field) == "":
                     blockers.append(f"{datum.get('id', name)}: {field} is missing")
+            if datum.get("status") == "verified" and datum.get("unit") is not None \
+                    and datum.get("tolerance") is None:
+                blockers.append(f"{datum.get('id', name)}: tolerance is missing")
     for collection in ("required_sensors", "required_interlocks"):
         for item in data.get(collection, []):
             if item.get("required") and item.get("status") != "verified":
                 blockers.append(f"{item.get('id', collection)}: required item is not verified")
             if item.get("required") and not item.get("verification"):
                 blockers.append(f"{item.get('id', collection)}: verification reference is missing")
+            if collection == "required_sensors" and item.get("required"):
+                for field in ("instrument_id", "location", "range", "accuracy",
+                              "sample_rate_hz", "calibrated_at", "calibration_due_at",
+                              "calibration_record", "plausibility_test", "availability_test"):
+                    if item.get(field) in (None, ""):
+                        blockers.append(f"{item.get('id', collection)}: {field} is missing")
+                due = item.get("calibration_due_at")
+                if due:
+                    try:
+                        deadline = datetime.fromisoformat(due.replace("Z", "+00:00"))
+                        if deadline <= datetime.now(timezone.utc):
+                            blockers.append(f"{item.get('id', collection)}: calibration is stale")
+                    except (TypeError, ValueError):
+                        blockers.append(f"{item.get('id', collection)}: calibration_due_at is invalid")
+            if collection == "required_interlocks" and item.get("required") \
+                    and not item.get("independent_fallback"):
+                blockers.append(f"{item.get('id', collection)}: independent fallback is missing")
+    authorization = data.get("run_authorization", {})
+    for field in ("authority", "authorized_at", "scope", "evidence"):
+        if not authorization.get(field):
+            blockers.append(f"run_authorization: {field} is missing")
     blockers.extend(str(item) for item in data.get("blockers", []))
     return blockers
 
@@ -353,7 +410,7 @@ def validate_manifest(path: Path, problems: Problems, require_runnable: bool) ->
     required = {
         "schema_version", "manifest_version", "apparatus_id", "configuration_id",
         "intended_process", "evidence_status", "approved_for_run", "categories",
-        "required_sensors", "required_interlocks", "blockers",
+        "required_sensors", "required_interlocks", "run_authorization", "blockers",
     }
     problems.require(not (required - data.keys()), loc,
                      f"missing fields: {', '.join(sorted(required - data.keys()))}")
@@ -391,6 +448,12 @@ def validate_manifest(path: Path, problems: Problems, require_runnable: bool) ->
                 if status == "unknown":
                     problems.require(datum.get("value") is None, dloc,
                                      "unknown datum must not carry a value")
+            present = {entry.get("id") for entry in entries if isinstance(entry, dict)}
+            required_ids = EXPERIMENT_001_REQUIRED_DATA.get(name, set())
+            missing_ids = required_ids - present
+            problems.require(not missing_ids, cloc,
+                             "omits required Experiment 001 data: "
+                             + ", ".join(sorted(missing_ids)))
         seen_items: set[str] = set()
         for collection in ("required_sensors", "required_interlocks"):
             items = data.get(collection)
@@ -406,6 +469,21 @@ def validate_manifest(path: Path, problems: Problems, require_runnable: bool) ->
                 if item.get("status") == "verified":
                     problems.require(bool(item.get("verification")), iloc,
                                      "verified item requires verification reference")
+                if collection == "required_sensors":
+                    for field in ("instrument_id", "location", "range", "accuracy",
+                                  "sample_rate_hz", "calibrated_at", "calibration_due_at",
+                                  "calibration_record", "plausibility_test", "availability_test"):
+                        problems.require(field in item, iloc, f"sensor record requires {field}")
+                else:
+                    problems.require("independent_fallback" in item, iloc,
+                                     "interlock record requires independent_fallback")
+
+    authorization = data.get("run_authorization")
+    problems.require(isinstance(authorization, dict), loc,
+                     "run_authorization must be an object")
+    if isinstance(authorization, dict):
+        problems.require(set(authorization) == {"authority", "authorized_at", "scope", "evidence"},
+                         loc, "run_authorization has the wrong field set")
 
     readiness = manifest_readiness(data)
     approved = data.get("approved_for_run") is True

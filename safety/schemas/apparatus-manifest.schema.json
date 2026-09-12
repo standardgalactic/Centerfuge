@@ -7,7 +7,7 @@
   "required": [
     "schema_version", "manifest_version", "apparatus_id", "configuration_id",
     "intended_process", "evidence_status", "approved_for_run", "categories",
-    "required_sensors", "required_interlocks", "blockers"
+    "required_sensors", "required_interlocks", "run_authorization", "blockers"
   ],
   "properties": {
     "schema_version": {"const": "1.0.0"},
@@ -34,6 +34,16 @@
     },
     "required_sensors": {"type": "array", "items": {"$ref": "#/$defs/safety_item"}},
     "required_interlocks": {"type": "array", "items": {"$ref": "#/$defs/safety_item"}},
+    "run_authorization": {
+      "type": "object", "additionalProperties": false,
+      "required": ["authority", "authorized_at", "scope", "evidence"],
+      "properties": {
+        "authority": {"type": ["string", "null"]},
+        "authorized_at": {"type": ["string", "null"], "format": "date-time"},
+        "scope": {"type": ["string", "null"]},
+        "evidence": {"type": ["string", "null"]}
+      }
+    },
     "blockers": {"type": "array", "items": {"type": "string", "minLength": 1}}
   },
   "$defs": {
@@ -71,7 +81,18 @@
         "name": {"type": "string", "minLength": 1},
         "required": {"type": "boolean"},
         "status": {"enum": ["missing", "installed", "verified", "not_applicable"]},
-        "verification": {"type": ["string", "null"]}
+        "verification": {"type": ["string", "null"]},
+        "instrument_id": {"type": ["string", "null"]},
+        "location": {"type": ["string", "null"]},
+        "range": {"type": ["string", "null"]},
+        "accuracy": {"type": ["string", "null"]},
+        "sample_rate_hz": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "calibrated_at": {"type": ["string", "null"], "format": "date-time"},
+        "calibration_due_at": {"type": ["string", "null"], "format": "date-time"},
+        "calibration_record": {"type": ["string", "null"]},
+        "plausibility_test": {"type": ["string", "null"]},
+        "availability_test": {"type": ["string", "null"]},
+        "independent_fallback": {"type": ["string", "null"]}
       }
     }
   }

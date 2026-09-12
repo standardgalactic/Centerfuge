@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "manifest_version": "0.1.0",
+  "manifest_version": "0.2.0",
   "apparatus_id": "fast-solids-lab-apparatus-unassigned",
   "configuration_id": "experiment-001-precommissioning",
   "intended_process": "Air-assisted classification of characterized polystyrene pellets, coarse salt, and steel BBs",
@@ -15,7 +15,10 @@
         {"id": "DAT-MECH-003", "name": "rotating assembly inertia", "status": "unknown", "value": null, "unit": "kg m^2", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
         {"id": "DAT-MECH-004", "name": "maximum credible stored rotational energy", "status": "unknown", "value": null, "unit": "J", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
         {"id": "DAT-MECH-005", "name": "vibration protective-stop threshold", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
-        {"id": "DAT-MECH-006", "name": "steel BB retention basis at maximum credible impact", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null}
+        {"id": "DAT-MECH-006", "name": "steel BB retention basis at maximum credible impact", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-MECH-007", "name": "effective maximum radius and tip-speed calculation", "status": "unknown", "value": null, "unit": "m", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-MECH-008", "name": "commissioned vibration baseline", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-MECH-009", "name": "rotor, shaft, bearing, fastener, chamber and guard ratings", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null}
       ]
     },
     "air_pressure": {
@@ -24,7 +27,10 @@
         {"id": "DAT-AIR-001", "name": "admitted airflow range", "status": "unknown", "value": null, "unit": "m^3/s", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
         {"id": "DAT-AIR-002", "name": "filter differential-pressure stop limit", "status": "unknown", "value": null, "unit": "Pa", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
         {"id": "DAT-AIR-003", "name": "maximum chamber pressure and vacuum", "status": "unknown", "value": null, "unit": "Pa", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
-        {"id": "DAT-AIR-004", "name": "minimum extraction required during stop", "status": "unknown", "value": null, "unit": "m^3/s", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null}
+        {"id": "DAT-AIR-004", "name": "minimum extraction required during stop", "status": "unknown", "value": null, "unit": "m^3/s", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-AIR-005", "name": "blockage indication threshold and persistence", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-AIR-006", "name": "relief behavior, capacity and safe destination", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-AIR-007", "name": "collector-detachment and containment-loss detection", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null}
       ]
     },
     "thermal": {
@@ -32,7 +38,10 @@
       "data": [
         {"id": "DAT-THERM-001", "name": "bearing protective-stop temperature", "status": "unknown", "value": null, "unit": "degC", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
         {"id": "DAT-THERM-002", "name": "motor protective-stop temperature", "status": "unknown", "value": null, "unit": "degC", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
-        {"id": "DAT-THERM-003", "name": "accessible-surface release temperature", "status": "unknown", "value": null, "unit": "degC", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null}
+        {"id": "DAT-THERM-003", "name": "accessible-surface release temperature", "status": "unknown", "value": null, "unit": "degC", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-THERM-004", "name": "air-stream protective-stop temperature", "status": "unknown", "value": null, "unit": "degC", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-THERM-005", "name": "material protective-stop temperature", "status": "unknown", "value": null, "unit": "degC", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-THERM-006", "name": "filter and electronics protective-stop temperatures", "status": "unknown", "value": null, "unit": "degC", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null}
       ]
     },
     "electrical": {
@@ -40,7 +49,10 @@
       "data": [
         {"id": "DAT-ELEC-001", "name": "supply and protective-device specification", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
         {"id": "DAT-ELEC-002", "name": "grounding and bonding verification", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
-        {"id": "DAT-ELEC-003", "name": "behavior after power loss and restoration", "status": "provisional", "value": "RUN prohibited; enter FAULT_LATCHED until controlled reset", "unit": null, "tolerance": null, "provenance": "docs/safety-maintenance-spec.md#5-operating-states", "verified_at": null, "evidence": null}
+        {"id": "DAT-ELEC-003", "name": "behavior after power loss and restoration", "status": "provisional", "value": "RUN prohibited; enter FAULT_LATCHED until controlled reset", "unit": null, "tolerance": null, "provenance": "docs/safety-maintenance-spec.md#5-operating-states", "verified_at": null, "evidence": null},
+        {"id": "DAT-ELEC-004", "name": "ignition-source review", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-ELEC-005", "name": "measured protective bonding and grounding results", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-ELEC-006", "name": "electrical isolation points and verification method", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null}
       ]
     },
     "material": {
@@ -49,7 +61,10 @@
         {"id": "DAT-MAT-001", "name": "admitted material batch identifiers", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
         {"id": "DAT-MAT-002", "name": "steel BB diameter and individual mass range", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
         {"id": "DAT-MAT-003", "name": "particle size and total admitted mass limits", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
-        {"id": "DAT-MAT-004", "name": "dust and ignition-source assessment", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null}
+        {"id": "DAT-MAT-004", "name": "dust and ignition-source assessment", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-MAT-005", "name": "batch moisture range", "status": "unknown", "value": null, "unit": "%", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-MAT-006", "name": "fines, abrasion and impact constraints", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-MAT-007", "name": "per-material and total admitted mass limits", "status": "unknown", "value": null, "unit": "kg", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null}
       ]
     },
     "stop_behavior": {
@@ -57,7 +72,12 @@
       "data": [
         {"id": "DAT-STOP-001", "name": "normal coast-down time", "status": "unknown", "value": null, "unit": "s", "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
         {"id": "DAT-STOP-002", "name": "imbalance safe-stop sequence and response-time budget", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
-        {"id": "DAT-STOP-003", "name": "blockage safe-stop sequence", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null}
+        {"id": "DAT-STOP-003", "name": "blockage safe-stop sequence", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-STOP-004", "name": "overspeed safe-stop sequence and response-time budget", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-STOP-005", "name": "feed-jam safe-stop sequence", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-STOP-006", "name": "collector-detachment or containment-loss safe-stop sequence", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-STOP-007", "name": "sensor-loss or disagreement safe-stop sequence", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-STOP-008", "name": "power-loss-during-stop behavior", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null}
       ]
     },
     "access_service": {
@@ -65,7 +85,9 @@
       "data": [
         {"id": "DAT-ACCESS-001", "name": "guard unlock conditions", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
         {"id": "DAT-ACCESS-002", "name": "hazardous-energy isolation and verification procedure", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
-        {"id": "DAT-ACCESS-003", "name": "post-trip inspection and reset authority", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null}
+        {"id": "DAT-ACCESS-003", "name": "post-trip inspection and reset authority", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-ACCESS-004", "name": "independent zero-speed and residual-hazard verification", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null},
+        {"id": "DAT-ACCESS-005", "name": "post-service reassembly and recommissioning test", "status": "unknown", "value": null, "unit": null, "tolerance": null, "provenance": null, "verified_at": null, "evidence": null}
       ]
     },
     "installation": {
@@ -78,19 +100,20 @@
     }
   },
   "required_sensors": [
-    {"id": "SNS-001", "name": "rotor or imposed-swirl speed", "required": true, "status": "missing", "verification": null},
-    {"id": "SNS-002", "name": "vibration", "required": true, "status": "missing", "verification": null},
-    {"id": "SNS-003", "name": "bearing and process temperature", "required": true, "status": "missing", "verification": null},
-    {"id": "SNS-004", "name": "airflow and pressure", "required": true, "status": "missing", "verification": null},
-    {"id": "SNS-005", "name": "guard, collector, and service-closure state", "required": true, "status": "missing", "verification": null}
+    {"id": "SNS-001", "name": "rotor or imposed-swirl speed", "required": true, "status": "missing", "verification": null, "instrument_id": null, "location": null, "range": null, "accuracy": null, "sample_rate_hz": null, "calibrated_at": null, "calibration_due_at": null, "calibration_record": null, "plausibility_test": null, "availability_test": null},
+    {"id": "SNS-002", "name": "vibration", "required": true, "status": "missing", "verification": null, "instrument_id": null, "location": null, "range": null, "accuracy": null, "sample_rate_hz": null, "calibrated_at": null, "calibration_due_at": null, "calibration_record": null, "plausibility_test": null, "availability_test": null},
+    {"id": "SNS-003", "name": "bearing and process temperature", "required": true, "status": "missing", "verification": null, "instrument_id": null, "location": null, "range": null, "accuracy": null, "sample_rate_hz": null, "calibrated_at": null, "calibration_due_at": null, "calibration_record": null, "plausibility_test": null, "availability_test": null},
+    {"id": "SNS-004", "name": "airflow and pressure", "required": true, "status": "missing", "verification": null, "instrument_id": null, "location": null, "range": null, "accuracy": null, "sample_rate_hz": null, "calibrated_at": null, "calibration_due_at": null, "calibration_record": null, "plausibility_test": null, "availability_test": null},
+    {"id": "SNS-005", "name": "guard, collector, and service-closure state", "required": true, "status": "missing", "verification": null, "instrument_id": null, "location": null, "range": null, "accuracy": null, "sample_rate_hz": null, "calibrated_at": null, "calibration_due_at": null, "calibration_record": null, "plausibility_test": null, "availability_test": null}
   ],
   "required_interlocks": [
-    {"id": "INT-001", "name": "feed inhibited without closed containment", "required": true, "status": "missing", "verification": null},
-    {"id": "INT-002", "name": "guard retained until residual hazards are verified safe", "required": true, "status": "missing", "verification": null},
-    {"id": "INT-003", "name": "independent overspeed protection", "required": true, "status": "missing", "verification": null},
-    {"id": "INT-004", "name": "restart inhibited after power restoration or protective trip", "required": true, "status": "missing", "verification": null},
-    {"id": "INT-005", "name": "required sensor unavailable or stale prevents RUN", "required": true, "status": "missing", "verification": null}
+    {"id": "INT-001", "name": "feed inhibited without closed containment", "required": true, "status": "missing", "verification": null, "independent_fallback": null},
+    {"id": "INT-002", "name": "guard retained until residual hazards are verified safe", "required": true, "status": "missing", "verification": null, "independent_fallback": null},
+    {"id": "INT-003", "name": "independent overspeed protection", "required": true, "status": "missing", "verification": null, "independent_fallback": null},
+    {"id": "INT-004", "name": "restart inhibited after power restoration or protective trip", "required": true, "status": "missing", "verification": null, "independent_fallback": null},
+    {"id": "INT-005", "name": "required sensor unavailable or stale prevents RUN", "required": true, "status": "missing", "verification": null, "independent_fallback": null}
   ],
+  "run_authorization": {"authority": null, "authorized_at": null, "scope": null, "evidence": null},
   "blockers": [
     "No physical apparatus or immutable configuration identifier has been supplied.",
     "Mechanical speed, energy, imbalance, and retention limits are unset.",
