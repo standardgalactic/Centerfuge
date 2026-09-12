@@ -37,6 +37,16 @@ def render() -> str:
     service = load("service-maintenance.json")
     domestic = load("domestic-boundaries.json")
     manifest = load("manifests/experiment-001.json")
+    manifest_data = [
+        datum
+        for category in manifest["categories"].values()
+        for datum in category["data"]
+    ]
+    verified_data = sum(datum["status"] == "verified" for datum in manifest_data)
+    verified_sensors = sum(item["status"] == "verified"
+                           for item in manifest["required_sensors"] if item["required"])
+    verified_interlocks = sum(item["status"] == "verified"
+                              for item in manifest["required_interlocks"] if item["required"])
 
     lines = [
         "# Centerfuge Safety Records",
@@ -51,6 +61,33 @@ def render() -> str:
         f"Experiment 001 apparatus: **{'RUNNABLE' if manifest['approved_for_run'] else 'BLOCKED'}**  ",
         f"Evidence status: **{manifest['evidence_status']}**  ",
         f"Recorded blockers: **{len(manifest['blockers'])}**",
+        "",
+        "## Experiment 001 manifest readiness",
+        "",
+        "The manifest is fail-closed: every required datum must be present and verified; "
+        "numeric values require tolerances; required sensors require current calibration, "
+        "plausibility, and availability evidence; required interlocks require an independent "
+        "fallback; and RUN requires separately recorded authorization.",
+        "",
+    ]
+    lines += table(
+        ["Evidence class", "Verified", "Required", "Current result"],
+        [
+            ["Apparatus data", str(verified_data), str(len(manifest_data)),
+             "PASS" if verified_data == len(manifest_data) else "BLOCKED"],
+            ["Safety sensors", str(verified_sensors), str(sum(
+                item["required"] for item in manifest["required_sensors"])),
+             "PASS" if verified_sensors == sum(
+                 item["required"] for item in manifest["required_sensors"]) else "BLOCKED"],
+            ["Protective interlocks", str(verified_interlocks), str(sum(
+                item["required"] for item in manifest["required_interlocks"])),
+             "PASS" if verified_interlocks == sum(
+                 item["required"] for item in manifest["required_interlocks"]) else "BLOCKED"],
+            ["Run authorization", "1" if all(manifest["run_authorization"].values()) else "0",
+             "1", "PASS" if all(manifest["run_authorization"].values()) else "BLOCKED"],
+        ],
+    )
+    lines += [
         "",
         "## Hazard register",
         "",
