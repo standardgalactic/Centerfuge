@@ -1,0 +1,194 @@
+\section{State, Inputs, Parameters, and Initial Conditions}
+
+Chapter 5 described a procedural family as a map $G(\theta,s)$ from parameters $\theta$ and a seed $s$ to a scene. That map has no memory: the same arguments always give the same scene, and nothing that happened earlier matters. A simulation adds memory. Its basic form is
+\[
+  x_{k+1}=F(x_k,\,u_k,\,\Delta t;\,\theta),\qquad k=0,1,2,\dots,
+\]
+and four kinds of quantity enter it, which should not be confused. The \emph{state} $x_k$ is what the process carries from one step to the next. The \emph{initial condition} $x_0$ is the state at the start. The \emph{inputs} $u_k$ are quantities supplied from outside at each step, such as a source rate that the experimenter switches on and off. The \emph{parameters} $\theta$, together with the time step $\Delta t$, are fixed for the duration of a run. A random stream belongs with the inputs if it is recorded, so that the run is a deterministic function of $(x_0,\,u_0,u_1,\dots,\,\theta)$, and a run can be replayed only if all of these were kept.
+
+The defining property of a state is that it is a sufficient summary of the past: given $x_k$ and the future inputs, nothing earlier is needed. This is the sense in which a stateful process differs from a \emph{frame-dependent generator}, which computes the scene at frame $k$ directly as $g(k;\theta)$ from the frame number and the current inputs. The two can produce indistinguishable images. They represent different processes, and the difference shows when the past is varied. In the network model of the next section, two runs of $300$ steps that both have the source switched off at the final step, one with the source on for the first $100$ steps and the other for the first $200$, end with total stock $8.3371$ and $17.4023$ respectively, and the stocks at individual nodes differ by up to $0.173$. A function of the frame number $300$ and the current input $0$ cannot return both, because the information that distinguishes them lives only in the history, which the state has absorbed.
+
+\section{A Resource Network on the Orthodrome Arrangement}
+
+The arrangement of Chapter 11 supplies a graph. Its nodes are the $54$ intersection points, and its edges are the $116$ arcs between consecutive intersection points along each circle. Counting from the multiplicities there, $48$ nodes lie on two circles and have degree $4$, four lie on three circles and have degree $6$, and the two poles lie on four circles and have degree $8$, since a node on $m$ circles has $2m$ neighbours. The graph is simple, because two distinct great circles can share only an antipodal pair of points, and these are never consecutive on a circle that carries other vertices.
+
+Orient each edge arbitrarily from a tail to a head and let $B$ be the node-by-edge incidence matrix, with $B_{ie}=+1$ if node $i$ is the tail of edge $e$, $-1$ if it is the head, and $0$ otherwise. For edge flows $q$, positive from tail to head, the vector $Bq$ is the net outflow at each node. Every column of $B$ contains one $+1$ and one $-1$, so $\mathbf 1^{\mathsf T}B=0$, a fact that carries the whole conservation argument. The blueprint writes steady conservation as $Bq=b$ (its Section 9.11) and the dynamic law as $\partial u/\partial t+\nabla\!\cdot\!F=S$ (its Section 12.3). The discrete counterpart used here is an explicit Euler step of the second on a graph, with the divergence replaced by $B$:
+\[
+  x_{k+1}=x_k-\Delta t\,B\,q_k+\Delta t\,s_k,
+\]
+where $s_k$ collects injections and withdrawals. The sign convention differs from the blueprint's $b$, in which $b$ holds the external withdrawals and injections, and should be reconciled before the two are combined.
+
+The flow rule is a teaching choice. Let each edge carry a flow proportional to the difference of the stocks at its ends, $q=\kappa B^{\mathsf T}x$, so that stock moves down gradients. Then $Bq=L x$ with $L=\kappa BB^{\mathsf T}$, the weighted graph Laplacian. This is not a hydraulic or electrical law, which have nonlinear relations between head and flow and may include pumps. It shares only the incidence structure with the blueprint's networks. Add a source $\sigma$ at the north pole, node $N$, and a drain that removes stock at the south pole, node $S$, at a rate $\lambda x_S$. The update is then
+\[
+  x_{k+1}=x_k-\Delta t\,L x_k+\Delta t\,\sigma\,\mathbf e_N-\Delta t\,\lambda\,x_{S,k}\,\mathbf e_S
+  =(I-\Delta t\,M)\,x_k+\Delta t\,\sigma\,\mathbf e_N,
+\]
+with $M=L+\lambda\,\mathbf e_S\mathbf e_S^{\mathsf T}$. For $\kappa=1$ and $\lambda=0.5$ the eigenvalues of $M$ range from $\mu_{\min}=0.00837$ to $\mu_{\max}=9.7642$. The smallest is close to $\lambda/n=0.5/54\approx0.0093$, which is what one expects of the nearly uniform mode of total stock draining through a single node.
+
+The code for the update follows. The accompanying file \texttt{netsim.py} contains the graph construction and every check reported below.
+
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true,firstline=44,lastline=82]{netsim.py}
+
+\section{Accounting Checks and Their Limits}
+
+\paragraph{The ledger.} Summing the update over nodes and using $\mathbf 1^{\mathsf T}B=0$ gives
+\[
+  \mathbf 1^{\mathsf T}x_{k+1}-\mathbf 1^{\mathsf T}x_k=\Delta t\,(\sigma_k-\lambda\,x_{S,k}),
+\]
+so the change in total stock equals what entered minus what left. In floating-point arithmetic this holds to rounding, and the run recorded a largest deviation of $2.3\times10^{-14}$ over $300$ steps. A conservation check should use a tolerance scaled to the magnitudes involved and not an equality test.
+
+\paragraph{Nonnegativity.} Stock cannot be negative, and the update guarantees this only under a condition. The matrix $I-\Delta tM$ has nonnegative entries exactly when $\Delta t\,M_{ii}\le1$ for every node, which for $\kappa=1$ means $\Delta t\le1/(\kappa d_{\max}+\lambda)$, using the south pole, whose degree is $8$ and which also carries the drain. The value is $1/8.5=0.1176$. With a nonnegative initial state and nonnegative source, the state then stays nonnegative. The condition is sufficient but not necessary, as the data below show: a run that starts empty with a steady source refills the pole every step and stayed nonnegative up to $\Delta t=0.19$.
+
+\paragraph{Stability.} Explicit Euler is stable when $|1-\Delta t\,\mu|\le1$ for every eigenvalue $\mu$ of $M$, that is, $\Delta t\le2/\mu_{\max}=0.2048$. The two bounds are different statements. Between them the run is stable but can contain negative stocks, which no physical stock can have. The table records a run that starts with one unit of stock at the north pole and no source.
+
+\begin{center}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+$\Delta t$ & Minimum stock & Largest $|x|$\\
+\midrule
+0.05 & 0 & 1.000\\
+0.1175 & 0 & 1.000\\
+0.13 & $-0.04$ & 1.000\\
+0.17 & $-0.36$ & 1.000\\
+0.19 & $-0.52$ & 1.000\\
+0.21 & $-8.5\times10^{3}$ & $9.0\times10^{3}$\\
+0.25 & $-9.6\times10^{44}$ & $1.4\times10^{45}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The first entry beyond the nonnegativity bound reproduces the prediction: at $\Delta t=0.13$ the north pole retains $1-8(0.13)=-0.04$ after one step. The ledger deserves a caution at this point. For $\Delta t=0.21$, with the source on, the run had stocks of magnitude $10^{3}$ and negative values, yet its ledger error was only $4\times10^{-13}$. Conservation is structural, a consequence of $\mathbf 1^{\mathsf T}B=0$, and a diverging run satisfies it. Passing a conservation check therefore does not show that a result is meaningful. It shows that no stock was created or destroyed by the arithmetic.
+
+\paragraph{Time-step sensitivity.} In this linear case the continuous-time solution is available in closed form, $x(t)=x^\ast+e^{-tM}(x_0-x^\ast)$, where $x^\ast$ solves $Mx^\ast=\sigma\mathbf e_N$. Starting from an empty network and comparing at $t=2$, the largest nodal errors for $\Delta t=0.1,\,0.05,\,0.025,\,0.0125$ were $9.49\times10^{-4}$, $4.74\times10^{-4}$, $2.37\times10^{-4}$, and $1.19\times10^{-4}$. Each halving of the step halves the error, which is first-order convergence, as expected of explicit Euler.
+
+\paragraph{Steady state and its time scale.} At steady state the ledger requires $\sigma=\lambda x^\ast_S$, so $x^\ast_S=\sigma/\lambda=2$ exactly, and solving $Mx^\ast=\sigma\mathbf e_N$ gives stocks between $2.000$ and $2.542$ with total $122.6$. The approach to it is governed by $\mu_{\min}$, a time constant of $1/\mu_{\min}\approx119$ time units. The stepped run bore this out: the largest deviation from $x^\ast$ was $0.437$ at $t=200$ and $0.0153$ at $t=600$, a ratio of $0.035$, against the predicted $e^{-0.00837\cdot400}=0.035$. Whether a run has converged is therefore a statement about $\mu_{\min}$, not about how the animation looks, and a picture can look settled long before the slowest mode has decayed.
+
+\section{Replay, Checkpoints, and Floating Point}
+
+A run can be recorded as $(\theta,\,\Delta t,\,x_0,\,\text{input sequence},\,\text{code version})$ and replayed. For the network, two replays from the logged record produced identical final states, and so did a run that was stopped at step $200$, saved, and resumed. The test used a digest of the final state's bytes, the first sixteen hexadecimal digits of its SHA-256 hash, which was \texttt{beb96d47ee4f26bc} in all three cases.
+
+Bitwise equality has conditions. Rewriting the same update with the matrix $M$ in place of explicit edge flows is the same mathematics, and it differed from the original by at most $4.4\times10^{-16}$, but its digest, \texttt{e7b1f3f9ba18db62}, was different, because the floating-point operations occur in a different order. A replay test must therefore say which standard it applies. Equality of digests is appropriate for the same code on the same platform, and agreement to a stated tolerance is appropriate across implementations. Recording the code version alongside the parameters is part of recording the run.
+
+\section{When a Closed Form Fails}
+
+The linear model has a closed form, so a frame-dependent generator could reproduce it. Many rules do not. Suppose each edge can carry at most a flow $c$, so that $q_e=\mathrm{clip}\bigl(\kappa(B^{\mathsf T}x)_e,\,-c,\,c\bigr)$. The ledger still holds, because clipping preserves the fact that each edge's flow leaves one node and enters another; the recorded error over $800$ steps was $1.4\times10^{-13}$. But the rule is nonlinear and has no solution of the earlier form.
+
+Take $\sigma=4$ and $c=0.3$. The north pole has $8$ edges, so at most $8c=2.4$ can leave it per unit time, while $4$ enters. Its stock must therefore rise at least $4-2.4=1.6$ per unit time. In the run, the north-pole stock was $32.16$ at $t=20$ and $64.16$ at $t=40$, a slope of exactly $1.6$, against $3.48$ at $t=40$ in the uncapped model. The state records a bottleneck that no snapshot of the flow rule would show, and only stepping the process with its memory reveals it.
+
+\section{A Case from Existing Code: The Vortex Sorter}
+
+The Centerfuge repository contains a browser-based vortex sorter (\texttt{experiments/\allowbreak vortex\_\allowbreak sorting\_\allowbreak lab/\allowbreak index.html} in \texttt{standardgalactic/\allowbreak Centerfuge}, commit \texttt{b0648ff}). It maintains a list of particles of three classes with masses $0.55$, $1$, and $1.65$. Each frame, with rotation $\rho$, intake $\iota$, and turbulence $\tau$ taken from sliders on a scale of $0$ to $100$, each particle's radius changes by
+\[
+  r_{k+1}=r_k+\bigl(m_c\,\rho-\delta+\nu\,\xi_k\bigr)\,\varphi,\qquad
+  \delta=0.55\,\tfrac{\iota}{100},\quad \nu=1.3\,\tfrac{\tau}{100},\quad \rho=\tfrac{\text{rotation}}{100},
+\]
+where $\xi_k$ is uniform on $[-\tfrac12,\tfrac12]$ and $\varphi=60\,\Delta t$ is the frame factor. A particle is captured at the fines outlet when $r\le t_1$ and at the overflow outlet when $r\ge t_2$. New particles arrive at a rate of $0.3+5.7\,\iota/100$ per second at a radius near the midpoint of the thresholds, and an arrival is discarded when $160$ particles are present. The code also advances an angle, but no outcome depends on it. The state that decisions use is $r$ alone, and the angle is state that exists for the picture.
+
+This is a conceptual sorting model, and its dynamics have not been validated against a physical device. What can be examined is the structure of the update. The file uses an unseeded generator and a time step equal to the elapsed frame time, capped at $0.05$ s, so a run cannot be repeated and its behaviour depends on the display's frame rate. To examine it, the accompanying \texttt{vortex\_port.py} reimplements the arithmetic of the update with a seeded generator and a fixed step. It is a port made from reading the source, not the original code, and the page itself was not run in a browser.
+
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true,firstline=16,lastline=35]{vortex_port.py}
+
+Four observations follow from the port.
+
+First, a particle ledger holds: arrivals accepted equal particles inside plus particles captured. It does not include arrivals discarded at the cap, and these can dominate. With the intake slider at $100$, a $300$ second run at $60$ Hz had $1{,}799$ arrival attempts, of which $480$ were accepted and $1{,}319$ discarded, so the displayed intake setting greatly overstates the material entering. At the default sliders the cap never binds, and there were $859$ attempts, all accepted.
+
+Second, at the default sliders all three classes drift outward, at $+3.3$, $+18.2$, and $+39.6$ radius units per second for the light, medium, and heavy classes, and the default run captured $844$ particles at the overflow outlet and none at the fines outlet, with $15$ still inside. The sliders can reverse this, but the starting point does not show a separation.
+
+Third, the noise term is multiplied by $\varphi$, whereas for a random walk to have a rate of spreading that does not depend on the step, it should be multiplied by $\sqrt{\varphi}$. The consequence is that the variance of the pure noise after one second is $\tfrac{\nu^2}{12}\,3600\,\Delta t$, proportional to the step. Measured over $20{,}000$ trials with $\tau=100$, the variance was $4.26$, $8.35$, $16.68$, and $24.79$ for steps of $1/120$, $1/60$, $1/30$, and $0.05$ seconds, against $4.23$, $8.45$, $16.9$, and $25.4$ predicted. With $\sqrt\varphi$ scaling it was $8.51$, $8.35$, $8.34$, and $8.26$. The effective turbulence of the sorter thus doubles when the frame rate halves.
+
+Fourth, this changes outcomes, not only statistics. With rotation $30$, intake $55$, turbulence $100$, and thresholds $90$ and $115$, the medium class, whose drift is nearly zero, is governed by the noise. The fraction of $3{,}000$ particles reaching the overflow outlet and the mean time to capture are shown below.
+
+\begin{center}
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+ & \multicolumn{2}{c}{Noise $\times\varphi$ (as read)} & \multicolumn{2}{c}{Noise $\times\sqrt\varphi$}\\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+$\Delta t$ (s) & Overflow fraction & Mean time (s) & Overflow fraction & Mean time (s)\\
+\midrule
+1/120 & 0.294 & 33.9 & 0.393 & 18.1\\
+1/60 & 0.397 & 18.0 & 0.397 & 18.0\\
+1/30 & 0.434 & 9.5 & 0.380 & 18.7\\
+0.05 & 0.470 & 6.4 & 0.387 & 19.0\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The two versions agree exactly at $60$ Hz, where $\varphi=1$, as they must. Away from it the version as read gives answers that depend on the step, while the $\sqrt\varphi$ version is stable to within the sampling error of about $0.01$. The light and heavy classes, which are dominated by drift, are insensitive to the step. This is a finding about the arithmetic of one file at one commit and is offered as an example of the time-step check, not as a change made to the repository.
+
+\section{A Turn-Based Case: Entropy's Edge}
+
+The repository's turn-based prototype, \texttt{projects/entropy\_edge/entropy\_edge.py} at commit \texttt{b0648ff}, is a forty-line command-line game that its README calls a miniature 4X with exploration and an entropy economy. It is useful here because its whole update rule fits on a page and every term of the scheme $x_{k+1}=F(x_k,u_k;\theta)$ can be pointed at. The inputs $u_k$ are the typed commands \texttt{end}, \texttt{build factory}, \texttt{build lab}, and \texttt{scan}. The parameters $\theta$ are the constants in the code: a factory costs $5$ energy and a lab costs $4$, each end of turn adds $1$ energy plus $2$ for every factory, and adds $0.1$ entropy per unit of that factory production and $0.05$ for every lab, so that $f$ factories and $\ell$ labs add $1+2f$ energy and $0.2f+0.05\ell$ entropy per turn. The initial condition is energy $10$, entropy $0$, no buildings, and a single recorded tile, \texttt{(0,0)}, labelled home. The persistent state is the turn counter, energy, entropy, the list of buildings, and the dictionary of scanned tiles. A \texttt{build} command that the energy cannot pay for is refused and leaves the state unchanged, which makes the refusal a non-transition and not an error. The file mutates a module-level dictionary, prints from inside its update functions, and draws from an unseeded generator, so the accompanying \texttt{edge\_port.py} restates the same rules as a function that returns a new state, keeps the generator inside the state, and makes the draws in the same order as the original. Run under the same seed on $300$ random forty-command sequences, the port and the unmodified original produced identical states in every case. The port is a reimplementation for checking and is not the repository's code.
+
+\Needspace{30\baselineskip}
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true,firstline=24,lastline=48]{edge_port.py}
+
+The tiles belong to the full state, and the distinction between the full state and its projection onto energy and entropy is the central point of the case. Randomness enters only through \texttt{scan}, which chooses a coordinate in $\{-2,\dots,2\}^2$ and a label from three, and writes the result into the tile dictionary. No other update reads the tiles. The projection $\pi(x)=(\text{turn},\text{energy},\text{entropy},\text{buildings})$ therefore evolves as a deterministic function of the command sequence alone, while the full state does not. With the ten-command list \texttt{build factory, end, scan, end, scan, scan, end, end, build lab, end}, two hundred different seeds produced a single projection, $(5,\,16,\,1.05,\,\text{factory, lab})$, and two hundred distinct full states, because the three scans land on different tiles. The same seed reproduces the full state exactly. Randomness therefore affects the trajectory of the full state and leaves the projection unchanged, and a claim about energy and entropy can be checked on the projection without fixing a seed, whereas a claim about the map needs the seed, or the whole generator state, as part of the record. That requirement extends to checkpoints. Resuming from a state saved after five commands reproduces the uninterrupted run exactly when the generator is saved with the state, and when it is instead reseeded at the resume point the final full state differs from the correct one for $1{,}967$ of $2{,}000$ seeds, the rest agreeing only by chance. The original, which never seeds its generator, cannot replay its full state at all.
+
+Scanning is also not accumulation only. A scan overwrites the entry for whatever tile it hits, including home: the chance that a single scan targets $(0,0)$ is $1/25$, after which the label \texttt{home} is replaced by one of the three scan labels. After $k$ scans the probability that home has been overwritten is $1-(24/25)^k$, and the expected number of recorded tiles is $1+24\bigl(1-(24/25)^k\bigr)$. Simulation agrees within sampling error: for $k=3$, $10$, and $25$ the formulas give $3.766$, $9.044$, and $16.350$ tiles and overwrite probabilities $0.1153$, $0.3352$, and $0.6396$, and simulation gave $3.771$, $9.056$, and $16.385$ tiles and $0.1097$, $0.3293$, and $0.6490$, from $10{,}000$, $10{,}000$, and $3{,}000$ runs respectively. The tile record is therefore a revisable map and not a history, in the sense of Section~6.1, and anything that reads it must say which of the two it takes it to be.
+
+\begin{center}
+\begin{tabular}{@{}lp{0.68\textwidth}@{}}
+\toprule
+Role & Content in Entropy's Edge\\
+\midrule
+Initial conditions & energy $10$, entropy $0$, no buildings, tiles $=\{(0,0)\mapsto\text{home}\}$, generator state\\
+Inputs $u_k$ & the command sequence\\
+Parameters $\theta$ & costs $5$ and $4$; base income $1$; $2$ per factory; entropy rates $0.1$ per unit production and $0.05$ per lab; scan range $\pm2$\\
+Persistent state & turn, energy, entropy, buildings, tiles, and generator state if replay is wanted\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A closed form is available for the projection, and its initial conditions must be stated with it. If $f$ factories and $\ell$ labs are present from the start and energy begins at $e_0$, then after $T$ turns the energy is $e_0+T(1+2f)$ and the entropy is $T(0.2f+0.05\ell)$. For two factories, one lab, $e_0=10$, and $T=10$ this gives energy $60$ and entropy $4.5$, and the port agrees. The value $60$ assumes that those buildings were already standing and that nobody paid for them. The game itself starts with no buildings, and the three buildings in this example would cost $14$, which exceeds the initial $10$, so no command sequence reaches that starting point from the stated initial condition. A smaller example shows how much the assumption matters. One factory and one lab cost $9$ together. If they are present from the start, ten turns end at energy $40$ and entropy $2.5$. If they are bought at turn zero, the run ends at energy $31$ and entropy $2.5$. If they are bought after three turns, it ends at energy $25$ and entropy $1.75$. The general statement is that a building completed after $t_b$ end-turns contributes production for $T-t_b$ turns, so that
+\[
+  \text{energy}_T=e_0+T+\sum_{b\in\text{factories}}2\,(T-t_b)-\sum_b c_b,\qquad
+  \text{entropy}_T=\sum_b r_b\,(T-t_b),
+\]
+with $c_b$ the cost and $r_b\in\{0.2,\,0.05\}$ the entropy rate of building $b$, valid whenever every build was affordable when issued. The port agrees with this formula on $500$ random build schedules. The closed form is thus a function of the whole command history and not of the initial state alone, and quoting it without its initial conditions would assign a trajectory to a starting point that cannot produce it.
+
+The absence of any path from entropy back to the other quantities deserves a careful description. In the file, entropy is a running total that is written and never read: it does not change income, costs, or the options available. Under the policy of building a factory whenever one is affordable before each end of turn, the port gives energy $11$, $26$, $69$, and $189$ with $4$, $12$, $34$, and $93$ buildings and entropy $1.8$, $7.0$, $22.0$, and $63.2$ after $3$, $6$, $9$, and $12$ turns, so that growth is geometric and nothing in the state resists it. Labs have a similar status, since their only effect is to add to entropy. Whether this counts as a defect depends on the purpose the model is held to. As a minimal state-input-update loop for studying turn structure, replay, and projection, the file is adequate and does what its rules say. As a model of an entropy economy, in which accumulated entropy is meant to constrain growth, it lacks the mechanism that would let such a constraint appear, and that is a limit relative to that proposed purpose and not an implementation error. The distinction matters for how a result is reported: a finding about the exponential growth of the greedy policy describes these rules, and says nothing about what an entropy-limited economy would do.
+
+\section{A Script That Is Not Idempotent}
+
+A scene script is idempotent if running it again in the same session leaves the file in the state that running it once would. The property matters because Blender sessions are long, scripts are rerun while editing, and a file records its contents without recording the actions that produced them. The repository's \texttt{tetraorthodrome.py} begins by selecting and deleting every object, which suggests a clean slate on each run, and it prints that nine toruses and one sphere were created. A direct test is easy to state: run the script unchanged several times in one session and count datablocks of each kind, not objects alone. The accompanying \texttt{idempotence\_check.py} does this, and the results below come from Blender's Python module, version $5.2.2$, run headless.
+
+\begin{center}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+After run & Objects & Meshes & Materials\\
+\midrule
+1 & 10 & 10 & 10\\
+2 & 10 & 20 & 20\\
+3 & 10 & 30 & 30\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The object count stays at ten, which is the only quantity the script's own message tests, so the message is accurate on every run and blind to the accumulation. Deleting an object does not delete its mesh or its materials; the old meshes survive with no user and keep the old materials alive. Names reveal the process: the second run's materials are \texttt{TorusMat\_Equator.001} and so on, and the second run's torus meshes are numbered \texttt{Torus.009} to \texttt{Torus.017}, so that in a clean repeated run the numbering advances by nine per run. Saving and reloading after three runs leaves $10$ objects, $10$ meshes, and $30$ materials, of which $20$ have no users. The unused meshes are dropped at save time, but the materials they held were still counted as used when the file was written, so they persist as orphans. A repair is to remove unused meshes and then unused materials after the objects are deleted and before the scene is rebuilt. The order matters, since a mesh holds a user count on each of its materials and the materials become unused only once the meshes are gone.
+
+\Needspace{14\baselineskip}
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true,firstline=20,lastline=28]{idempotence_check.py}
+
+With that purge inserted before each run, the counts stay at $10$, $10$, and $10$ over three runs, and no material or mesh acquires a numeric suffix. The unchanged script is the committed one and has not been edited, since the point of the test is what the script as written does.
+
+The committed file \texttt{tetraorthodrome.blend}, opened with the same module, shows the pattern that the unrepaired script produces. It contains ten objects whose rotations match the script exactly, and $74$ materials, of which $63$ have no users. Each of the nine \texttt{TorusMat\_} names and \texttt{EarthMaterial} appears with suffixes \texttt{.000} through \texttt{.006}, seven datablocks each, except \texttt{TorusMat\_Tetra1\_3}, which runs through \texttt{.008}. The live torus meshes are numbered \texttt{Torus.070} through \texttt{Torus.078}, and the sphere is \texttt{Sphere.007}. These are accumulated datablocks, and accumulated datablocks are what repeated execution of the unrepaired script produces. They do not by themselves establish that the script was executed seven times. Duplicating objects, copying or appending data from another file, and manual editing can also create suffixed datablocks, and several features resist a pure repeated-run account. One material name has two more datablocks than the others. The sphere mesh carries suffix \texttt{.007} while its material stops at \texttt{.006}. In a clean repeated run under version $5.2.2$ the final nine torus meshes of the seventh run would be numbered \texttt{.054} to \texttt{.062}, not \texttt{.070} to \texttt{.078}. The last comparison is itself uncertain, because the file was written by version $2.93$ and its numbering rule may differ from the one tested. The narrower claim that the direct test establishes is the one to carry forward: the script as committed is not idempotent. The file's own history is a matter that the file records only indirectly and does not settle.
+
+\section{From Python to Blender}
+
+Section~6.2 described Geometry Nodes simulation zones, and a complete zone is left for a later chapter. A simulation computed elsewhere can nevertheless be made legible in Blender, with attention to what that does and does not establish. The script \texttt{export\_states.py} runs the network model for $1{,}200$ steps and writes every tenth state, $121$ states of $54$ nodes in all, to \texttt{network\_states.json}. The largest stock in that record is $1.6869$. The script below reads the file, creates one marker per node on the sphere, all sharing a single cube mesh, and keys each marker's scale so that its volume is proportional to its stock.
+
+\Needspace{40\baselineskip}
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true]{network_to_blender.py}
+
+The script was run in Blender's Python module, version $5.2.2$, headless, from a saved file next to \texttt{network\_states.json}. It created $54$ objects sharing one mesh and made $54\times121=6{,}534$ calls to \texttt{keyframe\_insert}, which Blender stores as $19{,}602$ keyframe points because each call keys the three scale channels. At frame $121$ the scale of the largest marker is $1.0$ and the smallest marker's scale is $0.9044$, both equal to the cube roots of the recorded stocks divided by the peak. That run checks the script's handling of the data and the construction and animation of the objects. It does not check what the viewport or a render looks like, and it does not touch the model's correctness. Two cautions apply to what it shows. The playback is an animation of a recorded run, in the sense of Section~6.1: Blender computes nothing, and the claim to a simulation rests on the checks above, applied to the data before display. In particular, the script clamps negative stock to zero when sizing a marker, so a run with negative stocks would look plausible. The nonnegativity check must be made on the data and not on the picture.
+
+\section{Exercise: Break the Model on Purpose}
+
+\begin{exercise}[6.14: Predict, break, replay]
+Using \texttt{netsim.py}, compute $\mu_{\max}$ and the two bounds on $\Delta t$ for your own choice of $\kappa$ and $\lambda$, and predict the largest step that keeps a spike initial condition nonnegative and the largest that remains stable. Run steps just inside and just outside each bound, record the minimum stock and the ledger error, and confirm that the ledger error stays small even when the run diverges. Halve the step and measure the ratio of errors against the closed-form solution to confirm first-order convergence.
+
+Then predict the north-pole accumulation rate for a cap $c$ and a source $\sigma$ of your choosing, using the number of edges at the pole, and compare it with the measured slope between two late times. Record a run, replay it twice, and resume it from a checkpoint, and compare digests. Rewrite the update in another algebraically equivalent form and say whether you expect equal digests, and why.
+
+For the vortex port, hold all settings fixed and vary only the step with the two noise scalings, and reproduce the table above. Decide, and state in a paragraph, whether the dependence on the step is a defect or a modelling choice in the original, and what you would need to know about the intended meaning of the turbulence slider to decide. Finally, export a run to \texttt{network\_states.json}, animate it in Blender, and write down one thing the animation shows and one thing about the run that it cannot show.
+For Entropy's Edge, choose a command list with at least three scans and show that the projection is the same for every seed while the full state is not. State the initial conditions under which your closed form for energy holds, and recompute it when the buildings must be paid for at the turns you choose. Describe one purpose for which the file is an adequate model and one for which it is not, and say what mechanism the second would need. Finally, run \texttt{tetraorthodrome.py} twice in one session without editing it, count meshes and materials after each run, and state what you may conclude about a saved file that shows suffixed datablock names.
+\end{exercise}

@@ -1,0 +1,75 @@
+\chapter*{Prologue: The Doughnut}
+\addcontentsline{toc}{chapter}{Prologue: The Doughnut}
+\markboth{Prologue}{Prologue}
+
+Most introductions to Blender begin with a doughnut: a torus, a layer of icing, a scatter of sprinkles. The exercise is popular because it touches many tools at once, and it has become a joke among learners for the same reason, since nearly everyone who stays with the program makes one. This book begins with a doughnut as well, except that ours is a Moon-forming synestia. The joke is also a method. The object is chosen because it has a recognisable shape, a published scientific context, and a lesson that the shape alone would hide, namely that a picture of a structure is a set of decisions and that each decision can be examined.
+
+The wider purpose of the book can be stated here. Blender is treated as an environment for conducting and inspecting computational experiments, and not only as a tool for making films, games or models. Geometry supplies the experimental domain. Scripts define interventions and parameter sweeps. Scenes make the resulting structures available for inspection, and rendering is one step among measurement, comparison and reproducibility. Blender can also run physical simulations of its own, such as rigid bodies, cloth and fluids, and a script written in Python can call numerical packages, so that a separate solver computes traffic, resource flows or ecological dynamics while Blender builds and displays the situation that the solver describes. The responsibilities differ. The mesh depicts, the solver computes, and the script moves states between them. Chapters 15 through 17 already work in this way on a small scale: a numerical rule runs outside Blender, its result is translated into a scene, and the scene is read back to check that nothing was lost in translation. Only the occupancy, branching and network examples have been exercised in this book so far. Coupling to a civic, factory or ecological simulation is a stated aim of Part VII and has not been tested here.
+
+\section*{A Prescribed Field}
+
+The object for this prologue is deliberately modest. Let $R$ be the distance from an axis and $z$ the height above a midplane, and prescribe a density
+\[
+  \rho(R,z)=\rho_0\exp\!\Big[-\frac{(R-R_0)^2}{2\sigma_R^2}-\frac{z^2}{2\sigma_z^2}\Big],\qquad R\ge0,
+\]
+with the ring radius $R_0=1$ as the unit of length, $\sigma_R=0.35$ and $\sigma_z=0.15$. The numbers were chosen for a legible picture. The field is thick around a ring of radius one and thins away from it, and it is an invented profile and not the output of a calculation of a planetary body. A synestia is described in the planetary-science literature, as recalled and not rechecked, as a rapidly rotating, partly vaporised mass of planetary material extending past the radius at which it could rotate as a single planet, and it has been proposed by Lock and Stewart as a stage in the formation of the Moon. That description is recalled from reading, and nothing below depends on it or tests it.
+
+A contour of the field, the set of points where $\rho=f\rho_0$ for a level $0<f<1$, is an ellipse in the $(R,z)$ plane with semi-axes $a=k\sigma_R$ and $b=k\sigma_z$, where $k=\sqrt{2\ln(1/f)}$. Rotated about the axis it is an elliptical torus, whose volume by Pappus's theorem is $2\pi^2R_0\,ab$ when $a<R_0$. The surface we draw is therefore one member of a family indexed by the level $f$, and the first thing to learn is how much of what the picture shows depends on the index.
+
+\section*{What the Contour Level Decides}
+
+The table lists, for seven levels, the semi-axes, the radius of the central hole $R_0-a$, the volume enclosed by the surface, and the fraction of the total mass inside it. The total mass of the field for $R\ge0$ is $2.0731$ in units of $\rho_0R_0^3$. The enclosed mass was computed by numerical quadrature, and checked against a brute-force sum on a $1501\times1501$ grid, which agreed to better than $5\times10^{-5}$ at four levels.
+
+\begin{center}
+\begin{tabular}{rrrrrrr}
+\toprule
+$f$ & $k$ & $a$ & $b$ & $R_0-a$ & Volume & Mass fraction\\
+\midrule
+0.6    & 1.011 & 0.354 & 0.152 & 0.646  & 1.0587 & 0.3999\\
+0.3    & 1.552 & 0.543 & 0.233 & 0.457  & 2.4954 & 0.6998\\
+0.1    & 2.146 & 0.751 & 0.322 & 0.249  & 4.7724 & 0.8998\\
+0.03   & 2.648 & 0.927 & 0.397 & 0.073  & 7.2678 & 0.9698\\
+0.0169 & 2.857 & 1.000 & 0.429 & 0.000  & 8.4572 & 0.9829\\
+0.01   & 3.035 & 1.062 & 0.455 & $-0.062$ & none & 0.9898\\
+0.003  & 3.409 & 1.193 & 0.511 & $-0.193$ & none & 0.9969\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Three observations follow, each a statement about the construction and not about any planet. First, the hole is a property of the contour and not of the field. The hole closes when $a=R_0$, that is at $f=\exp[-(R_0/\sigma_R)^2/2]=0.01688$, and below that level the contour surface passes through the axis and the object has no hole at all. The same field is a doughnut when drawn at $f=0.1$ and a filled body when drawn at $f=0.01$. Second, the volume enclosed by the surface grows by a factor of $6.9$ between $f=0.6$ and $f=0.03$, while the mass inside grows by a factor of $2.4$, from $40\%$ to $97\%$. The apparent size of the object in a picture is a choice of level, and it carries no mass information unless the level is stated. Third, the enclosed mass fraction is close to $1-f$: it is $0.3999$, $0.6998$, $0.8998$ and $0.9698$ at the first four levels. For a field that is a Gaussian in two Cartesian coordinates the relation is exact, and the departures here, which are below $0.0003$ at those four levels and $0.0002$ at the closing level, would come from the factor $2\pi R$ in the volume element. That explanation was not tested separately. The relation is useful because it turns the choice of contour into a statement about mass, which is the kind of statement a rendering should be able to support.
+
+\section*{The Surface in Blender}
+
+Each contour is built as a mesh with $N$ points around the axis and $N/2$ around the ellipse. The script is \texttt{synestia\_blender.py}. The volume of the closed mesh, computed from its faces, approaches the analytic value $4.77238$ at $f=0.1$ from below, with relative errors $-1.23\times10^{-1}$, $-3.2\times10^{-2}$, $-8.0\times10^{-3}$, $-2.0\times10^{-3}$ and $-5.0\times10^{-4}$ for $N=16$, $32$, $64$, $128$ and $256$. Each doubling of $N$ divides the error by about four. A mesh is inscribed in the smooth surface and so understates its volume, and the size of the understatement is a choice of resolution that should be recorded beside any volume taken from a mesh.
+
+The hole was also read from the mesh, as the smallest signed ring radius over the vertices of one section, against the prediction $R_0-a$. The two agreed to the four decimals printed, at five levels, with the hole present at $f=0.1$, $0.03$ and $0.0175$ and absent at $0.0165$ and $0.01$. The agreement is a check that the code implements the formula and not an independent confirmation of the formula, because the vertices were placed from it. The figure shows four nested surfaces at $f=0.6$, $0.3$, $0.1$ and $0.03$, each with a quarter of the ring cut away so that the nesting is visible. There are four objects, each with its own mesh, and one material that reads the contour parameter $k$ from a custom property on the object and maps it through a colour ramp, as in Chapters 15 to 17.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.86\textwidth]{figs/fig0_synestia.png}
+\caption{Four contour surfaces of the prescribed density field at $f=0.6$, $0.3$, $0.1$ and $0.03$, from the inside out, with a quarter of each ring removed to show the nesting. One material colours each surface by its contour parameter $k$. The figure shows the contours of an invented field. It is not a model of a planetary structure.}
+\end{figure}
+
+\section*{Depicted, Prescribed, Established}
+
+The distinction that the rest of the book keeps returning to can be stated in terms of this object. The mesh \emph{depicts}: it shows one contour of one field at one resolution. The field is \emph{prescribed}: the Gaussian profile, the three numbers and the choice of units were assumptions and were not derived. Nothing in the prologue is \emph{established} about a synestia. The measurements establish properties of the construction, namely where the hole closes, how mesh volume converges and how mass relates to level, and they establish them to the precision stated. A physical statement would need a calculation of the structure from equations of state, rotation and energy, and then a comparison of the result with the field assumed here. One prescribed rotation law, for instance Keplerian rotation with angular velocity proportional to $R^{-3/2}$, could be added to the field, and the angular momentum inside each contour computed. That would still be a prescription. The progression from an impressive glowing object to an investigation of whether its structure follows from stated assumptions is the experimental programme of the book, and the chapters that follow show, in an order set by the vocabulary each needs, how each step is carried out and checked.
+
+\section*{What This Prologue Does Not Show}
+
+Everything above concerns one invented field with three parameters and a single set of ellipses. The relation between enclosed mass and level was observed at seven levels and not proved for this field. The rotation law mentioned in the previous section was not computed. The mesh-volume convergence was measured at one level. The comparison with the literature on synestias rests on recollection and was not checked, and no claim about the Moon, about planetary formation, or about the real shape of a synestia is made or implied.
+
+\begin{exercise}[P.1: Move the closing level]
+Change $\sigma_R$ to $0.25$ and $0.5$, and predict the level at which the hole closes before computing it. Confirm the prediction from the mesh, and report how the enclosed mass fraction at closing changes.
+\end{exercise}
+
+\begin{exercise}[P.2: Angular momentum inside a contour]
+Prescribe an angular velocity proportional to $R^{-3/2}$ and compute the angular momentum inside each contour of the table. State which part of the result depends on the prescription and which part depends only on the density field.
+\end{exercise}
+
+\begin{exercise}[P.3: A different profile]
+Replace the Gaussian in $R-R_0$ by an exponential $\exp(-|R-R_0|/\ell)$. Determine whether contour surfaces are still ellipses, and describe how the hole-closing level and the mass--level relation change.
+\end{exercise}
+
+\begin{exercise}[P.4: The customary doughnut]
+Model the ordinary doughnut with a torus of major radius $1$ and minor radius $0.4$, and compute its volume from the mesh at three resolutions against $2\pi^2R_0r^2$. Then add a layer of icing as a second surface and report how its volume is defined and what the mesh measurement of it establishes.
+\end{exercise}

@@ -1,0 +1,48 @@
+\chapter{Batch Generation and the Manifest}
+
+\section{From One Object to a Family}
+
+A constructor that makes one staircase becomes a way of exploring a design when it is called many times with different specifications. The questions that arise are those of any batch process. How are the specifications chosen, and can the choice be reproduced? What happens when one of a hundred specifications is wrong? How much of the work can members share? And what record must exist so that the family, and not only each member, can be rebuilt? This chapter answers them for the staircase constructor of Chapter 22 using the file \texttt{batch.py}, which builds a family from a seeded sampler, writes a manifest, and verifies the manifest in a fresh process.
+
+The sampler draws each of the four parameters independently from a short list: $n$ from $3$ to $14$, three values of rise, three of run, and three of width, so there are $12\cdot3\cdot3\cdot3=324$ distinct specifications. The draws come from Python's \texttt{random.Random} seeded by an integer. The list is deliberately small. Members with equal specifications then share one mesh, as the cluster sites of Chapter 15 shared one cube, and the effect of sharing can be counted. Member $i$ is placed on a grid, $25$ to a row, at a pitch of four units, so that its position is a function of its index alone.
+
+\Needspace{34\baselineskip}
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true,firstline=17,lastline=64]{batch.py}
+
+\section{When One Specification Is Wrong}
+
+The function validates every specification before it builds anything. Two policies for a bad specification are offered. Under the first, \texttt{stop}, a batch containing any invalid specification builds nothing and returns the errors. Under the second, \texttt{skip}, the valid members are built and the errors are returned beside them. The two were compared on a batch of $50$ specifications in which three were corrupted: member $7$ had $n=0$, member $20$ a negative rise, and member $41$ no width. Under \texttt{stop} no object was built, the generated collection held none, and the three errors were reported with their indices and messages. Under \texttt{skip} forty-seven objects were built, the same three errors were reported, and the members kept the indices they had in the batch, so the built indices ran $0$ to $6$, then $8$ and $9$.
+
+The choice between them is a decision about what a batch means. If the family is only valid as a whole, as when a street of stairs is meant to be continuous, a partial family is worse than none, and \texttt{stop} is right. If members are independent samples, the valid ones are worth keeping, and \texttt{skip} is right provided that the errors are not lost. Validation before building is common to both, since it prevents the third possibility, a family half built before the first failure and left in the scene.
+
+\section{Counting What Is Shared}
+
+With $324$ possible specifications, a batch of $N$ draws contains fewer distinct members than $N$. For $N=200$ and seed $5$ there were $145$ distinct meshes in the scene for $200$ objects, and for seed $6$ there were $148$. If every specification were equally likely and independent, the expected number of distinct specifications among $200$ draws is $324\,[1-(1-1/324)^{200}]=149.4$. The two observations lie within a few of that figure. The number of meshes in Blender equalled the number of distinct specifications in every case, so the cache works as intended, and a family of many objects costs as many meshes as it has distinct shapes.
+
+Larger batches approach the limit. For $N=100$, $1000$ and $5000$ the number of distinct specifications was $91$, $318$ and $324$, so $5000$ objects shared $324$ meshes, and the whole possible family was present. Timing came from three repetitions in a fresh factory-reset scene each time. The median time to build was $25$ ms, $248$ ms and $1001$ ms, with the range over repetitions $24$ to $25$, $213$ to $288$ and $931$ to $1009$ ms, which is about $250$, $250$ and $200$ microseconds per member. The cost per member is roughly constant over a fifty-fold range, in contrast to the growth of the operator loop in Chapter 20, and a batch of five thousand members takes about a second on this machine. As elsewhere, the timings are for orders of magnitude on one machine.
+
+\section{The Manifest}
+
+The record of a family is a text file containing the constructor, its version, the seed, the count, and one entry per member with its specification, geometry hash and location, together with a hash of the whole body. For $N=200$ and seed $5$ the manifest was $26{,}940$ bytes. Generating the family twice, in two separate runs of Blender, gave byte-identical files, and a different seed, $6$, gave a different manifest, whose hash was $5dce27454cf7$ against $e6e0d5b70f8e$ for seed $5$.
+
+The test of a manifest is whether the family can be rebuilt from it alone. A fresh Blender process read the manifest, built every member from the stored specifications, and compared geometry hashes and specifications with the stored ones. All $200$ of $200$ members agreed and the manifest hash was intact, with no errors reported, in $106$ ms. This shows that the construction is deterministic on one machine and that the manifest holds what is needed. It does not show that the seed alone would regenerate the same specifications on every version of Python, because the manifest lists the specifications explicitly and the verification does not use the seed. That is a reason to store the specifications and not only the seed. The manifest's hash detects any change to the file, which includes accidental editing but does not detect a change made together with a recomputed hash.
+
+\section{What These Experiments Do Not Show}
+
+The family has four parameters with a short list of values each, and the batches had at most $5000$ members. The failure test used three corrupted specifications in one batch. Nothing was tested about batches too large to hold in memory, about failures that occur during building and not during validation, or about members changed after generation. The agreement of the distinct-mesh counts with the probabilistic estimate rests on two seeds at $N=200$ and on three batch sizes, and is a consistency check and not a test of the sampler's quality. The manifest was verified on the machine that made it. Verification on another machine or another build of Blender is the real test of whether it is a record, and was not done.
+
+\begin{exercise}[23.1: A third policy]
+Add a policy \texttt{repair} that clamps each invalid parameter to the nearest allowed value and reports what it changed. State one situation in which this is acceptable and one in which it hides an error, and test your function on the three corrupted specifications.
+\end{exercise}
+
+\begin{exercise}[23.2: Check the estimate]
+For $N=50$, $200$ and $1000$, generate $20$ batches with different seeds and compare the mean number of distinct specifications with $324\,[1-(1-1/324)^N]$. Report the standard deviation across batches and say whether the estimate is within it.
+\end{exercise}
+
+\begin{exercise}[23.3: Tamper]
+Edit one specification in a manifest by hand without changing its geometry hash and run the verification. Then edit the hash too and update the manifest hash. State which of the two edits is detected and by which comparison.
+\end{exercise}
+
+\begin{exercise}[23.4: Another machine]
+Run the verification on a different machine or a different build of Blender, if one is available, and report whether the geometry hashes still agree. If they do not, find which part of the construction is responsible.
+\end{exercise}

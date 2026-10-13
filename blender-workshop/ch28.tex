@@ -1,0 +1,136 @@
+\part{Orchestration and Correctable Inquiry}
+
+\chapter{Readings, Alternative Constructions, and Staged Review}
+
+\section{A Request Is a Specification With Gaps}
+
+Work on a scene is increasingly handed from one agent to another: from a person to a script, from a script's author to a colleague, or from a person to a language model that writes the script. In each case the request is a specification with gaps, the delegate fills the gaps, and something checks the result. This chapter treats the three parts in the way the preceding chapters treated geometry and state, as things that can be built in more than one way and measured. No language model was run for any experiment below. The delegate is a function in \texttt{review.py} that builds the staircase of Chapter 22 and can be told to build it wrongly in a chosen way, and the readings of a request are enumerated by hand. What the experiments can support is therefore a statement about the structure of requests, constructions and review, and nothing about how often any particular delegate makes any particular mistake.
+
+\section{Three Readings of One Sentence}
+
+Take the request \emph{a staircase of twelve steps rising 2.4}. It states a count and a height and nothing else. Three readings are each consistent with the sentence under a different definition of its words. In the first, there are twelve solid steps and the top of the solid is at height $2.4$, so the rise of each step is $0.2$. In the second, there are twelve risers with the last of them leading to an upper floor at $2.4$, which leaves eleven treads in the solid, each of rise $0.2$, and a solid whose top is at $2.2$. In the third, there are twelve steps and the height of $2.4$ is measured from the first tread to the last, which covers eleven intervals, so the rise is $2.4/11$ and the solid's top is at $2.618$. The run and the width of $0.3$ and $1.2$ were chosen for the table, since the request gives neither.
+
+\begin{center}
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+Reading & $n$ & Rise & Solid top & Volume & Relative to first\\
+\midrule
+A: twelve steps, solid top at 2.4 & 12 & 0.2000 & 2.4000 & 5.6160 & 1.0000\\
+B: twelve risers, upper floor at 2.4 & 11 & 0.2000 & 2.2000 & 4.7520 & 0.8462\\
+C: twelve steps, 2.4 first to last & 12 & 0.2182 & 2.6182 & 6.1265 & 1.0909\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The readings differ in volume by up to $15\%$ at fixed run and width, which is not small, but it is smaller than the spread produced by the entries the request leaves out: under the first reading alone, a run between $0.25$ and $0.35$ and a width between $1.0$ and $1.5$ give volumes from $3.90$ to $8.19$, a ratio of $2.1$. A delegate that fills those two gaps by default has therefore made a larger decision than a delegate that picks the wrong reading, and the request never mentioned either.
+
+Added statements remove readings, and which statement does the removing is not obvious in advance. The statement that the solid is $2.4$ tall leaves only the first reading. That every riser is $0.2$ leaves the first and the second. That there are twelve treads leaves the first and the third, and that there are eleven treads leaves only the second. A review that checks a delivered staircase against the sentence of the request would pass every one of the three, since each satisfies the sentence under its own definitions. The check that fails is a check against a statement that was not in the request, and it can be written only after someone has decided what the request meant. This does not make the request defective. It means that a record of the work should carry the reading that was adopted, as a sentence in the specification of Chapter 22, next to the numbers.
+
+\section{Three Constructions of One Solid}
+
+A reading fixes the solid and not the way it is built. Three constructions of the same solid were compared, for twelve steps of rise $0.2$, run $0.3$ and width $1.2$. The \emph{prism} is the constructor of Chapter 22, one closed polyhedron made from the side profile. The \emph{columns} are twelve separate cuboids, one per step, each rising from the floor to the height of its step. The \emph{layers} are twelve separate slabs, each of thickness $0.2$, each running from the front of its step to the back wall. Each is a plausible way to write the script. The code is in \texttt{alternatives.py}.
+
+The three agree on the volume, summed from signed tetrahedra, to the printed precision of $5.616000$, which is the formula value $w\,r\,u\,n(n+1)/2$. They disagree on almost everything else.
+
+\begin{center}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Construction & Vertices & Faces & Surface area & Area over the true area\\
+\midrule
+prism & 52 & 28 & 23.76 & 1.00\\
+columns & 96 & 72 & 55.44 & 2.33\\
+layers & 96 & 72 & 71.28 & 3.00\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The true surface area of the solid is $23.76$. The two assemblies of parts count their internal faces. After vertices at identical positions were merged, $11$ of the $133$ edges of each assembly were shared by more than two faces, whereas none of the $78$ edges of the prism was. In Blender, \texttt{Mesh.validate} reported no change for any of the three, and before merging no construction had an edge with more than two faces or a boundary edge, since each cuboid is closed by itself. A mesh check that asks only whether edges are closed would therefore pass all three.
+
+Differences appear when something is done with the mesh. A vertical line through the layered solid crossed between $2$ and $24$ surfaces, against exactly $2$ for the prism and the columns. An estimate of thickness as the distance between the first and second hit gave the correct height for the prism and the columns, and a mean absolute error of $1.126$ for the layers, whose second hit is the next slab boundary. Estimating thickness from the first and the last hit was correct for all three. The first hit from above, which is what a renderer or Blender's own \texttt{ray\_cast} sees, agreed among all three constructions to $3\times 10^{-6}$ or better over $200$ random lines, so a picture of the three is the same picture.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrr}
+\toprule
+Boolean solver & Construction & Faces after & Volume after & Error\\
+\midrule
+exact, self-intersection off & prism & 18 & 1.5960 & 0.0000\\
+exact, self-intersection off & columns & 6 & 0.0840 & $-1.5120$\\
+exact, self-intersection off & layers & 0 & none & none\\
+exact, self-intersection on & prism & 18 & 1.5960 & 0.0000\\
+exact, self-intersection on & columns & 36 & 1.5960 & 0.0000\\
+exact, self-intersection on & layers & 36 & 1.5960 & 0.0000\\
+float & prism & 18 & 1.5960 & 0.0000\\
+float & columns & 42 & 1.5960 & 0.0000\\
+float & layers & 42 & 1.5960 & 0.0000\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The boolean experiment cut away everything beyond $y=1.85$, a plane that lies inside the seventh step and meets no existing face, for an expected remaining volume of $1.5960$. With the default setting of the exact solver, the prism was right, the columns returned a six-face mesh of volume $0.084$, and the layers returned no faces at all, in both cases without an error message. With the exact solver's self-intersection option on, and with the float solver, all three were right. An earlier trial that placed the cutting plane exactly on a step boundary gave other wrong values with the float solver as well, which shows that the failures depend on the setup of the test, and the table above is the trial with a plane away from the faces. The cause of the exact solver's failure on touching parts was not investigated, and that it relates to the coincident internal faces is a conjecture consistent with the success of the self-intersection option.
+
+The lesson for comparing constructions is that agreement of the volume and the picture is weak evidence of agreement of the solid. The constructions are equal as sets of points and unequal as inputs to later operations, and the later operation is not known when the construction is chosen. A comparison therefore records the operations it exercised, here a thickness estimate and a boolean, and the construction is accepted for those and no others.
+
+\section{Staged Review of a Delegate's Output}
+
+Review is itself a construction, a sequence of stages, and the question is what a given sequence lets through. Eight stages were written, each a function of the vertices, the faces, the recorded properties and the specification. The \emph{format} stage rejects non-finite coordinates and indices out of range. The \emph{closed} stage requires each edge, taken by vertex index, to have exactly two faces. The \emph{volume} stage compares the signed volume with the formula to a relative tolerance of $10^{-5}$. The \emph{extent} stage compares the bounding box with the specification, and the \emph{area} stage compares surface area with its closed form. The \emph{provenance} stage requires the recorded specification to equal the requested one. The \emph{hash} stage compares a hash of the rounded coordinates with a reference, and the \emph{canonical} stage compares the sorted set of faces, each written as the cyclic sequence of its rounded vertex positions beginning at the smallest. Fifteen cases were run, one correct build, eleven defective builds and three that change only the order or the last digits of a correct build and should be accepted. Each stage was also applied alone.
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lcccccccc}
+\toprule
+Case & format & closed & volume & extent & area & prov. & hash & canon.\\
+\midrule
+correct & -- & -- & -- & -- & -- & -- & -- & --\\
+unit error ($\times 100$) & -- & -- & x & x & x & -- & x & x\\
+one step too many & -- & -- & x & x & x & -- & x & x\\
+one step too few & -- & -- & x & x & x & -- & x & x\\
+inside out & -- & -- & x & -- & -- & -- & x & x\\
+mirrored along $y$ & -- & -- & -- & -- & -- & -- & x & x\\
+run and rise swapped & -- & -- & -- & x & -- & -- & x & x\\
+one vertex NaN & x & -- & -- & -- & -- & -- & x & x\\
+one vertex off by $0.001$ & -- & -- & x & -- & x & -- & x & x\\
+built from columns & -- & -- & -- & -- & x & -- & x & x\\
+faces with their own vertices & -- & x & -- & -- & -- & -- & x & --\\
+no provenance & -- & -- & -- & -- & -- & x & -- & --\\
+\midrule
+vertex order rotated (should pass) & -- & -- & -- & -- & -- & -- & x & --\\
+faces shuffled (should pass) & -- & -- & -- & -- & -- & -- & x & --\\
+noise of $10^{-9}$ (should pass) & -- & -- & -- & -- & -- & -- & x & --\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The properties alone, from format to provenance, pass exactly one defective build, the mirrored staircase, which has the right volume, extent and area and descends where the original rises. The hash stage catches it and also rejects all three builds that should be accepted, since a reordering of vertices or a perturbation of $10^{-9}$ changes a hash of rounded text. The canonical stage catches the mirrored staircase and accepts the three benign builds. It also accepts the build whose faces each carry their own vertices, which the closed stage rejects, because the canonical stage compares positions and that build has the same faces at the same positions. Whether such a mesh is acceptable is a decision about representation and not about the solid, since unmerged vertices are a defect for any operation that follows edges. The provenance stage is the only one that sees the missing record, as no property of the geometry can. The inside-out mesh passes the extent and area stages and is seen only by the sign of the volume.
+
+How small a defect each stage sees was tested by moving one vertex by an amount $d$ from $10^{-9}$ to $10^{-1}$. Nothing flagged a displacement of $10^{-5}$ or below. At $10^{-4}$ the hash and the canonical stages flagged it, because the rounding is to four places and a displacement of one unit in the last place is flagged only by the way the coordinate rounds, which was not examined. At $10^{-3}$ and above the volume and area stages joined them. Resolution is a property of the stage, set by a tolerance chosen in advance, and a review that reports no difference has reported none above that tolerance. The same stages were then run on the meshes after a round trip through Blender, with storage in single precision and the faces rebuilt from loops, and the first failing stage was the same for all fifteen cases. The properties were passed directly in that test, since the stand-in has nowhere to store them in a mesh, so the test says that the geometry stages survive float32 storage and says nothing about provenance stored in a file.
+
+The same structure applies to review by a person or by another model. A reviewer that checks the sentence of the request, a mesh validity report and the picture, which is a reasonable summary of an unaided check, resembles the first three stages here, and the mirrored staircase, the layered solid and the unmerged mesh are the kinds of thing it would not see. That is an analogy and not a measurement: no reviewer was run, and the defects here were chosen by the author, so the table is a statement about this list and not an estimate of what a delegate will do.
+
+\section{Staging as a Record}
+
+The experiments suggest a form for a delegation record that the final project can use. The request carries the reading that was adopted, stated as a sentence and as numbers, together with the list of entries filled by default. The delivered construction carries the operations it was tested on, which in this chapter would be the first-hit view, the thickness estimate and the boolean. The review carries its stages with their tolerances, the defects each was shown to catch and the defects that none was shown to catch, in the manner of the table above. Each of these is something that a later reader can check, and none depends on trusting the delegate, the reviewer or the account given of either. A stage was shown to catch a defect only if the defect was injected and seen, and the list of what was injected is part of the record.
+
+\section{What These Experiments Do Not Show}
+
+The delegate is a stand-in and the defects were chosen by the author, so nothing here measures how a person, a script author or a language model fails. The three readings are three among others, and the argument that a request has a set of readings does not show that the set is always small or that the added statements always separate them. The constructions are three for one solid, and the boolean results are for one Blender version and one cutting plane, with the cause of the exact solver's failures untested. The review stages are sensitive at tolerances picked in advance, and a different tolerance changes the table. No visual review was included, and no cost was measured, although the stages are cheap for a mesh of this size. Nothing was tested about iterative review, in which a rejected build is returned to the delegate with an explanation, and nothing about a delegate that sees the review stages and adapts to them, which would change what a pass means.
+
+\begin{exercise}[28.1: A fourth reading]
+Write a fourth reading of the request, state the added statement that distinguishes it from the three given, and build it with the constructor of Chapter 22. Report its volume relative to the first reading and the statements under which it survives.
+\end{exercise}
+
+\begin{exercise}[28.2: A fourth construction]
+Build the same solid by extruding the profile with Blender's \texttt{bmesh} operators and report the table of vertices, faces, area, boundary edges and edges with more than two faces. Then repeat the boolean experiment on it with the exact solver's default settings.
+\end{exercise}
+
+\begin{exercise}[28.3: Close the mirrored gap]
+Add a stage that detects the mirrored staircase without a reference mesh, from the centroid of the solid or from the order of the step heights along $y$. Show that it passes the three benign builds, and describe a defect it would not catch.
+\end{exercise}
+
+\begin{exercise}[28.4: The tolerance]
+Repeat the displacement sweep with tolerances of $10^{-3}$, $10^{-5}$ and $10^{-7}$ in the volume stage, and report the smallest displacement flagged and the number of correct builds falsely rejected after a round trip through Blender.
+\end{exercise}

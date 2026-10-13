@@ -1,0 +1,97 @@
+\chapter{Creating Data: Meshes, Attributes, and What to Check}
+
+\section{Building from Arrays}
+
+Chapter 20 established that construction by the data interface is cheap and leaves the scene alone. This chapter turns to what is built. A mesh is stored as arrays: vertex positions, a list of loops that each name a vertex, and polygons that each name a run of loops. Blender offers a convenient entry point, \texttt{Mesh.from\_pydata}, that takes ordinary Python lists, and a lower-level one, \texttt{foreach\_set}, that fills each array from a flat buffer. The second is what a program that has already computed its geometry in NumPy should use, because the geometry arrives as arrays and need not be turned into lists of tuples and back. The function in \texttt{mesh\_tools.py} builds a mesh of equal-sided faces in that way, and a second function reports the facts a script should check before trusting any mesh it has made.
+
+\Needspace{26\baselineskip}
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true]{mesh_tools.py}
+
+The report gives the counts of vertices, edges, faces and loops, the Euler characteristic $V-E+F$, the number of boundary edges, the number of edges shared by more than two faces, and the total face area. Each of these is a statement that can be compared with what the construction was meant to produce, and the chapters of Part V used them in this way.
+
+\section{Is the Lower-Level Route Worth It?}
+
+A square grid of $n\times n$ quadrilaterals was built both ways, with the same coordinates and indices, in an empty scene, and the median of three repetitions was taken.
+
+\begin{center}
+\begin{tabular}{rrrr}
+\toprule
+Quads & \texttt{from\_pydata} (ms) & \texttt{foreach\_set} (ms) & Ratio\\
+\midrule
+2500 & 3.6 & 1.7 & 2.2\\
+10\,000 & 13.7 & 5.8 & 2.4\\
+40\,000 & 58.9 & 24.1 & 2.4\\
+160\,000 & 238.3 & 99.8 & 2.4\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The two scale together, and the lower-level route is a little over twice as fast at every size. That is a modest gain, and it does not change the choice of method for a mesh of a few thousand faces, where both take milliseconds. The timing for \texttt{from\_pydata} starts from Python lists, and the timing for \texttt{foreach\_set} starts from NumPy arrays, so the comparison is between the two routes as a program would use them, and a program whose data were already lists would not see the same ratio. Whether the speed matters is therefore a question about the size of the mesh and the number of meshes. The two routes gave the same result on a $30\times30$ grid: identical coordinates, identical edges and identical vertex lists for every polygon, so the faster route is not an approximation of the slower. These timings are from one machine and should be read for their order of magnitude.
+
+\section{What \texttt{validate} Finds and What It Does Not}
+
+A mesh can be built from indices that make no geometric sense, and the interface will often accept it. The method \texttt{Mesh.validate} checks for structural errors and repairs them, returning a true value if it changed anything. It was applied to six constructed cases.
+
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+Case & Before (V,E,F) & Returned & After (V,E,F)\\
+\midrule
+clean quad & 4, 4, 1 & false & 4, 4, 1\\
+face repeating a vertex & 4, 4, 1 & true & 4, 3, 0\\
+duplicate face & 4, 4, 2 & true & 4, 4, 1\\
+loose vertex & 5, 4, 1 & false & 5, 4, 1\\
+zero-area triangle & 3, 3, 1 & false & 3, 3, 1\\
+coincident vertices & 8, 8, 2 & false & 8, 8, 2\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The method repaired the two cases that are structurally invalid, deleting the face that named the same vertex twice together with one of its edges, and removing the duplicate face. It left alone the three cases that are structurally valid and geometrically doubtful: a vertex with no face, a triangle whose three points lie on a line, and two faces that meet along a pair of coincident but unmerged vertices, so that what looks like a shared edge is really two. These are the faults that matter in a generated structure, since each makes a mesh that renders and that fails at the first measurement. The report of Section 21.1 exposes two of them when its numbers are compared with what the construction promised: the coincident pair shows as boundary edges where a shared edge was intended, and the degenerate triangle as a total area of zero. The loose vertex is not exposed by the report as written, which has no count of unused vertices, and Exercise 21.2 asks for one. A validator of the interface cannot know what the construction intended, and the script's own checks, which compare the build with its specification, are the ones that can.
+
+\section{Winding Decides the Sign}
+
+The order in which a face lists its vertices decides which side is its front. A cube was built with every face written outward and again with every face reversed. The signed volume computed from the faces was $+1.000$ for the first and $-1.000$ for the second, and the normals of the second pointed towards the centre. Applying \texttt{recalc\_face\_normals} to the second mesh restored a signed volume of $+1.000$. A volume taken from a mesh is therefore meaningful only after the orientation has been checked, and a script that sums mesh volumes, as the prologue's volume check did after recalculating normals, should confirm that the sign is positive or should take the absolute value deliberately. The recalculation can be relied on only for a closed, consistently connected surface, as far as is known here, since it has nothing but the surface itself to decide which side is outward, and Exercise 21.3 tests the open case.
+
+\section{Attributes}
+
+Data attached to a mesh, such as the number of sides of each cell in Chapter 18, are stored as attributes on a named domain. For a four-vertex square, a floating-point attribute on the point domain had four values, one for each vertex, and an integer attribute on the face domain had one. A colour attribute had four components per element. Setting an attribute from a buffer of the wrong length failed with an error that named the expected and received lengths and an internal error in the call, so the length of the buffer is checked by Blender. Asking for a second attribute with a name already in use did not replace the first. It created an attribute named with a numeric suffix, so two attributes were present and the original name still referred to the first. A script that creates attributes in a loop without checking for existing ones will accumulate them, as the generated names showed.
+
+\section{Where Precision Goes}
+
+Positions are stored in single precision. A vertex requested at a distance $X$ from the origin plus a small offset $d$ was read back, and the offset recovered was as follows, in the same units.
+
+\begin{center}
+\begin{tabular}{rrrr}
+\toprule
+$X$ & $d=0.001$ & $d=0.01$ & $d=0.1$\\
+\midrule
+$10^{3}$ & 0.001 & 0.010 & 0.100\\
+$10^{4}$ & 0.001 & 0.0098 & 0.0996\\
+$10^{5}$ & 0.000 & 0.0078 & 0.1016\\
+$10^{6}$ & 0.000 & 0.000 & 0.125\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+At a distance of one hundred thousand units, a displacement of a thousandth was lost and a hundredth became a little under a hundredth. At a million units a hundredth was lost and a tenth became an eighth. The spacing of representable numbers at $10^5$, $10^6$ and $10^7$ is $0.0078$, $0.0625$ and $1$, and a vertex at $10^7+0.001$ read back as exactly $10^7$. An object's location showed the same behaviour: a location of $10^7+0.3$ was read back as $10^7$. The consequence for construction is that positions should be built near the origin and in units that keep the structures of interest within a few thousand units, and that a quantity needing finer resolution than the spacing at its distance must be stored in the data, as an attribute or a property, and not in the position. A structure placed far from the origin does not lose its shape gradually; its smallest features simply cease to exist.
+
+\section{What These Experiments Do Not Show}
+
+All results are for one build of Blender, for small constructed examples and a grid of at most $160{,}000$ quadrilaterals, and the timings come from a software-rendered headless session. The validation was tested on six cases, chosen to be typical and not exhaustive, and nothing was tested on meshes with non-manifold edges or with faces of unequal size, which \texttt{mesh\_from\_arrays} does not support. The precision table is for single-precision positions as stored in vertices and in object locations, and it was not tested for other quantities, such as the values of attributes or the transforms applied by modifiers. Nothing here says that single precision is a defect: a mesh near the origin has far more resolution than a rendering can show.
+
+\begin{exercise}[21.1: Extend the builder]
+Extend \texttt{mesh\_from\_arrays} to accept faces of different sizes by passing an array of face sizes. Rebuild a Voronoi arrangement of Chapter 18 with it, and compare the report against the one from \texttt{from\_pydata}.
+\end{exercise}
+
+\begin{exercise}[21.2: A check that finds the fault]
+Add to the report a count of vertices not used by any face and a count of coincident vertex pairs within a tolerance you choose. Run it on the six cases of Section 21.3 and say which faults it detects.
+\end{exercise}
+
+\begin{exercise}[21.3: Orientation on an open surface]
+Build a hemisphere with half of its faces reversed and compute its signed volume after calling the recalculation of normals. Report what the result shows and why the method cannot choose an outward side for an open surface.
+\end{exercise}
+
+\begin{exercise}[21.4: Find the safe radius]
+Build a unit cube and place it at distances $10^3$, $10^4$, $10^5$ and $10^6$ units from the origin. At each, compute the smallest edge length that the stored coordinates give, and report the distance at which the cube's edges cease to be equal within $10^{-3}$.
+\end{exercise}

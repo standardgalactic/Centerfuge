@@ -1,0 +1,76 @@
+\chapter{The Final Project: A Habitat That Can Be Revisited}
+
+\section{The Project as a Record}
+
+The preceding chapters built separate things: a habitat of platform, walls, entrance and plinth in Chapter 3; a validated constructor and a seeded family of staircases in Chapters 22 and 23; a stateful process kept apart from its scene in Chapter 24; export in Chapter 25; identifiers in Chapter 26; coupling in Chapter 27; review in Chapter 28; and a ledger of runs in Chapter 29. This chapter assembles them into one project and tests the assembly, because the interesting failures of a project are not inside the parts but between them. The project is a record, and everything else is regenerated from it. The habitat is recorded as the name of its entrance variant. The family is recorded as a seed, a count, and for each member a specification and an identifier assigned once. The process is the adaptive network of Chapter 24, recorded as a seed, an exponent, an event log and an end step. A visit is recorded as a step, an identifier, and what was observed at that step: the reading at the site and the hash of the process state. The reading at a site is the conductance of the network edge attached to it, the edge numbered $7i$ modulo $480$ for the member of index $i$, so that each site has a state that changes with the process and cannot be inferred from its geometry. The record is built by \texttt{capstone.py}, which has no dependence on Blender.
+
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true,firstline=28,lastline=43]{capstone.py}
+
+The record used below has the centre entrance, a family of $24$ members from seed $5$ placed on a ring of radius $8$ around the habitat, the process from seed $0$ with three events, namely that two edges on the settled path are cut at steps $100$ and $160$ and the first is restored at step $220$, an end step of $300$, and ten visits at steps from $60$ to $290$ to sites chosen by a seeded sampler. The family has $22$ distinct specifications among its $24$ members, so two share a mesh. The code that builds the scene and runs the tests is in \texttt{capstone\_blender.py}.
+
+\section{Building and Rebuilding}
+
+The scene is built from the record in a fresh Blender state: the habitat's seven objects, then the family's $24$ objects in $22$ meshes, each carrying its identifier, its index, its specification and a hash of its stored geometry. A \emph{composition hash} summarises the whole project: a hash of the habitat's objects by name, world matrix and vertex positions rounded to four places, of the family by identifier with geometry hash, specification and location, and of the final state of the process. It is a fingerprint of everything the record is meant to determine.
+
+Rebuilding the scene from the record in the same session gave the same composition hash, and so did rebuilding it in a separate Python process, which rules out dependence on state left behind in the first session. A third test went further. The family was created in a shuffled order, and each object was given a random name, so that names, order of creation and order in the collection all differed from the original, and the ten visits were then replayed: each identifier was resolved among the objects, the geometry hash of the object found was compared with the record, and the reading and process state at the visit's step were recomputed from the process alone. All ten visits returned to the same site with the same reading and the same state, and the composition hash was unchanged. This is the identifier discipline of Chapter 26 and the history discipline of Chapter 24 working together, and it needed neither names nor order.
+
+\section{What an Edit Touches}
+
+Four kinds of edit were made to the record, and for each the scene was rebuilt and compared with the original. The columns give whether the habitat, the process and the whole composition hash changed, the number of members whose stored data changed, the number of identifiers no longer present, and the number of the ten visits that fail on replay. The edits were: changing the entrance variant from centre to east; changing the family seed, which gives a new family with new identifiers; changing the specification of one member while keeping its identifier; and adding one event to the process, a cut at step $60$.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcrrcrc}
+\toprule
+Edit & Habitat & Members & Ids lost & Process & Visits failing & Whole\\
+\midrule
+entrance to east & yes & 0 & 0 & no & 0 & yes\\
+family seed & no & 0 & 24 & no & 10 & yes\\
+one member's specification & no & 1 & 0 & no & 0 & yes\\
+extra event at step 60 & no & 0 & 0 & yes & 9 & yes\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The entrance edit changed the habitat's hash and nothing else. The edit of one member changed that member alone, and the other $23$ matched their records. The two edits that touched other components did so through the record's own references. A new family seed assigned new identifiers, so all $24$ identifiers of the original family were absent and all ten visits failed, because a visit refers to a site by identifier. An added event changed the state of the process from step $60$ on, so nine visits failed on the state hash and the reading recorded for them, and the tenth, at step $60$, did not, since an event at step $60$ applies at the start of that step and the state reported at step $60$ has not yet received it.
+
+The same pattern was entered in the ledger of Chapter 29 as a claim, \emph{an edit to one component of the record changes that component and no other}, with one run for each edit, and the review defeated it as stated, with the family-seed edit and the added event as the defeating runs. The narrower claim that survived named the entrance edit and the one-member edit. The defeat is not a fault of the project, since a visit must depend on the family and on the process or it would record nothing, but the claim as first written was false, and the table shows exactly where the dependencies are. A second claim, that rebuilding from the record reproduces the composition hash, stood against three rebuilds, in the same process, in a fresh process, and with shuffled order and random names.
+
+Two cautions belong with the table. The visit record holds an identifier, a reading and a state hash and holds no geometry hash, so an edit that changes a visited site's geometry is not seen by the replay. The member whose specification was edited in the test is visited at step $190$ in the log, and the replay reported no failure for it. A record that must detect changed geometry at a visited site has to log the geometry hash too. And the composition hash changed under every edit, as it should, which makes it a poor guide to which edit was made. The per-component counts are the informative ones.
+
+\section{Export and Independent Reading}
+
+The assembled scene was exported as a binary glTF file and read by the independent reader of Chapter 25. The file had $31$ nodes, every one with a mesh: $24$ staircases and the $7$ parts of the habitat. It had $29$ glTF meshes, which is the $22$ distinct specifications plus the $7$ habitat parts, so the sharing of meshes between members that had the same specification survived export, consistent with Chapter 25. The volume of every one of the $24$ staircases was recomputed from the exported triangles by the independent reader and compared with the closed-form volume of its specification. The largest relative error was $1.1\times 10^{-7}$, at the level of single-precision storage. The check establishes that the geometry that left Blender had the intended volume. It does not establish that the identifiers or any other property crossed, since extras were not exported and the state of the process, which lives outside the scene, is not in the file at all. A runtime that needs the visits must receive the record, and the file alone cannot carry the project.
+
+\section{Defects Injected Into the Assembled Project}
+
+The review stages of Chapter 28 were applied to every member as stored in Blender, with a canonical comparison against the geometry of the member's own specification. None of the $24$ failed. Three defects were then injected, each in a place that a single-component test would not look.
+
+A vertex of one member's mesh was moved by $0.001$. That mesh was shared by one object, so one stored hash differed from the record. The volume stage flagged it, as in Chapter 28, where a displacement of this size was flagged by the volume and area stages and a displacement of $10^{-5}$ was flagged by none. Had the moved vertex belonged to a mesh shared by several members, the edit would have changed all of them at once, because they use the same data. That case was not tested, and the sharing of Chapter 23 makes it a hazard of editing a generated family by hand.
+
+An identifier was copied to a second object. There were $23$ unique identifiers among $24$ objects, and a visit to the copied identifier resolved to two objects, the situation that Chapter 26 predicted for duplication. The uniqueness check that Chapter 26 recommended after any operation that can copy would catch it, and none was run inside the build.
+
+Two events were placed at the same step in the process log, a cut and a restore of one edge, and their order in the record was swapped. The two orders gave different process hashes, $863393723320$ and $52d6dac7e66b$, the second equalling the hash of the record without the added pair because the restore then followed the cut. Events at one step apply in the order of the record, so that order is part of the record, and a canonicalisation that sorted events by step alone would silently change the process.
+
+\section{What the Book Has and Has Not Established}
+
+The project is small. It has $24$ staircases, a habitat of seven boxes and a process of $480$ edges, one seed of each, and everything was run on one machine with one version of Blender. The tests are tests of the structure: that a record regenerates a scene, that sites are found again by identifier, that edits are local except where references make them non-local, that the geometry survives export, and that a few kinds of injected defect are seen. They say nothing about how large the project can grow or how it behaves with several authors or over time. The visits were chosen by a seeded sampler and not by a person moving through the habitat, and no interactive runtime was involved, so the project is revisitable in the sense of the record and the replay, and the claim that it is a navigable world, which Chapter 24 warned against making of an animation, is not made here either.
+
+Across the chapters, one habit has done most of the work, and it is the habit this chapter applied last. A statement was written together with what would defeat it, the defeat was looked for, and the result was kept with enough information to repeat it. Several of the statements in this book were narrowed by that search: the determinism of renders, the fourfold fall of the mesh error, the adequacy of a mesh validity check, and the independence of components in the table above. Others were left as untested and are listed at the end of the chapters that made them. A reader who continues the work should expect the same of any new result, including those of this book, which was made on one machine and has been checked by one author.
+
+\begin{exercise}[30.1: Log the geometry]
+Add the geometry hash of the site to each visit record, extend the replay to compare it, and repeat the one-member edit. Report whether the replay now fails for the member visited at step $190$ and for which others.
+\end{exercise}
+
+\begin{exercise}[30.2: A shared-mesh edit]
+Choose two members that share a mesh, move one vertex of that mesh by $0.001$, and report how many stored hashes differ from the record and which review stage flags each member. Then give one of the two its own mesh and repeat.
+\end{exercise}
+
+\begin{exercise}[30.3: Uniqueness in the build]
+Add a uniqueness check for identifiers to \texttt{build\_scene} that stops the build with a message, and write a test that copies an object with \texttt{bpy.data.objects.new} and with \texttt{Object.copy}, reporting what each does to the identifier and the custom properties.
+\end{exercise}
+
+\begin{exercise}[30.4: A second process]
+Add a second process to the record, such as the solver of Chapter 27 with its own event log, attach it to a different set of sites, and repeat the table of edits. State which new dependencies appear and extend the claim about independent edits accordingly.
+\end{exercise}

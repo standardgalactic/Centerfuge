@@ -1,0 +1,70 @@
+\chapter{Identity and Returning to a Site}
+
+\section{A Visit Is a Reference}
+
+A visitor who walks through a world and later wants to return to a place has made a reference to it. Strategic play, navigation by landmark, and a record of what has been seen all depend on the reference finding the same place again after the world has changed. This is an identity problem and not a drawing problem. The previous chapter treated a world as state, authored geometry and presentation. A place is an element of the geometry and the state, and the question here is what a record must say about it so that, after the scene is regenerated, edited, reordered or copied, the record still names that place and no other.
+
+Six ways of referring to one of the staircases of Chapter 23 are compared. A reference by \emph{name} records the object's name in the scene. By \emph{order} it records the object's position in the collection. By \emph{index} it records the generation number stored on the object. By \emph{location} it records the position in space. By \emph{content} it records the specification and the geometry hash of Chapter 22. By \emph{identifier} it records a twelve-character code assigned to the site once, from the seed and the index, and stored in the family's record as well as on the object. The code is in \texttt{identity.py}. A bookmark holds all six, and each resolver uses only its own. A hidden property named truth follows each site through every change and is used only to score the result: a resolver is \emph{correct} if it finds exactly one object and that object is the site, \emph{wrong} if it finds exactly one and it is another site, \emph{ambiguous} if it finds more than one, and \emph{missing} if it finds none.
+
+\section{Eight Ways the Scene Changes}
+
+The family was $200$ staircases from seed $5$, as in Chapter 23, with bookmarks taken for all $200$. The scene was then changed in eight ways, and every resolver was scored on every bookmark. The changes were: nothing, as a control; renaming every object by reversing its name; inserting a new member at position $3$ and regenerating, so that every later member moves one place; moving $30\%$ of the objects by half a unit; changing a parameter on $30\%$ of the objects in place, which changes their geometry and hash; regenerating the whole family without recording the identifiers, so that fresh ones are assigned; duplicating objects in the manner of copy and paste, which in this run duplicated twelve; and regenerating in a shuffled order. The table gives the percentage of the $200$ bookmarks resolved correctly, with the number of wrong, ambiguous and missing results in brackets, written w, a and m.
+
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+Change & Name & Order & Index & Location & Content & Identifier\\
+\midrule
+none & 100.0 & 100.0 & 100.0 & 100.0 & 48.5 [a103] & 100.0\\
+rename every object & 0.0 [m200] & 100.0 & 100.0 & 100.0 & 48.5 [a103] & 100.0\\
+insert at position 3 & 1.5 [w197] & 1.5 [w197] & 1.5 [w197] & 1.5 [w197] & 48.0 [a104] & 100.0\\
+move 30\% & 100.0 & 100.0 & 100.0 & 69.0 [m62] & 48.5 [a103] & 100.0\\
+parameter on 30\% & 100.0 & 100.0 & 100.0 & 100.0 & 34.5 [w17 a76 m38] & 100.0\\
+regenerate, no ids & 100.0 & 100.0 & 100.0 & 100.0 & 48.5 [a103] & 0.0 [m200]\\
+duplicate objects & 100.0 & 100.0 & 94.0 [a12] & 100.0 & 45.5 [a109] & 94.0 [a12]\\
+regenerate shuffled & 100.0 & 0.5 [w199] & 100.0 & 100.0 & 48.5 [a103] & 100.0\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Each entry is a single run with seeded random choices, so the percentages are exact counts out of $200$ for that run and are not estimates with an error. The table has five lessons.
+
+\section{Reading the Table}
+
+\emph{No reference by an attribute of the scene survives every change.} Name fails completely under renaming, order under shuffling, index under insertion. Location fails under insertion too, since in this family a member's position is computed from its index, and it fails for exactly the sites that were moved, $62$ of $200$. Each of these attributes is correct until the one thing that it depends on changes, and the dependence is rarely written down. A name depends on nobody renaming, an index on nobody inserting, a position on nobody moving. Each dependence is an assumption about the world's future, and a persistent world has to expect that the assumption will be broken.
+
+\emph{Content is not identity.} In the control, where nothing had changed, only $48.5\%$ of bookmarks resolved by content, because $103$ of them matched more than one object. The family has $145$ distinct specifications among $200$ members, so many sites are exact copies of others and nothing about their shape or parameters distinguishes them. A reference by what a place looks like is a reference to a kind of place. Changing a parameter made it worse, with $17$ results wrong, $76$ ambiguous and $38$ missing, since a site whose specification was edited into another site's specification matched that site.
+
+\emph{An identifier survives when it is assigned once and kept outside the scene.} It was correct in every row in which the family's record supplied it, which includes insertion and shuffling, where all the other schemes fail. It failed completely when the regeneration did not use the record and assigned fresh identifiers: $200$ of $200$ bookmarks were missing. An identifier stored only on the objects is lost when the objects are rebuilt, and it must be stored where the objects are built from, which is the manifest of Chapter 23.
+
+\emph{Duplication defeats identifiers too.} Copying an object copies its custom properties, so the copy carries the original's identifier and index. In the run of the table the twelve duplicated sites became ambiguous for the identifier and the index, $94.0\%$ resolved, while name and location remained correct because the copies had new names and new places. In a separate run with a fresh generator that duplicated more, $23$ identifiers were each held by two objects, and $23$ objects carried a numeric suffix on their names. A persistent identifier needs a check for uniqueness that is run after any operation that can copy, and a rule for what a copy is: a new site that needs a new identifier, or a second view of the same site that shares one.
+
+\emph{The control matters.} Under no change every scheme except content is correct, so a test of identity run only on an unchanged scene would pronounce all five adequate.
+
+\section{What a Persistent Identifier Requires}
+
+The results support four requirements, each tested above in some form. The identifier is assigned once, at the time the site is created, and is a property of the site and not of its place in a list. It is recorded in the family's record, and objects are built from the record, so rebuilding preserves it. Its uniqueness is checked, after generation and after any editing that can copy. And the record states what change keeps a site the same site: moving it or editing its parameters kept the identifier in these tests, and a policy that a changed specification is a new site would have to be stated and enforced separately. The tests show that these requirements work together in one scene. They do not show that the identifier survives export to another runtime, where the properties that carry it depend on the choices of Chapter 25.
+
+A trail of visits, a visitor's history through the world, is then a list of identifiers, and returning is resolution of an identifier. Resolution finds the place. It does not recover what has happened there since, which is state, as Chapter 24 showed, so a return needs the identifier of the site and a way of obtaining its state, and a state hash is a means of recording which state was seen.
+
+\section{What These Experiments Do Not Show}
+
+All results are for one family of $200$ staircases, with changes constructed for the purpose and one run of each. The truth labels follow sites by construction, and the question of what counts as the same site after a parameter change was settled by fiat, in favour of sameness. The identifier here is derived from the seed and index by a hash, to make runs repeatable, and is not a random universally unique identifier, whose collision properties were not studied. Nothing was tested about identifiers across files, across several authors editing at once, or in a runtime other than Blender, and the interaction with export was not tested. The numbers in the table are not predictions of how often these failures occur in practice, which depends on how a world is edited and was not observed.
+
+\begin{exercise}[26.1: A seventh reference]
+Add a reference by nearest neighbour, which records the identifiers of the three nearest sites, and resolve a bookmark to the site whose neighbours match. Score it on the eight changes of the table and describe where it succeeds that the six did not.
+\end{exercise}
+
+\begin{exercise}[26.2: Check uniqueness]
+Write a function that reports every identifier held by more than one object, run it after the duplication change, and give each copy a fresh identifier recorded in the family's record. Show that every bookmark of an original site still resolves correctly.
+\end{exercise}
+
+\begin{exercise}[26.3: Same site or new site]
+For the parameter change, write down a rule by which a site whose specification changes keeps its identifier if the change is below a threshold and receives a new one otherwise. Apply it with two thresholds and report how many bookmarks resolve correctly under each.
+\end{exercise}
+
+\begin{exercise}[26.4: Through the file]
+Export the family with extras enabled, import it into a fresh scene, and score the six resolvers on the imported objects. State which attributes survived the round trip and which resolvers therefore still work.
+\end{exercise}

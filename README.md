@@ -1,5 +1,7 @@
 # Centerfuge
 
+[Blender Textbook](https://standardgalactic.github.io/Centerfuge/blender-textbook.pdf) — *Incomplete* 
+
 [Boundary-Aware Operating Architecture](docs/operating-model.md)  
 [Safety and Maintenance Specification](docs/safety-maintenance-spec.md)  
 [Headless Blender Scenes](headless_blender/README.md)  

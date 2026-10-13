@@ -1,0 +1,128 @@
+\section{Transforms as Matrices}
+
+The keys \key{G}, \key{R}, and \key{S} have exact mathematical counterparts. Scaling by factors $s_x,s_y,s_z$ along the axes is the linear map with matrix $S=\mathrm{diag}(s_x,s_y,s_z)$. Rotation by an angle $\theta$ about the $Z$ axis is
+\[
+  R_z(\theta)=\begin{pmatrix}
+    \cos\theta&-\sin\theta&0\\
+    \sin\theta&\cos\theta&0\\
+    0&0&1
+  \end{pmatrix},
+\]
+and rotations about $X$ and $Y$ are defined in the same way. Translation by a vector $\mathbf t$ is not a linear map of $\mathbb R^3$, since it moves the origin, so it cannot be written as a $3\times3$ matrix. The standard remedy is to use \emph{homogeneous coordinates}, appending a fourth coordinate $w$. A point $\mathbf x$ is written $(\mathbf x,1)$ and a direction $\mathbf d$ is written $(\mathbf d,0)$. A $4\times4$ matrix
+\[
+  M=\begin{pmatrix}A&\mathbf t\\ \mathbf 0^{\mathsf T}&1\end{pmatrix}
+\]
+then acts by $M(\mathbf x,1)=(A\mathbf x+\mathbf t,\,1)$ on a point and $M(\mathbf d,0)=(A\mathbf d,\,0)$ on a direction. This is why translating a point moves it and translating a direction does not: the fourth coordinate decides whether $\mathbf t$ contributes.
+
+For an object without a parent, the ordinary model of Blender's object transform is
+\[
+  \mathbf x_{\mathrm{world}}=T\,R\,S\,\mathbf x_{\mathrm{local}},
+\]
+where $S$ is built from the Scale fields, $R$ from the rotation fields, and $T$ from the Location fields. Reading the product from the right, a local point is scaled first, then rotated, then translated. The three field groups in the Item panel are therefore the three factors of one matrix, and the full matrix is available in Python as the object's \texttt{matrix\_world}. Delta transforms and parenting add further factors; they are set aside here and returned to when hierarchies are introduced.
+
+For Euler rotations in the XYZ mode, the rotation factor is $R=R_z(\gamma)R_y(\beta)R_x(\alpha)$, so the $X$ rotation acts first on a local point and the $Z$ rotation last. This is the convention behind the orientation recipe of Chapter 11, in which $X=0$ reduces the factor to $R_z R_y$.
+
+\section{The Platform as a Computation}
+
+The platform of Chapter 1 can now be written as a single matrix. Its scale is $(3,3,0.2)$ and its location is $(0,0,-0.2)$, so
+\[
+  M=T\,S=
+  \begin{pmatrix}
+    1&0&0&0\\ 0&1&0&0\\ 0&0&1&-0.2\\ 0&0&0&1
+  \end{pmatrix}
+  \begin{pmatrix}
+    3&0&0&0\\ 0&3&0&0\\ 0&0&0.2&0\\ 0&0&0&1
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    3&0&0&0\\ 0&3&0&0\\ 0&0&0.2&-0.2\\ 0&0&0&1
+  \end{pmatrix}.
+\]
+The third row shows the whole vertical story: a local height $z$ becomes the world height $0.2z-0.2$. The top vertices have $z=1$ and land at $0$, and the bottom vertices have $z=-1$ and land at $-0.4$. The horizontal extents are $\pm3$, giving the six by six footprint. The vertex $(1,1,1)$ maps to $(3,3,0)$ and the vertex $(-1,-1,-1)$ maps to $(-3,-3,-0.4)$, which are the values predicted in Exercise~1.6. These numbers have been confirmed by direct matrix multiplication outside Blender.
+
+Two consequences follow. First, the object's origin sits at $Z=-0.2$, the midpoint of the platform's thickness, which is why the top lies $0.2$ above the origin. Second, the sequence of key presses in Chapter 1 produced a particular matrix, but the matrix does not remember the sequence. Pressing \key{G} before \key{S} gives the same result, because with a single selected object and the default pivot the scaling is performed about the object's origin and so leaves the Location field untouched. The key presses edit separate factors of $T\,R\,S$.
+
+\section{Why the Order of Operations Sometimes Matters}
+
+Matrix multiplication is not commutative, and the fixed order $T\,R\,S$ is what keeps the Object Mode fields predictable. The same operations performed on \emph{geometry} do not have that protection. Consider the point $(1,0,0)$ and two operations in Edit Mode: scale the $X$ direction by $2$, and rotate by $90^\circ$ about $Z$. If the point is scaled first it moves to $(2,0,0)$ and then rotates to $(0,2,0)$. If it is rotated first it moves to $(0,1,0)$, and scaling the $X$ direction then leaves it at $(0,1,0)$. In matrix form,
+\[
+  R_z(\pi/2)\,\mathrm{diag}(2,1,1)\ne\mathrm{diag}(2,1,1)\,R_z(\pi/2).
+\]
+When a result depends on the order, the sequence of operations is part of the construction and should be recorded with it.
+
+The pivot is the other source of dependence. Scaling about a point $\mathbf p$ other than the origin is the composite $T(\mathbf p)\,S\,T(-\mathbf p)$, which translates $\mathbf p$ to the origin, scales, and translates back. The point $\mathbf p$ is then fixed while everything else moves relative to it. For a single selected object under the default Median Point pivot, $\mathbf p$ is the object's own origin and nothing moves. With several selected objects, the median of their origins is used, so scaling changes their locations as well as their sizes. This is the practical reason Chapter 2 asks the reader to change one contextual setting at a time.
+
+One caution anticipates later chapters. If a parent has nonuniform scale and a rotated child, the product of their matrices can introduce \emph{shear}, which no choice of Location, Rotation, and Scale fields on the child can represent. A single object with fields $T\,R\,S$ never shears, because the columns of $R\,S$ remain mutually perpendicular. Hierarchies with nonuniform scale are therefore best avoided until the effect is understood.
+
+\section{Object Transform Versus Mesh Coordinates}
+
+Section~2.2 distinguished scaling an object from scaling its vertices. The matrix view says what that distinction means. The object transform is the matrix $M$. The mesh coordinates are the local points $\mathbf x_{\mathrm{local}}$ stored in the data. Applying scale, through \texttt{Object > Apply > Scale}, multiplies every stored vertex by $S$ and resets the Scale fields to $(1,1,1)$, so that
+\[
+  M\,\mathbf x_{\mathrm{local}}=T\,R\,S\,\mathbf x_{\mathrm{local}}
+  =T\,R\,\bigl(S\,\mathbf x_{\mathrm{local}}\bigr)
+  =T\,R\,\mathbf x'_{\mathrm{local}}.
+\]
+Nothing visible changes, and for the platform the local vertex $(1,1,1)$ becomes $(3,3,0.2)$ while its world position stays $(3,3,0)$. The operation changes the representation, not the shape.
+
+The representation matters whenever an operation works in local coordinates. A Bevel modifier of local width $0.1$ on the unapplied platform is stretched by the scale to world widths of roughly $0.3$ in $X$ and $Y$ and $0.02$ in $Z$, which is why bevels on nonuniformly scaled objects look uneven. Applying scale first makes the local and world lengths agree. Array offsets are likewise interpreted in local coordinates, so a change of scale changes their effect; this should be confirmed by experiment in the installed build, as modifier details can differ between releases. Applying scale is nevertheless not a ritual. An animated scale, or a linked duplicate that shares mesh data with differently scaled siblings, can lose the property that made it useful.
+
+\section{Three Routes to the Same Platform}
+
+The platform has now been constructed by interface commands in Chapter 1 and described by a matrix above. A third route is a short script, and the three should agree. The first script uses NumPy outside Blender and tests the matrix computation.
+
+\begin{lstlisting}[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true]
+import itertools
+import numpy as np
+
+def translation(t):
+    m = np.eye(4)
+    m[:3, 3] = t
+    return m
+
+def scale(s):
+    return np.diag([*s, 1.0])
+
+verts = np.array([[x, y, z, 1.0]
+                  for x, y, z in itertools.product([-1, 1], repeat=3)])
+M = translation([0, 0, -0.2]) @ scale([3, 3, 0.2])
+world = (M @ verts.T).T[:, :3]
+
+print(M)
+print('top z   :', world[:, 2].max())    # expect 0.0
+print('bottom z:', world[:, 2].min())    # expect -0.4
+print('extents :', np.ptp(world, axis=0))  # expect [6.0 6.0 0.4]
+\end{lstlisting}
+
+The second script builds the same platform inside Blender through the data API and compares Blender's own matrix with the prediction. It adds one object to the active collection, named so that it cannot be confused with the interface-built platform, and removes nothing. It was executed in Blender 5.2.2 (the Python module, run headless) during preparation of this manuscript: the maximum matrix error was $0$ and the top and bottom were at $0.0$ and $-0.4$, as predicted.
+
+\begin{lstlisting}[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true]
+import bpy
+from mathutils import Matrix
+
+bpy.ops.mesh.primitive_cube_add(size=2.0, location=(0.0, 0.0, 0.0))
+obj = bpy.context.active_object
+obj.name = 'Ground_Script'
+obj.scale = (3.0, 3.0, 0.2)
+obj.location = (0.0, 0.0, -0.2)
+bpy.context.view_layer.update()   # refresh matrix_world
+
+T = Matrix.Translation((0.0, 0.0, -0.2))
+S = Matrix.Diagonal((3.0, 3.0, 0.2, 1.0))
+expected = T @ S
+
+err = max(abs(obj.matrix_world[i][j] - expected[i][j])
+          for i in range(4) for j in range(4))
+zs = [(obj.matrix_world @ v.co).z for v in obj.data.vertices]
+print('max matrix error:', err)        # expect about 0
+print('top z, bottom z :', max(zs), min(zs))   # expect 0.0, -0.4
+\end{lstlisting}
+
+If the printed error is not close to zero, or the top is not at zero, the discrepancy is itself informative. Check whether the object was created at the 3D Cursor rather than the origin, whether a parent or delta transform is present, and whether the view layer was updated before the matrix was read.
+
+\section{Exercise: Predict, Then Check}
+
+\begin{exercise}[2.10: A rotated, nonuniformly scaled object]
+Add a new cube and give it scale $(2,1,0.5)$, a rotation of $30^\circ$ about $Z$, and location $(1,2,0)$. Before inspecting it, write the matrix $M=T\,R_z(30^\circ)\,S$ and compute the world coordinates of the local vertices $(1,1,1)$, $(-1,-1,-1)$, and $(1,-1,1)$ by hand.
+
+The predicted world coordinates, to four places, are $(2.2321,\,3.8660,\,0.5)$, $(-0.2321,\,0.1340,\,-0.5)$, and $(3.2321,\,2.1340,\,0.5)$. Check them three ways: read the Global coordinates in Edit Mode, evaluate the NumPy computation above with the new matrices, and adapt the Blender script to print \texttt{matrix\_world} times each vertex. Record any difference and decide whether it comes from rounding, from a misread field, or from an operation that was applied in a different order than the matrix assumes. Then apply the scale and confirm that the world coordinates are unchanged while the Scale fields return to $(1,1,1)$.
+\end{exercise}

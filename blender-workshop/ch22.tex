@@ -1,0 +1,66 @@
+\chapter{Constructors, Specifications, and Provenance}
+
+\section{A Constructor Is a Function From a Specification}
+
+Chapters 20 and 21 made single objects. A habitat needs many objects of one kind, with members that differ in a few parameters, and a way to say afterwards what each member is. This chapter builds the smallest useful machinery for that: a constructor that takes a specification, refuses a specification that makes no sense, builds the object, and records on the object what it was built from. The example is a staircase of $n$ solid steps, each with a rise, a run and a width. It is chosen because its volume, height and depth are known in closed form, so that the construction can be checked against formulas and not only against itself. Step $k$ occupies the run from $(k-1)\,\mathrm{run}$ to $k\,\mathrm{run}$ and has height $k\,\mathrm{rise}$, so the volume is $\mathrm{width}\cdot\mathrm{rise}\cdot\mathrm{run}\cdot n(n+1)/2$, the height is $n\,\mathrm{rise}$ and the depth is $n\,\mathrm{run}$.
+
+The code is split in two files. \texttt{stairs.py} contains no Blender code: it validates a specification, computes vertices and faces, and hashes geometry. \texttt{stairs\_blender.py} builds the mesh in Blender, places the object in the generated collection of Chapter 20, and records provenance. The division means that the part of the constructor that decides the geometry can be tested without Blender, and that the Blender part is only a translation.
+
+\Needspace{30\baselineskip}
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true,firstline=8,lastline=65]{stairs.py}
+
+\section{Refusing Bad Specifications}
+
+A specification is a dictionary with exactly four entries. The validator rejects a missing entry, an unknown entry, a count that is not a whole number or lies outside $1$ to $200$, and a dimension outside $0.01$ to $100$. It was tried on seven faulty specifications and rejected all seven, each with a message naming the entry at fault: $n=0$, $n=2.5$, a negative rise, a missing width, an unknown key \texttt{colour}, $n$ given as the Boolean true, and a rise that is not a number. The last two deserve a remark. In Python a Boolean is an integer, and a value that is not a number fails every comparison, so a test written as ``reject if the value is out of range'' would let both through. The validator is written as ``accept only if the value is within range'', which is the safe form because it rejects what it does not understand. The bounds themselves are choices. They stop a typing mistake from creating a million faces and they are not claims about what a staircase may be.
+
+\section{Checking Against the Formulas}
+
+Five specifications were built, from a single step to $200$ steps, and the volume of each mesh was computed from its faces after orientation was checked, as in Chapter 21.
+
+\begin{center}
+\begin{tabular}{rrrrrr}
+\toprule
+$n$ & Mesh volume & Formula & Relative difference & Height & Depth\\
+\midrule
+1 & 0.060000 & 0.060000 & $+5.5\times10^{-8}$ & 0.2000 & 0.3000\\
+5 & 0.907200 & 0.907200 & $+3.3\times10^{-8}$ & 0.9000 & 1.4000\\
+12 & 3.071250 & 3.071250 & $-4.0\times10^{-8}$ & 2.1000 & 3.0000\\
+40 & 73.800000 & 73.800000 & $+2.1\times10^{-14}$ & 6.0000 & 12.0000\\
+200 & 402.000000 & 402.000000 & $+1.1\times10^{-13}$ & 20.0000 & 40.0000\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The mesh volumes agree with the formula to the rounding of single precision at worst, and the heights and depths equal $n\,\mathrm{rise}$ and $n\,\mathrm{run}$ to the four decimals printed. The two largest cases agree far more closely than the single-precision limit, which was not investigated, and no conclusion is drawn from that. What the check establishes is that the construction is correct for these five specifications. It does not establish correctness for every specification, but the formula is exact, so a disagreement for any other specification would be a defect in the code and not a rounding effect.
+
+\section{Provenance on the Object}
+
+Each object made by the constructor carries four custom properties: the name of the constructor, a version number, the specification as a text string with keys in sorted order, and a short hash of the geometry actually stored in the mesh. The hash is a SHA-1 digest of the vertex coordinates rounded to five decimals and the face lists, shortened to twelve characters. It is computed from the stored single-precision values, so that any later change to the mesh, accidental or intended, changes the hash.
+
+The test of provenance is to rebuild from the record alone. For each of the five objects, a new mesh was built from the stored specification and compared with the stored hash and with the object's current mesh. All ten comparisons agreed. The same specification gave the same hash when built into two different objects in one session, and the hash of one specification, \texttt{85d58a7b8743} for $n=12$ with rise $0.175$, run $0.25$ and width $0.9$, was the same in two separate runs of Blender. The hash is therefore a stable fingerprint across sessions on this machine. Whether it is stable across versions of Blender or across machines was not tested, and that matters because single-precision conversions and the face order produced by the interface could differ; the version number on the object is the place to record that a rule has changed.
+
+\section{Making a Constructor Safe to Call Twice}
+
+A script that creates objects is often run again, after an edit or after a failure. A constructor that makes a new object each time produces duplicates. The function \texttt{ensure} looks in the generated collection for an object made by this constructor with the same specification text and returns it if found, and makes a new one otherwise. The comparison is by the specification string and not by the name, because Chapter 20 showed that names are reused. Called twice with one specification it returned the same object both times and the object count did not change. A new specification created one object, and the same specification written with its keys in a different order returned that object and made none, because the stored text sorts the keys.
+
+Changing a specification is a separate operation. The function \texttt{update} builds a new mesh from the new specification, assigns it to the existing object, rewrites the stored specification and hash, and removes the old mesh if nothing else uses it. After an update from $n=7$ to $n=9$, the object was the same object, the number of meshes in the file was unchanged, the stored specification showed $n=9$, and the rebuild check passed. Identity is thereby kept across a change of parameters, which is what a habitat needs when a stair is made longer and everything that refers to it should still find it. Whether anything else refers to the object, and how, is a design question for Part VII.
+
+\section{What These Experiments Do Not Show}
+
+The constructor was tested on one kind of object with four parameters, and on five specifications for geometry and seven for validation. The hash is stable across two runs on one machine and its stability across builds is unknown. The \texttt{ensure} function compares specifications by their text, so two specifications that differ by a float that prints the same would be treated as the same, and the validator does not round. Nothing was tested about concurrent edits, about objects modified by hand after generation, or about files saved and reopened with the constructor's objects in them. A hand-modified object keeps its recorded specification while its geometry no longer matches it, and the hash is the means of detecting that, but the detection was not exercised here.
+
+\begin{exercise}[22.1: Detect a hand edit]
+Move one vertex of a stair by hand in edit mode, or by script, and show that the comparison of the stored hash with the hash of the current mesh detects it. Then show that the rebuild from the specification alone restores the original.
+\end{exercise}
+
+\begin{exercise}[22.2: A second constructor]
+Write a constructor for a column of radius $r$ with $m$ sides and height $h$, with a validator in the same style, a closed-form volume to check against, and the same provenance properties. Report the largest relative difference between mesh volume and the formula for $m=8,\,16,\,64$.
+\end{exercise}
+
+\begin{exercise}[22.3: Save and reopen]
+Save a file containing several stairs, reopen it in a fresh session, and run the rebuild check on every generated object. Report whether the stored hashes still agree and, if any do not, find out why.
+\end{exercise}
+
+\begin{exercise}[22.4: Equal but not identical]
+Find two specifications whose values differ by less than $10^{-6}$ and whose text strings differ, and report whether \texttt{ensure} treats them as the same. Propose a rule for the comparison, state what it costs, and implement it.
+\end{exercise}

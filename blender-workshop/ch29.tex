@@ -1,0 +1,130 @@
+\chapter{Degradation, Provenance, and Defeat}
+
+\section{Degrading a Construction Is a Question About Invariants}
+
+A procedural construction has parameters that cost something and parameters that do not. Segment counts, sample counts, texture sizes and decimation ratios trade computing time against fidelity, and any experiment that has to run many times, or on a modest machine, must decide how far to lower them. The decision is usually made by looking at a picture, and a picture is one test among several that could be made. This chapter treats the decision as a question about invariants. A degradation is \emph{admissible} here if every property that the work depends on stays within a stated tolerance, and the question is how much cheaper a construction can be made without leaving that set. The same chapter then asks how the evidence for such statements should be recorded and reviewed, since a claim of the form \emph{this is enough} is a general claim that later evidence can defeat.
+
+The word \emph{aspect} is used in its plain sense, a group of parameters that govern one property of the construction, and relegating an aspect means holding it at a default and no longer attending to it. The chapter tests these operationally and does not test the larger frameworks in which those terms may have been developed, whose texts are to be consulted before any formal proposition is imported, as the plan of this part states.
+
+The object throughout is the contour shell of the prologue at level $f=0.05$, a torus with elliptical cross-section, semi-axes $0.857$ and $0.367$ and a hole of radius $0.143$ in the units of the prologue, with $R_0=1$. It is built from $n_{\mathrm{maj}}$ segments around the axis and $n_{\mathrm{min}}$ segments around the cross-section, as quads, by the function of the prologue. Three properties were measured, each with a tolerance chosen in advance. The \emph{volume} error is the relative difference between the volume of the mesh and the analytic volume $2\pi^2R_0ab$, required below $1\%$. The \emph{hole} error is the relative difference between the radius of the hole in the mesh and the true radius, required below $5\%$, and is measured by the inradius of the ring of innermost vertices in the grid study and by rays cast from the axis in the later studies. The \emph{smoothness} is the largest angle between neighbouring faces, required below $25^{\circ}$ as a proxy for visible faceting. The code is in \texttt{degrade.py}.
+
+\section{Two Parameters, Three Invariants}
+
+All pairs of segment counts from $\{6,8,12,16,24,32,48,64\}$ were built and measured. Some of the sixty-four are shown.
+
+\begin{center}
+\small
+\begin{tabular}{rrrrrr}
+\toprule
+$n_{\mathrm{maj}}$ & $n_{\mathrm{min}}$ & Faces & Volume error & Hole error & Largest angle\\
+\midrule
+8 & 8 & 64 & $-0.1894$ & $-0.0761$ & $83.5^{\circ}$\\
+12 & 12 & 144 & $-0.0881$ & $-0.0341$ & $62.3^{\circ}$\\
+16 & 16 & 256 & $-0.0504$ & $-0.0192$ & $49.0^{\circ}$\\
+16 & 64 & 1024 & $-0.0271$ & $-0.0192$ & $22.4^{\circ}$\\
+64 & 16 & 1024 & $-0.0271$ & $-0.0012$ & $49.7^{\circ}$\\
+32 & 32 & 1024 & $-0.0128$ & $-0.0048$ & $25.8^{\circ}$\\
+48 & 48 & 2304 & $-0.0057$ & $-0.0021$ & $17.4^{\circ}$\\
+64 & 64 & 4096 & $-0.0032$ & $-0.0012$ & $13.1^{\circ}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The cheapest grid meeting each tolerance differs with the property. The volume tolerance alone was first met by $32\times 48$, with $1536$ faces. The smoothness tolerance alone was met by $16\times 48$ with $768$ faces. The hole tolerance alone was met by $12\times 6$, with only $72$ faces. All three together required the volume grid, $1536$ faces, so the admissible set depends on which properties are required, and a construction degraded until the picture looks right may have sacrificed whichever property the picture does not show. A volume-sensitive experiment, such as the mass in a contour of the prologue, cannot use the $72$-face shell although the hole is exact in it, and a visual presentation does not need $1536$.
+
+The grid has structure that the cheapest-point search hides. Doubling one parameter from $16\times 16$ gave the following.
+
+\begin{center}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Mesh & Faces & Volume error & Hole error & Largest angle\\
+\midrule
+$16\times 16$ & 256 & $-0.05036$ & $-0.01921$ & $48.95^{\circ}$\\
+$32\times 16$ & 512 & $-0.03175$ & $-0.00482$ & $49.58^{\circ}$\\
+$16\times 32$ & 512 & $-0.03175$ & $-0.01921$ & $25.40^{\circ}$\\
+$32\times 32$ & 1024 & $-0.01279$ & $-0.00482$ & $25.76^{\circ}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The hole error changed only when the major count changed, to the digits shown, and the largest angle changed by less than a degree under a change of the major count and by about half under a change of the minor count. Only the volume depended on both. In the sense of the opening section, hole size is governed by the aspect $n_{\mathrm{maj}}$, smoothness by the aspect $n_{\mathrm{min}}$, and volume by both, so the minor count may be held at a low default for work that needs only the hole, and the major count at a low default for work that needs only a smooth surface. This is a statement about this shell and these three properties. A property not on the list, such as the position of the vertices relative to texture coordinates, would define another aspect structure, and nothing here predicts it.
+
+A further fact was found only because the minor count was varied by single units. With $n_{\mathrm{maj}}=32$, the hole error was $-0.0048$ for every even minor count tested and rose to $+0.59$, $+0.36$, $+0.10$ and $+0.026$ for $7$, $9$, $17$ and $33$ segments, by the inradius measure, and to $+0.58$, $+0.35$, $+0.097$ and $+0.022$ by rays cast from the axis. With an odd count, no vertex lies at the innermost point of the ellipse, so the surface nowhere reaches the true hole radius and the hole is too large. The volume improved monotonically through the same counts. A parameter that appears to be only a resolution can therefore carry a parity condition, and a search over doublings from an even start would never meet it.
+
+\section{Resolution Against Decimation}
+
+A degraded mesh can also be obtained by reducing a fine one. A mesh of $128\times 128$ segments was triangulated and reduced with Blender's collapse decimation to about the triangle count of a uniform grid of the cheapest-grid proportion, with $n_{\mathrm{min}}$ about one and a half times $n_{\mathrm{maj}}$ and even.
+
+\begin{center}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Method & Triangles & Volume error & Hole error (rays) & Largest angle\\
+\midrule
+grid $7\times 10$ & 140 & $-0.1852$ & $-0.0990$ & $68.7^{\circ}$\\
+collapse & 144 & $-0.0493$ & $-0.0914$ & $84.7^{\circ}$\\
+grid $11\times 16$ & 352 & $-0.0776$ & $-0.0405$ & $48.0^{\circ}$\\
+collapse & 384 & $-0.0204$ & $-0.0581$ & $74.7^{\circ}$\\
+grid $16\times 24$ & 768 & $-0.0366$ & $-0.0192$ & $33.5^{\circ}$\\
+collapse & 768 & $-0.0099$ & $-0.0274$ & $59.5^{\circ}$\\
+grid $23\times 34$ & 1564 & $-0.0180$ & $-0.0093$ & $24.2^{\circ}$\\
+collapse & 1536 & $-0.0048$ & $-0.0160$ & $28.5^{\circ}$\\
+grid $32\times 48$ & 3072 & $-0.0093$ & $-0.0048$ & $17.3^{\circ}$\\
+collapse & 3072 & $-0.0026$ & $-0.0113$ & $23.5^{\circ}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+At every size, collapse decimation gave a volume error about a quarter of the grid's and a larger maximum angle, and a larger hole error at every size but the smallest, where the hole errors were close. Which is better therefore depends on the property again: the same triangle budget buys volume from decimation and smoothness and hole from the grid. The result is for one shell and one decimation setting, and the triangle counts are approximately but not exactly equal in two rows.
+
+\section{A Ledger of Runs}
+
+A statement such as \emph{$1536$ faces is enough} is worth keeping only with what produced it. The ledger of \texttt{ledger.py} records each run as a line of text with its kind, its parameters, its results and a provenance block holding the version of Blender's Python module, the Python and NumPy versions, and a hash of the scripts that produced the run. The ledger was filled by three kinds of run, doubling runs, hole runs and decimation runs, described below, and holds $62$ records. Provenance has two uses. It allows a run to be repeated, and it allows a changed environment or changed script to be noticed.
+
+Twelve of the $62$ records, chosen at random, were re-executed from their recorded parameters. The largest relative difference between the recorded and the re-executed numbers was exactly zero, so these computations are deterministic on this machine, which was not the case for some of the renders of Chapter 24. The hash of the scripts had changed by then, because commands were added to the scripts after the runs were recorded, and the hash recorded in the ledger no longer equalled the hash of the scripts as they stood. The hash flagged a change that did not alter the result, and this is the right direction for an error to take: it asks that the runs be repeated and does not assert that they differ. A hash cannot say which kind of change was made.
+
+\section{Review That Can Be Defeated}
+
+Three claims were entered, each as a text, a rule saying which runs bear on it and a test that a bearing run must meet. The first, taken from the prologue, says that the error of the mesh volume falls by a factor between $3.5$ and $4.5$ when the resolution is doubled. The second says that a shell of at least $12$ major segments keeps the hole within $5\%$ whatever the number of minor segments. The third says that at equal triangle count collapse decimation has a smaller volume error than a uniform grid. A claim is \emph{defeated as stated} if any bearing run fails its test, and where the runs that hold can be separated from the runs that fail by one recorded parameter, the review reports the narrower claim.
+
+The initial evidence was $25$ runs: doubling from $8$ to $64$ segments in both parameters; hole errors for sixteen combinations of major counts $12$ to $64$ with even minor counts $6$ to $32$; and decimation against grid at five triangle counts. Every claim stood. The review then searched for defeaters, with a further $37$ runs: doubling only one parameter; doubling to $512$ segments; other contour levels; odd minor counts; and decimation at other levels.
+
+\begin{center}
+\small
+\begin{tabular}{llrrl}
+\toprule
+Claim & Status & Runs & Defeating & Narrower claim that survives\\
+\midrule
+C1 volume ratio & defeated & 24 & 8 & both parameters doubled\\
+C2 hole kept & defeated & 24 & 6 & even minor count\\
+C3 decimation better & stands & 14 & 0 & none needed\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+When only the minor or only the major count was doubled, the ratio of the volume error was between $1.54$ and $1.60$ and not near four, since the error of the parameter that was held fixed remained. When both were doubled it was $3.76$, $3.94$, $3.99$, $4.00$ at $8$, $16$, $32$, $64$ and stayed within $0.3\%$ of four through $128$, $256$ and $512$ segments, with an error of $5\times 10^{-5}$ at the last, and a trial at $1024$ segments, which was not entered in the ledger, gave $3.999$ with an error of $1.3\times 10^{-5}$. Single-precision storage of positions had not yet interfered at that size, since the error remained much larger than the single-precision rounding level, which was not itself measured here. The prologue's statement was therefore true for the case it was made for and was defeated by a case that its wording allowed. The hole claim failed at $7$, $9$ and $17$ minor segments, as described, and survived at $33$. The decimation claim stood across four contour levels and all the counts tried.
+
+Two cautions come from the same review. First, the runs at other contour levels were weak evidence. The grid errors at $f=0.5$, $0.2$, $0.05$ and $0.02$ were the same to the digits recorded, since the mesh error of this construction depends only on the segment counts and the shape of the cross-section's ratio to the ring radius, and not on the level, so these runs tested the same quantity four times. Counting them as four independent supports would have overstated the evidence for the claim, and the ledger counts them as bearing runs without saying they are alike. Second, the claim that survives after narrowing is a claim that has been reviewed fewer times. The narrower statement, that doubling both parameters divides the error by about four, rests on $16$ of the $24$ runs and on one shell shape.
+
+The ledger was also altered by hand to test what review sees. One record of a doubling at $64$ segments in both parameters, whose ratio was $3.996$, was changed to $2.0$. The narrower claim for the first statement, which had been reported as holding for the policy of doubling both, then disappeared from the review of the altered ledger, so a single changed number removed a surviving claim. Re-executing that record from its recorded parameters gave a relative difference of $0.998$, against exactly zero for the original, so provenance allows the alteration to be found. A review that reads only the ledger would not find it, and the review above reads only the ledger.
+
+\section{What These Experiments Do Not Show}
+
+All results are for one shell shape built by one function, in one version of Blender, with three properties and tolerances chosen by the author. Other tolerances would change the cheapest grids, and the structure of aspects, in which one parameter governs one property, depends on this regular quad construction and would be different for an irregular mesh. The decimation comparison used one decimation method and one setting of it. The claims reviewed were chosen because they could be tested in a few seconds, and the search for defeaters was the author's, so it covers only the defeaters considered: a claim that stands here stands against that search and no other. The determinism of the re-executed runs was observed for twelve records on one machine and does not show that results are portable. No test was made of how people hold parameters at defaults after practice, or of what acquired fluency does to attention, which the word relegation could suggest; the chapter used the word only for holding a parameter fixed.
+
+\begin{exercise}[29.1: A fourth property]
+Add a property to the grid study, such as the area of the surface or the position of the centre of mass, with a tolerance. Report the cheapest grid meeting it alone and the parameters that govern it, and say whether it changes the aspect structure of the table.
+\end{exercise}
+
+\begin{exercise}[29.2: An irregular mesh]
+Repeat the doubling experiment on a shell built from an icosphere-like subdivision of a torus rather than a regular grid, and report whether the ratio of volume errors is again near four and whether any single parameter governs the hole.
+\end{exercise}
+
+\begin{exercise}[29.3: Count the independent runs]
+For the three claims of this chapter, write a rule that groups bearing runs whose results agree to six digits and counts each group once. Report the number of independent bearing runs for each claim and whether any status changes.
+\end{exercise}
+
+\begin{exercise}[29.4: Seal the ledger]
+Add to each record a hash of its own contents and of the previous record, and write a review that verifies the chain before it evaluates claims. Repeat the alteration experiment of this chapter and report which step finds it.
+\end{exercise}

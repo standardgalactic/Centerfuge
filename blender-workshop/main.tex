@@ -1,0 +1,446 @@
+\documentclass[11pt,openany]{book}
+
+\usepackage{fontspec}
+\setmainfont{Latin Modern Roman}
+\setmonofont{Latin Modern Mono}
+\usepackage[a4paper,margin=1.15in]{geometry}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{amsmath,amssymb}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{needspace}
+\usepackage{graphicx}
+\lstset{showstringspaces=false}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{url}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=NavyBlue,citecolor=NavyBlue]{hyperref}
+
+\setstretch{1.08}
+\emergencystretch=3em
+\Urlmuskip=0mu plus 1mu\relax
+\def\UrlBreaks{\do\/\do\-\do\.\do\_}
+\setlength{\parskip}{0.4em}
+\setlength{\parindent}{1.2em}
+
+% Running heads
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\nouppercase{\leftmark}}
+\fancyhead[RO]{\small\nouppercase{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+% Chapter style
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{14pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{-10pt}{26pt}
+
+% Inline keys and names
+\newcommand{\key}[1]{\texttt{#1}}
+\newcommand{\obj}[1]{\texttt{#1}}
+\newcommand{\file}[1]{\texttt{#1}}
+
+% Exercise and note boxes
+\newtcolorbox{exercise}[1][]{
+  breakable, colback=Gray!6, colframe=NavyBlue!70!black,
+  fonttitle=\bfseries, title={Exercise #1},
+  left=8pt,right=8pt,top=5pt,bottom=5pt}
+\newtcolorbox{checkpoint}[1][]{
+  breakable, colback=white, colframe=Gray!70,
+  fonttitle=\bfseries, title={#1},
+  left=8pt,right=8pt,top=5pt,bottom=5pt}
+
+\title{\Huge\bfseries Blender as an Experimental Workshop\\[0.6em]
+\Large Modeling, Procedural Construction,\\ and the Formation of Persistent Worlds}
+\author{Flyxion\\[0.3em]\normalsize Independent Researcher}
+\date{Opening manuscript, revision 1\\13 October 2026}
+
+\begin{document}
+
+\frontmatter
+\maketitle
+
+\begin{center}
+\begin{minipage}{0.82\textwidth}
+\small
+This is a textbook of thirty chapters with a prologue. The opening chapters are teaching sketches, the later chapters are built around measurements, and the development plan at the end records how the book was organised. The conceptual framework is drawn from the author's account of teaching through material prompts, concurrent inquiry, variation and selection, and the construction of inexpensive experimental analogues. These are pedagogical interpretations of that account, not quotations from unpublished framework manuscripts.
+\end{minipage}
+\end{center}
+
+\tableofcontents
+
+\chapter*{Preface: Making a World Available}
+\addcontentsline{toc}{chapter}{Preface: Making a World Available}
+\markboth{Preface}{Preface}
+
+A computer model can begin much as a workshop begins: with a material, a few operations, and a question whose answer has not yet been settled. The first object need not be impressive. A room, a branching curve, or a collection of repeated cells can become useful as soon as it allows a relationship to be inspected or a possibility to be tested. Blender is particularly valuable in this setting because it places many kinds of construction in one environment. Geometry can be edited directly, generated procedurally, animated, simulated, and presented through cameras or an interactive viewport. Learning Blender therefore means acquiring ways to make a situation available for investigation.
+
+This textbook develops that competence through a sequence of working environments. Its instructional prompts have concrete outcomes, but the reader is encouraged to vary those outcomes once the governing operations become intelligible. An exercise in constructing a room can become an investigation of circulation. An exercise in distributing objects can become an investigation of density and access. The recurring question is what an operation preserves, changes, or makes newly possible.
+
+The approach grows out of a teaching practice in which objects and materials were placed on tables as invitations to activity. A bead loom, a constructed wallet, or a sheet of butcher paper could supply enough direction for a participant to begin. Questions that emerged from that beginning then informed subsequent intervention. In Blender, a prepared scene can serve a similar function. It supplies something to act upon and enough structure to make the consequences readable.
+
+The textbook also takes interface continuity seriously. A command becomes valuable partly because it becomes familiar. Once navigation and editing no longer require continual deliberation, attention becomes available for the construction itself. The instructions therefore establish a small recurring vocabulary of actions rather than demanding memorization of the entire interface. Menus and operator search remain available when an unfamiliar command is needed.
+
+Blender will be used as an authoring and investigative environment. It is not assumed to be the final runtime for a large game. A persistent world with strategic management, free spatial exploration, and thousands of agents may ultimately require a separate simulation program. Geometry, prototypes, visualizations, and experimental assets made here can contribute to that program without determining its architecture.
+
+\chapter*{Scope, Versions, and Reading Practice}
+\addcontentsline{toc}{chapter}{Scope, Versions, and Reading Practice}
+\markboth{Scope and Reading Practice}{Scope and Reading Practice}
+
+The opening chapters target the standard Blender keymap, left-click selection, and the conventional desktop interface. The official documentation consulted during preparation identifies Blender 5.2 as an LTS release. Readers using another recent release should check the local interface before assuming that a panel or operator has exactly the same location. The Industry Compatible keymap changes shortcuts and is not the baseline used here.
+
+\begin{checkpoint}[Status of the exercises]
+Every Python listing that calls Blender, and the counts, matrix, modifier, and rendering claims that can be stated as numbers, were executed headless in Blender 5.2.2 (the \texttt{bpy} module) during preparation; the file \texttt{blender\_test\_pass.py} extracts the listings of Chapters 2, 4, 5, and 11 from the source and reruns them with assertions. That does not cover the interface-driven exercises, which tell the reader to click, drag, and read the viewport; the render engine used in testing was EEVEE only, not Cycles; and the build was a software-rendered, windowless one. The interface exercises have been checked against the documentation and the arithmetic, not performed. This is an opening teaching manuscript, not a claim of software-tested completeness, and later revisions should record the build on which each interface exercise is reproduced. The prologue and Chapters 15 through 30 are of a different kind: each rests on measurements executed headless in Blender 5.2.2 or in plain Python, with the code in the accompanying project files, and each closes with a section stating what its checks do not show. Those results come from one machine and one author, several rest on literature values recalled and flagged as such, and none has been independently reproduced.
+\end{checkpoint}
+
+Use a notebook or a plain text file alongside the project. Record the initial question, the operations used, the changes made, and the observations that followed. A screenshot can preserve appearance, but it cannot by itself preserve the procedure that produced it. Save the editable Blender file as well as any final image.
+
+The conceptual chapters distinguish an illustration from a simulation and a simulation from a validated account of a phenomenon. A branching shape may resemble a tree, a neural arbor, or a cosmic filament. Those resemblances motivate questions; they do not establish common governing equations. The same discipline applies to attractive images generated by procedural systems.
+
+\input{prologue}
+
+\mainmatter
+
+%==========================================================
+\part{Acquiring a Stable Vocabulary}
+%==========================================================
+
+\chapter{The Scene as a Workbench}
+
+\section{What Exists When Blender Opens}
+
+The usual startup scene contains a cube, a camera, and a light. They are separate objects. The viewport shows an editable view of the scene; it is not necessarily the view that will be rendered. The camera determines a particular framing when it is used for rendering. The light contributes to illumination under appropriate viewing and rendering conditions. The cube is a mesh object whose surface consists of connected vertices, edges, and faces.
+
+The Outliner presents the scene's organization. Use it to identify objects when clicking in the viewport is ambiguous. The Properties editor exposes settings for the scene and the active object, among other things. The Timeline supplies a time coordinate for animation and related evaluation. These editors perform different tasks within the same application. A shortcut may therefore have different effects according to the editor under the pointer.
+
+{\sloppy Before changing anything, save the file through \texttt{File\,>\,Save As}. Call it \file{workshop\_01.blend} and place it in a project directory. Choose a directory whose contents can remain together. Later projects may depend on images, caches, fonts, or other external files, so a Blender file should not be treated as automatically containing every resource it uses.\par}
+
+\section{View, Object, and Selection}
+
+Moving the view does not move an object. This distinction is fundamental. Orbiting allows the reader to inspect another side of the cube while the cube remains in the same world position. Moving the cube changes its relationship to the camera, light, and other geometry. A beginner who confuses these operations may believe that a model has changed when only the viewpoint has changed.
+
+Click the cube to select it. Its highlighted outline identifies the selection. When several objects are selected, one is active; the active object governs many operations. Initially, work with a single selected object so that this additional distinction does not obscure the first experiments.
+
+Orbit with the middle mouse button, pan with \key{Shift} and the middle mouse button, and zoom with the wheel in the standard setup. If these are unavailable, use the viewport navigation gizmo and the \texttt{View} menu. A keyboard with a numeric keypad permits direct access to common views. \key{Numpad 1} gives the front view, \key{Numpad 3} the right view, and \key{Numpad 7} the top view. \key{Numpad 5} switches between perspective and orthographic viewing. \key{Numpad .} frames the selection. These are keypad commands; the corresponding keys in the main number row have other uses.
+
+Perspective displays depth through apparent size and convergence. Orthographic viewing removes that perspective scaling. Neither is inherently the correct view. Perspective is useful for inhabiting a space; orthographic views are useful for comparing alignment and dimensions. Acquire the ability to alternate between them without interpreting the change as a change to the object.
+
+\section{A First Prompt}
+
+The opening prompt is simple: make the cube into a platform that could support an activity. With the pointer in the viewport and the cube selected in Object Mode, press \key{S}, then \key{Z}, type \texttt{0.2}, and confirm with \key{Enter}. This scales the object along the vertical axis. Press \key{S}, then \key{X}, type \texttt{3}, and confirm. Repeat with \key{S}, \key{Y}, and \texttt{3}. The result should be a broad, shallow object.
+
+Now press \key{G}, \key{Z}, type \texttt{-0.2}, and confirm. The ordinary startup cube has a side length of two Blender units. After the transformations just given, the platform has dimensions approximately six by six by 0.4 units, and its top lies at world $Z=0$. These numbers provide a useful check, not merely a decorative description. Open the Sidebar with \key{N} and inspect the Item panel's transforms and dimensions.
+
+Rename the cube \obj{Ground} using the Outliner or object name field. Save the file. Orbit around the platform, switch to top view, frame the selection, and return to perspective. The practical outcome is a platform; the instructional outcome is an ability to distinguish constructing from looking.
+
+\section{Observations and Recovery}
+
+If a transform behaves unexpectedly, check the selected object, the editor under the pointer, the mode, and the axis constraint. These four facts explain many early mistakes. During an ordinary move, rotation, or scale, \key{Esc} or right-click can cancel the current transform. \key{Ctrl+Z} undoes a completed operation. Neither should become a substitute for inspecting state, but both support reversible exploration.
+
+Do not judge the exercise by the platform's visual sophistication. Judge it by whether the reader can explain why the top is at zero, recover the object when it leaves the view, and deliberately reproduce the dimensions. Those abilities will remain useful when the platform becomes a settlement, an experimental chamber, or a navigable habitat.
+
+\input{ch1_add}
+
+%----------------------------------------------------------
+\chapter{Learning Controls Without Losing the Question}
+
+\section{A Small Grammar of Action}
+
+The core transform vocabulary consists of \key{G} for move, \key{R} for rotate, and \key{S} for scale. An axis letter constrains the action; numeric entry specifies its magnitude. The sequence \texttt{G X 2 Enter} moves a selection two units along the $X$ axis in the ordinary global orientation. The sequence \texttt{R Z 90 Enter} rotates it ninety degrees around the $Z$ axis. These operations become a grammar through which an intention can be expressed consistently.
+
+The operation is interpreted within a context. Transform orientation, pivot choice, and mode influence its meaning. Begin with Global orientation and the default pivot settings. Change one contextual setting at a time when investigating its effect. An unexplained combination of altered pivot, local axes, and multiple selections makes it difficult to determine what produced a result.
+
+\key{F3} opens operator search in the standard keymap. Search provides access to named operations without requiring the reader to remember every menu location. A textbook instruction should provide an operator name when possible, since shortcuts can be customized and interfaces evolve. The shortcut is a convenient route to the action; it is not the action's identity.
+
+\section{Object Mode and Edit Mode}
+
+Object Mode manipulates scene objects. Edit Mode manipulates the internal geometry of a selected editable object. Select a mesh and press \key{Tab} to switch between the two. In mesh Edit Mode, the main number-row keys \key{1}, \key{2}, and \key{3} select vertex, edge, and face selection modes under the standard keymap. This is another reason to distinguish those keys from the numeric keypad.
+
+Scaling an object in Object Mode changes its object transform. Scaling selected mesh vertices in Edit Mode changes the mesh coordinates. The visible results may initially look identical, but the stored relationships differ. Modifiers and other operations may respond differently to an object with nonuniform scale. Applying scale in Object Mode, through \texttt{Object > Apply > Scale} or the corresponding \key{Ctrl+A} menu, transfers that scale into the object's data while retaining its visible size.
+
+Applying a transform is not a universal preliminary ritual. It is a deliberate decision about representation. For a simple static block whose bevel width should be predictable, applying scale is often useful. For an animated object, an object whose transform is intentionally meaningful, or a shared-data arrangement, applying transforms can have consequences that deserve inspection.
+
+\section{Continuity as a Learning Resource}
+
+Keep the initial keymap stable while the basic grammar becomes familiar. Customize only when a specific repeated difficulty has been identified. Record the original binding and the new binding. A preference that cannot be described is difficult to reconstruct on another machine.
+
+This practice interprets aspect relegation pedagogically: an action that initially requires explicit attention can become routine, freeing attention for the structure being made. An unexpected result calls that routine back into examination. The aim is not to make every action unconscious, but to make ordinary actions dependable and anomalies inspectable. This interpretation does not substitute for a formal account of Aspect Relegation Theory.
+
+\section{Exercise: Repeatable Placement}
+
+\begin{exercise}[2.4: Three markers]
+Add a cube through \texttt{Add > Mesh > Cube}, or use \key{Shift+A} to open the Add menu in the viewport. New objects are normally added at the 3D Cursor, so inspect the cursor when an object appears somewhere unexpected. Name the cube \obj{Marker\_A}. Set its location to $X=0$, $Y=0$, $Z=1$ and its dimensions to one unit on each axis using the Item panel. These explicit values avoid accumulating unnoticed relative transformations.
+
+Duplicate it with \key{Shift+D}, constrain the movement to $X$, enter \texttt{2}, and confirm. Name the duplicate \obj{Marker\_B}. Select the first marker and create another duplicate two units along $Y$. Name it \obj{Marker\_C}. Ordinary duplication creates separate mesh data in this basic case; linked duplication with \key{Alt+D} shares the mesh data and will be introduced later.
+
+The prompt is to make the three markers distinguishable through arrangement alone. Move one, observe what changes, undo, and try another arrangement. Save a version when the arrangement communicates something specific, such as an entrance, an obstruction, or a destination. The task is complete when the arrangement's intended meaning can be stated and its geometry deliberately reconstructed.
+\end{exercise}
+
+\input{ch2_add}
+
+%----------------------------------------------------------
+\chapter{A Habitat That Can Be Revisited}
+
+\section{Building a Place Rather Than a Picture}
+
+The first sustained project is a small habitat with a floor, boundaries, an entrance, and an interior landmark. It is designed to support repeated inspection from different positions. No elaborate materials are needed. The important relations are spatial: where one can enter, what can be seen, and what changes when a wall is moved.
+
+Use the existing ground platform. Create a new cube named \obj{Wall\_North}, set its dimensions to $X=6$, $Y=0.2$, $Z=2.5$, and its location to $X=0$, $Y=2.9$, $Z=1.25$. The wall rises from the platform's upper surface at zero. Duplicate or add further wall objects to define the other sides, leaving one side partly open. For east and west walls, a length of 5.6 in $Y$ avoids extending past the inner faces of the north and south boundaries. Exact corner construction is less important here than deliberate placement.
+
+An opening can initially be created by using two separate blocks for the front wall. This is easy to inspect and revise. A Boolean subtraction could also cut a doorway, but beginning with separate blocks exposes the design decision without introducing a modifier dependency. Later chapters will compare these construction methods.
+
+Create a low plinth inside the room using another cube. Give it a different name and location from the earlier markers. The landmark should help the reader recognize the interior from several viewpoints. Do not confuse a material's colour with a persistent object identity; names and scene organization remain useful when colours change.
+
+\section{Collections and the Cost of Disorder}
+
+Create a collection named \obj{Habitat} in the Outliner and move the floor, walls, and plinth into it. A collection organizes objects; it does not automatically combine their geometry into one mesh. Keep the camera and light identifiable outside or within their own presentation collection. Organization becomes necessary when a change must be applied to a class of objects without affecting unrelated work.
+
+Name by role rather than sequence alone. \obj{Wall\_North} is easier to interpret than \obj{Cube.017}. If a location or role changes, revise the name or record the convention. A meaningful but incorrect name can be more misleading than an uninformative one.
+
+Save a new version as \file{habitat\_01.blend}. Make a second version with a different entrance position and save it as \file{habitat\_02.blend}. These are alternatives, not necessarily a progression from worse to better. A clear file history preserves the ability to revisit the conditions under which a decision was made.
+
+\section{Inspection and Representation}
+
+Inspect the room in solid shading before attempting a finished render. Use orthographic views to check wall alignment and perspective views to assess the interior. Wireframe or X-Ray viewing can expose geometry concealed by nearer surfaces. Such views can function like a navigational map by preserving relationships that a visually opaque representation hides.
+
+For exploratory movement, use \texttt{View > Navigation > Walk Navigation} where available. Consult the on-screen controls because movement bindings and preferences may vary. Viewport walking is not evidence that the room has game collision or a persistent player controller. It is a tool for inspecting the scene. A game implementation must establish movement, collisions, and world state separately.
+
+The distinction between an inspectable scene and a persistent simulation matters. Saving the habitat preserves authored geometry. It does not automatically implement agents who remember actions, resources that change during play, or sites that continue evolving while absent from the view. Those are state-management questions to be treated explicitly later.
+
+\section{Exercise: Two Ways to Enter}
+
+\begin{exercise}[3.4: Comparing entrances]
+Compare the two saved entrance arrangements. Ask whether the landmark is visible immediately, whether the interior is easy to interpret, and which regions become concealed. Record the observations as observations about these constructions, not universal rules about architecture. A camera placed at a particular height samples one possible observer.
+
+Invite a second person to inspect both versions if possible. Their account may reveal a distinction the designer did not anticipate. Keep disagreement rather than converting it prematurely into one score. Variation and selection become informative when the grounds of selection are retained.
+\end{exercise}
+
+%==========================================================
+\part{Constructing Procedures}
+%==========================================================
+
+\chapter{Meshes, Topology, and Correctable Construction}
+
+\section{Editing a Surface}
+
+Create a separate cube for an editing exercise and save before changing its topology. In Edit Mode, choose face selection and select one face. Press \key{E} to extrude the face, specify a distance, and confirm. Extrusion creates geometry as well as moving it. This differs from moving an existing face with \key{G}.
+
+There is an important cancellation detail. After invoking extrusion, cancelling the movement can leave the newly created geometry in place. If the intention is to remove the extrusion completely, undo it and inspect the mesh. Repeated accidental extrusions can create overlapping geometry that is hard to see in a solid view.
+
+Use inset faces, commonly invoked with \key{I}, to create a smaller face region within a selected face. Extrude that region inward to form a recess. Initially, select one face so that the operation's scope is clear. Observe the edges created around the inset and how they constrain subsequent edits.
+
+\section{Topology and Appearance}
+
+Geometry is the spatial placement of elements; topology concerns their connectivity. A surface can look smooth while having unsuitable connectivity for a particular deformation, and it can look crude while accurately representing an arrangement needed for an experiment. The required topology depends on the intended operations.
+
+Surface normals help determine orientation. If faces behave unexpectedly under shading or later operations, inspect their orientation. In Edit Mode, selecting all mesh elements and searching for \emph{Recalculate Outside} can correct ordinary inconsistently oriented closed meshes, but it cannot infer every intended orientation for an open or ambiguous construction. Inspection remains necessary.
+
+Bevel adds geometry around edges, allowing a sharp corner to become a band of faces. A Bevel modifier can make this operation adjustable without immediately rewriting the base mesh. Smooth shading changes the interpolation of normals used for appearance; it does not by itself add geometric detail. Keep these effects distinct when evaluating the model.
+
+\section{Obligations and Optional Refinements}
+
+Use admissible degradation as a working design principle: identify what a model must preserve before deciding what it can lose. For a circulation study, entrance placement and passage width may be required while surface texture is optional. For a lighting study, reflectance and illumination may matter while small decorative features do not. A degraded model is adequate only relative to a stated task.
+
+This principle prevents ornament from consuming the resources needed to answer the question. It also prevents low detail from becoming an excuse for removing the very relationship being investigated. Write the model's obligations in prose beside the saved version. An obligation such as ``both entrances remain navigable in the target runtime'' must eventually be checked in that runtime, not inferred from a pleasant Blender view.
+
+\section{Exercise: A Recess With a Recoverable History}
+
+\begin{exercise}[4.4: A recess]
+Make a shallow recess in the test cube through inset and extrusion. Record its depth and explain which faces were added. Then create a second version in which the depth changes while the opening remains the same. Inspect both in solid and wireframe views. The aim is a change with a known scope: one parameter varies while the comparison's relevant conditions remain stable.
+\end{exercise}
+
+\input{ch4_add}
+
+%----------------------------------------------------------
+\chapter{Repetition, Instances, and Procedural Variation}
+
+\section{From a Module to a Family}
+
+A single carefully constructed module can support a family of arrangements. Make a small block whose proportions are easy to recognize and name it \obj{Cell\_Module}. An Array modifier can repeat the module along an offset. Begin with a count of four and inspect the result before raising the count. Relative offset depends on the object's bounding dimensions; constant offset specifies a displacement in units. These options answer different questions about spacing.
+
+Apply scale deliberately when the module's modifiers require a predictable relation to dimensions. Change its size, then inspect whether the spacing still expresses the intended relationship. A procedural construction is a set of dependencies, not merely a shortcut for copying things.
+
+\section{Instances and Shared Structure}
+
+Ordinary duplication, linked duplication, and procedural instancing have different consequences. A linked duplicate shares underlying mesh data, so editing that data can change all linked objects. Each object may still have its own transform. Geometry Nodes instances represent repeated references efficiently; realizing instances creates geometry where an operation specifically requires it and can substantially increase the amount of data.
+
+Do not realize instances simply because they are unfamiliar. Ask what subsequent operation requires actual geometry. A scene with thousands of repeated cells may remain manageable as instances and become expensive when all of them are expanded into meshes.
+
+\section{Geometry Nodes as an Explicit Procedure}
+
+Geometry Nodes connects operations through a graph. The graph provides a visible account of how geometry is derived. Begin on a disposable test object, add a Geometry Nodes modifier through the workspace's \emph{New} command, and inspect Group Input and Group Output. The initial connection passes the object's geometry through without modification.
+
+For a simple procedural family, add a Mesh Line node and an Instance on Points node. Connect the line's mesh output to the Points input. Add a Cube primitive node and connect its mesh output to Instance. Connect the instances output to Group Output. Set the line count to a small value and adjust its offset. Node names and socket layouts should be checked against the installed version; operator search within the node editor helps locate them.
+
+This graph produces repeated cubes at the line's points. The count controls multiplicity, the offset controls placement, and the cube size controls the repeated element. Those are separate variables. Expose them as group inputs when the procedure is useful enough to reuse, naming the inputs according to their role.
+
+\section{Controlled Variation}
+
+Randomness can create variation but can also confound comparison. When using a Random Value node, record its seed and the domain on which values are evaluated. Preserve the seed while changing another parameter if the purpose is to inspect that parameter's effect. Change the seed when the purpose is to examine sensitivity to a particular sample.
+
+The resulting alternatives form a corpus of constructions. Selection should retain the criteria used: readability, passage clearance, material expenditure, or another stated objective. An interesting arrangement and an adequate arrangement are not automatically the same. Keep a rejected version when it reveals an important failure.
+
+\input{ch5_add}
+
+%----------------------------------------------------------
+\chapter{Animation, Simulation, and What an Image Establishes}
+
+\section{Three Different Claims}
+
+An animation specifies change over time, potentially through keyframes. A simulation computes successive states according to a rule or solver. A validated simulation has also been compared against appropriate evidence for a stated use. These categories can overlap, but one does not imply the next. A convincingly animated plume may contain no fluid calculation. A fluid calculation may still be inadequate for predicting a particular experiment.
+
+Start with animation because it makes time legible. Place the plinth or another test object at one location, insert a location keyframe through the relevant property controls or keyframe menu, move to a later frame, change the location, and insert another location keyframe. Scrub between them. Inspect interpolation rather than assuming the object travels at constant speed. The Timeline and animation editors expose different parts of this temporal representation.
+
+\section{State and Successive Evaluation}
+
+A stateful procedure retains information from one step to the next. Write its conceptual form as
+\[
+  s_{t+1} = \mathrm{update}(s_t,\ \text{inputs},\ \Delta t),
+\]
+where the state $s_t$ might include positions, velocities, resource quantities, or occupancy. A procedural mesh that is regenerated solely from the present frame number is not necessarily maintaining such a history.
+
+Geometry Nodes simulation zones provide a mechanism for passing simulation state across time. The official manual describes time-dependent evaluation and caching. A later practical chapter will build and test a complete zone rather than presenting an unverified socket recipe here. Understand first that cached results are part of the workflow: changing inputs, revisiting earlier frames, and baking results can affect what is actually being inspected.
+
+\section{Local Rules and Emergent Form}
+
+The paper-pulp and cement-bubble experiments motivate a class of questions about distributed formation. A digital counterpart might begin with occupied sites, neighbourhood interactions, and a rule governing attachment or replacement. Branching would then be an outcome to inspect, not a shape to assume in advance.
+
+A useful experiment must permit outcomes other than the one the investigator hopes to see. If the procedure explicitly draws branches, its branching output establishes that the drawing procedure works. If a local attachment rule produces branches across a range of conditions, the outcome tells us something about that rule. Connecting it to another physical system requires additional work on the correspondence between variables, interactions, and scales.
+
+Record initial conditions, boundary conditions, the update rule, the time step, and the random seed where relevant. Compare multiple runs before treating one attractive result as characteristic. Inspect whether an apparent structure survives changes to resolution and step size. Numerical and representational choices can create patterns of their own.
+
+\section{A First Experimental Record}
+
+\begin{exercise}[6.4: Three recoverable comparisons]
+Take the habitat or repeated-cell construction and choose one variable to change across three saved alternatives. State a question before producing the alternatives. Keep the viewpoints comparable and preserve the construction parameters. Write what was observed, what remains uncertain, and what change would distinguish the live explanations.
+\end{exercise}
+
+This record is the bridge to later simulations. Its value is not the number of files generated. Its value is that another person can understand what changed, what the comparison supports, and how the inquiry could continue. A thousand unlabelled variations can be less informative than three recoverable comparisons.
+
+\input{ch6_add}
+
+\input{ch7}
+\input{ch8}
+\input{ch9}
+\input{ch10}
+
+\input{chap11}
+\input{ch12}
+\input{ch13}
+\input{ch14}
+\input{ch15}
+\input{ch16}
+\input{ch17}
+\input{ch18}
+\input{ch19}
+\input{ch20}
+\input{ch21}
+\input{ch22}
+\input{ch23}
+\input{ch24}
+\input{ch25}
+\input{ch26}
+\input{ch27}
+\input{ch28}
+\input{ch29}
+\input{ch30}
+
+%==========================================================
+\chapter*{Development Plan for the Textbook}
+\addcontentsline{toc}{chapter}{Development Plan for the Textbook}
+\markboth{Development Plan}{Development Plan}
+%==========================================================
+
+\section*{Target Scope and Method}
+
+The working target is roughly 350 to 450 pages, or 100,000 to 130,000 words, in thirty chapters averaging ten to fifteen pages. This is an estimate rather than a fixed commitment, since equations, code, and illustrations affect pagination. The present chapters are closer to introductory sketches than finished textbook chapters. Expanding them means adding worked constructions, mathematical explanations, and troubleshooting, not extending the prose. All thirty planned chapters are now written. The book is about two hundred pages, shorter than the estimate, and the paragraphs below are the original plan, with the chapters that realised each part noted where they were written.
+
+Mathematics is intended to be the organizing spine, and each idea should answer a practical question encountered in Blender. Navigation and transforms introduce vectors, coordinate systems, matrices, and changes of basis. Mesh construction introduces graphs, topology, orientation, and discrete surfaces. Procedural modeling introduces parameter spaces, functions, composition, and stochastic processes. In homogeneous coordinates, an object's transformation can be written
+\[
+  \mathbf{x}_{\mathrm{world}} = T\,R\,S\,\mathbf{x}_{\mathrm{local}},
+\]
+which explains why the order of operations matters and why editing mesh coordinates differs from changing an object transform. Each such construction is to be reproduced three ways: through interface commands, through matrix calculation, and through a short Python script.
+
+\section*{A Cumulative Habitat}
+
+One persistent habitat will serve as the cumulative project, with smaller experimental scenes alongside it. It will gradually acquire geometry, procedural families, circulation networks, resource transport, and temporal state. Each chapter should leave a usable construction and an explicit account of what that construction establishes.
+
+\section*{Proposed Formalizations}
+
+The following are proposed textbook formalizations. They are to be reconciled with the author's framework manuscripts before being attributed to them.
+
+\paragraph{Great circles.} A great circle on a sphere of radius $R$ is
+\[
+  \mathbf{x}(t) = R\bigl(\mathbf{u}\cos t + \mathbf{v}\sin t\bigr),
+  \qquad 0 \le t < 2\pi,
+\]
+where $\mathbf{u}$ and $\mathbf{v}$ are perpendicular unit vectors. From this the book can develop plane and sphere intersections, spherical distances, intersection networks, and tubular structures around curves. The nine-orthodrome arrangement becomes a reproducible construction once its planes and their orientations are specified. Any architectural interpretation requires further assumptions about dimensions, materials, and loading.
+
+\paragraph{Transport.} For simulations, considerable space goes to local rules, conservation, stability, and boundary conditions. A simple transport model begins with
+\[
+  \frac{\partial c}{\partial t}
+  = D\nabla^{2}c - \nabla\!\cdot(c\,\mathbf{v}) + s,
+\]
+where $c$ is a concentration, $D$ a diffusion coefficient, $\mathbf{v}$ a velocity field, and $s$ a source or sink. The teaching task is to explain each term, discretize a small example, visualize it in Blender, and check what happens when resolution or time step changes. Branching, occupancy, and cellular formation can also be explored through discrete rules without assuming that every interesting pattern requires a continuum equation.
+
+\paragraph{Model adequacy.} Given a full state $x$, a reduced representation $r(x)$, and a question $Q$, one can ask whether an answer procedure $\widehat{Q}$ preserves the relevant result:
+\[
+  d\bigl(Q(x),\,\widehat{Q}(r(x))\bigr) \le \varepsilon
+\]
+over a specified domain. This gives a concrete reading of what a model may discard while remaining adequate for its task. A circulation model and a lighting model can legitimately retain different information about the same habitat.
+
+\section*{Part III. Surfaces, Light, and Legibility}
+
+Chapter 7, on materials and lighting, and Chapter 8, on cameras, shader graphs, and rendering budgets, are written. Chapter 9, on representational adequacy, and Chapter 10, on surface treatment and ornament, are written, and they carry these tools into the existing habitat. Their central problem is representational adequacy: choosing a view and surface treatment that reveal the relationships under investigation. The practical work will compare solid, wireframe, cutaway, and rendered presentations while keeping geometry constant. A chapter on rendering budgets will distinguish essential visibility from optional ornament and establish repeatable output settings.
+
+\section*{Part IV. Curves, Spheres, and Orthodrome Studies}
+
+Chapters 11 through 14 are written; Chapters 11 through 14 introduce curve editing, bevelled paths, spherical coordinates, great-circle construction, and parameterized arrangements. \emph{Orthodromic Infrastructure Blueprint}, Section 3.6, supplies the fixed-five and flexible-four construction developed in Chapter 11. The repository script \texttt{tetraorthodrome.py} is an instance of the same family, with its flexible circles on the symmetric lattice, and Chapter 11 sets it beside the teaching arrangement. Whether the phrase two tetraorthodromes plus an equator denotes exactly that instance is a matter of terminology: the script's comments apply the word to each group of four circles. Exercises will distinguish a diagram of paths, a materialized structural model, and a habitat built around those paths.
+
+\section*{Part V. Distributed Formation}
+
+Chapters 15 through 19, on local attachment rules, cellular occupancy, branching processes, foam-like cells and resource transport, are written, and Part V is complete. Each practical simulation will state its update rule and its evidential limits. Physically motivated mechanisms will be separated from visual generators. Parameter sweeps will be organized as documented comparisons with stable seeds and measurable outcomes where suitable.
+
+\section*{Part VI. Python and Reproducible Construction}
+
+Chapters 20 through 23, on scene inspection, data creation, reusable constructors and batch generation, are written, and Part VI is complete. Scripts will use a dedicated collection for generated content and avoid deleting unrelated work. The book will explain the distinction between context-sensitive operators and direct data manipulation. A generated asset family will preserve its parameters and provenance, allowing a particular member to be reconstructed from its specification.
+
+\section*{Part VII. Persistent Worlds and External Simulation}
+
+Chapters 24 through 27, which separate authored geometry, simulation state, presentation and input, export to an independent runtime, treat identity and return to visited sites, and couple Blender to an external solver, are written, and Part VII is complete. The plan for the whole part is to separate authored geometry, simulation state, rendering, and input control. Blender assets will be exported to an independently chosen runtime after scale, coordinate conventions, materials, and collision requirements are specified. Global navigation and returning to previously visited sites will be treated as state and identity problems. The book will not equate a fly-through animation with an interactive world.
+
+\section*{Part VIII. Orchestration and Correctable Inquiry}
+
+Chapter 28, which treats requests as specifications with several readings, compares alternative constructions of one solid, and tests staged review against injected defects, and Chapter 29, which tests admissible degradation of a construction, a ledger of runs with provenance, and review that can be defeated, are written, and Chapter 30, which assembles the habitat, the procedural family and the stateful process into one record and tests the assembly, completes the planned chapters. The part will develop prompts, alternative constructions, comparative review, and staged delegation. Aspect relegation will guide the treatment of acquired interface fluency; admissible degradation will guide resource allocation; provenance and defeat-sensitive review will inform experimental records. These connections will be grounded in the relevant framework texts before formal propositions are imported. The final project will combine a revisitable habitat, a documented procedural family, and one tested stateful process.
+
+%==========================================================
+\chapter*{Documentation and Editorial Notes}
+\addcontentsline{toc}{chapter}{Documentation and Editorial Notes}
+\markboth{Documentation Notes}{Documentation Notes}
+%==========================================================
+
+The official Blender manual and release pages are the technical reference, while the pedagogical interpretation is developed specifically for this textbook. Release-specific instructions should be checked against the installed build. Some version-pinned manual pages could not be retrieved during preparation; therefore this edition does not claim a complete page-by-page verification of shortcuts and panels.
+
+\begin{itemize}[leftmargin=1.4em,itemsep=0.35em]
+  \item Blender releases: \url{https://www.blender.org/releases/}
+  \item Blender 5.2 LTS release information: \url{https://www.blender.org/releases/5-2/}
+  \item Blender manual: \url{https://docs.blender.org/manual/en/latest/}
+  \item Mesh editing introduction: \url{https://docs.blender.org/manual/en/latest/modeling/meshes/editing/introduction.html}
+  \item Mesh extrusion reference: \url{https://docs.blender.org/manual/en/latest/modeling/meshes/editing/mesh/extrude.html}
+  \item Simulation-zone documentation, earlier documented version: \url{https://docs.blender.org/manual/en/4.1/modeling/geometry_nodes/simulation/simulation_zone.html}
+\end{itemize}
+
+The experimental pedagogy was motivated in part by Monica Anderson's account of epistemic reduction and learning from experience. This book does not adopt the claim that machine learning is outside science, nor the claim that learned systems avoid all models. It uses the narrower distinction between explicit task-domain prescriptions and procedures that acquire or generate structure from encounters.
+
+\begin{itemize}[leftmargin=1.4em]
+  \item Monica Anderson, ``Experimental Epistemology for AI'': \url{https://experimental-epistemology.ai/experimental-epistemology-for-ai/}
+\end{itemize}
+
+The next manuscript stage should reproduce the opening exercises in an identified Blender build, revise any version-specific instructions, and develop the materials-and-lighting sequence. The framework integration should then be expanded from the author's source texts rather than inferred from titles alone.
+
+\end{document}

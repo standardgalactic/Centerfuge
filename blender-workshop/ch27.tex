@@ -1,0 +1,144 @@
+\chapter{Coupling to an External Solver}
+
+\section{A Process That Owns Part of the State}
+
+Many of the experiments of Part V were small enough to be written in a few lines of Python and run inside the same process as Blender. A solver of a different kind, such as a finite element code, a traffic or crowd model, a hydrological model or a factory simulation, is usually a separate program, written by other people, with its own state, its own time step and its own failure modes. Coupling Blender to such a program makes the world of Chapter 24 depend on a participant that Blender does not control. The geometry that Blender holds becomes the solver's boundary condition, the solver's output becomes Blender's state, and the loop between them is a numerical method in its own right, with errors that belong to neither side alone.
+
+The coupling studied here is deliberately small so that every number can be checked. The external program is \texttt{solver.py}, an explicit diffusion scheme on a square grid, run as a separate operating-system process by \texttt{solver\_server.py}. It stores the field itself. Cells inside an obstacle are excluded, no flux crosses a face that touches one, and a set of cells is held at a fixed level as a source. The stability limit of the explicit scheme in two dimensions is $D\,\Delta t/\Delta x^2 < 1/4$, and the code uses $0.2$. As a check that the solver does what it claims, a field of total $100$ in a domain with a wall and a slot, with no source, was advanced for $500$ steps and the total over fluid cells was $100.00000000000001$, so mass is conserved to rounding.
+
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true]{solver.py}
+
+The solver is a stand-in. A real code would differ in size, speed, units, and in how it is launched, and nothing here was run against one. What the stand-in has in common with real solvers, and what the chapter tests, is the structure: a separate process, a message protocol, state on the far side of that protocol, and geometry on this side. The driver in \texttt{coupling.py} starts the process, sends one JSON header line followed by raw bytes, reads the reply on a separate thread so that a missing reply can time out, and numbers every request so that a reply can be matched to the request that caused it. Everything that Blender does in the chapter goes through the data API and no operator is called, so the scripts run in the headless sessions used throughout.
+
+\section{Moving Arrays Between Processes}
+
+The first question is the cost of moving a field across the boundary. The same array of random 64-bit floats was sent to the solver process and returned unchanged by three routes: raw bytes through the pipe, a JSON text list through the pipe, and a file written with \texttt{numpy.save}, read by the other process, written again and read back. Each entry is the median of five repetitions, and every route returned the array exactly equal to what was sent, so none of them lost precision.
+
+\begin{center}
+\small
+\begin{tabular}{rrrr}
+\toprule
+Floats & Pipe, bytes (ms) & Pipe, JSON text (ms) & File (ms)\\
+\midrule
+$10^3$ & 0.12 & 1.17 & 0.82\\
+$10^4$ & 0.11 & 9.24 & 0.99\\
+$10^5$ & 1.22 & 93.8 & 2.08\\
+$10^6$ & 25.6 & 933 & 13.2\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Three facts follow. Text cost between ten and eighty times what bytes cost across the sizes tested, and takes about $20.6$ bytes per number, against eight for the binary form. The file route has a fixed cost near $0.8$ ms and then grows slowly, and at $10^6$ numbers it was faster than the pipe on this machine, probably because the pipe is read by a Python thread that copies the data, although that explanation was not tested. A round trip of eight bytes through the pipe took $0.145$ ms, and starting a fresh solver process and completing one call took $95$ ms. The practical consequence is that a solver should be started once and kept, since a start costs as much as hundreds of small round trips, and that the format matters less than the number of exchanges for fields of the sizes used below. The measurements are of a local pipe and a local disk under one load. They say nothing about a network, a container boundary or a solver that is slow to read its input.
+
+\section{Rasterising Blender Geometry}
+
+The solver cannot read a mesh. It reads a mask, so the geometry that Blender holds has to be sampled on the solver's grid. The function \texttt{rasterise} takes each object's inverse world matrix, maps every cell centre into the object's local coordinates, and marks the cell as obstacle if the point lies inside the local cube, so the matrices handle location, rotation and scale together. It is exact for boxes and approximate for the grid. A box of $20\times 8$ units rotated by $30^\circ$ has area $160$, and counting the cells whose centres fall inside, with $40$ random offsets of position at each resolution, gave the following relative errors of the area.
+
+\begin{center}
+\small
+\begin{tabular}{rrr}
+\toprule
+Cells per unit & Mean error & Largest error\\
+\midrule
+1 & 0.00328 & 0.01250\\
+2 & 0.00145 & 0.00313\\
+4 & 0.00024 & 0.00078\\
+8 & 0.00006 & 0.00020\\
+16 & 0.00002 & 0.00005\\
+32 & $<0.000005$ & 0.00001\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The error falls with resolution, by a factor between two and six for each doubling of the resolution, which is irregular, as one would expect from a count of boundary cells with random offsets. Area is the quantity checked here. It is not the same as the correctness of a flow through a slot that is a few cells wide, where the number of cells across the slot is what matters, and the diffusion experiments below use a grid on which the slot is eight cells wide.
+
+A second result concerns when the matrices are valid. Setting \texttt{object.location} through the data API changes the property at once, but \texttt{matrix\_world} is recomputed only when the dependency graph is updated. In a test, a box of area $16$ was moved by ten units. The mask computed straight after the move was identical to the mask before it. After \texttt{view\_layer.update()} on the object's own scene the mask moved, and the centre column changed from the old to the new position. The same call on the \emph{context} view layer, which belongs to a different scene from the one holding the box, left \texttt{matrix\_world} at the old value, since the first read after the move returned $20.0$ and the box had been set to $5.0$. A coupling that reads geometry must therefore update the scene that owns the objects before each read, and an error here produces no exception: the solver receives a valid mask for the wrong geometry.
+
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true,firstline=34,lastline=44]{coupling_blender.py}
+
+\section{A Staggered Loop and Its Lag}
+
+The coupled problem has a $48\times 48$ domain with a source at the left, a wall at the middle with a slot eight cells wide, and a door in the slot made of one scaled box. The door is closed at the start. Blender reads the field at a sensor cell on the source side, and when the reading reaches $5$ the door opens, its opening fraction rising by a fixed amount per solver step, so that the door box shrinks toward the centre of the slot. A second sensor on the far side of the wall is the measured outcome, and the time at which it first reaches $1$ is found by linear interpolation between exchanges. The loop is staggered: at each exchange Blender reads the field, decides the door position, sets the object, updates the scene, rasterises the mask, and sends it to the solver with a number of steps to advance. The door is therefore held fixed over the exchange interval, however long that interval is.
+
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true,firstline=109,lastline=146]{coupling_blender.py}
+
+The interval was varied from $1$ step, taken as the reference, to $400$ steps, with a slow door ($1/400$ of the opening per step) and a fast one ($1/40$).
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{rrrrrr}
+\toprule
+Door & Interval & Opens from step & Far sensor reaches 1 & Far sensor at 2400 & Exchanges\\
+\midrule
+slow & 1 & 237 & 503.8 & 15.1215 & 2400\\
+slow & 5 & 240 & 504.2 & 15.1208 & 480\\
+slow & 25 & 250 & 502.9 & 15.1197 & 96\\
+slow & 100 & 300 & 507.7 & 15.1135 & 24\\
+slow & 400 & 400 & 504.8 & 15.1246 & 6\\
+\midrule
+fast & 1 & 237 & 410.6 & 15.1908 & 2400\\
+fast & 5 & 240 & 411.1 & 15.1904 & 480\\
+fast & 25 & 250 & 411.5 & 15.1900 & 96\\
+fast & 100 & 300 & 429.2 & 15.1757 & 24\\
+fast & 400 & 400 & 504.8 & 15.1246 & 6\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The door can open no earlier than the first exchange after the sensor crosses its threshold, so with an interval of $400$ steps it opened at step $400$ and not at $237$. A slow door hid this. With the slow door the far sensor reached its threshold between steps $502.9$ and $507.7$ for every interval, a spread of under one percent, and the differences were not ordered by interval, which suggests that interpolation between exchanges and the delay in opening are both present and partly cancel, a conjecture that was not separated. A test of the coupling with the slow door alone would have passed an interval of $400$. With the fast door the time rose from $410.6$ at the reference to $411.5$, $429.2$ and $504.8$ steps for intervals of $25$, $100$ and $400$, which is $0.2\%$, $4.5\%$ and $23\%$ later, and the sensor's final value differed from the reference by $0.0008$, $0.015$ and $0.066$. At interval $400$ the two door speeds gave the same result, because the door was fully open before the solver saw it. The error comes from the coupling and not from either side: the solver is stable at every interval, and the rasteriser is the same.
+
+The cost side is as follows. Rasterising took $0.2$ to $0.5$ ms per exchange and the solver round trip, which includes the solver's steps, from $0.26$ ms for one step to about $18$ ms for $400$. For this problem, per-exchange overhead is therefore small beside the steps themselves from an interval of $25$ upward, and the whole range of this table ran in a few seconds. A first-order-in-interval error, which the fast-door numbers are consistent with ($0.2\%$ at $25$ steps and $4.5\%$ at $100$), is what is expected of a staggered scheme in which one side lags the other, but three points do not establish an order and no refinement study was done. Choosing the interval is a numerical decision that belongs to the experiment's record, with the check of the next section.
+
+\section{When the Solver Misbehaves}
+
+A solver that fails loudly is the easy case. Nine behaviours were injected at the solver, each in a fresh process, and a reply was subjected to six checks separately, so that the coverage of each could be seen. The \emph{id} check compares the number in the reply with that of the request. The \emph{shape} check compares the array size with the grid. The \emph{finite} check rejects NaN and infinity. The \emph{bounds} check rejects values below zero or above the source level. The \emph{mass} check compares the total over fluid cells before and after an exchange with no source, which should agree to rounding. The \emph{shadow} check reruns a small exchange in the driver's own process, from the same field and mask, and compares exactly. An entry reads x where the single check flags the fault and a dash where it does not.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lcccccc}
+\toprule
+Fault & id & shape & finite & bounds & mass & shadow\\
+\midrule
+none & -- & -- & -- & -- & -- & --\\
+process exits & \multicolumn{6}{c}{driver reports that the process ended}\\
+no reply (hang) & \multicolumn{6}{c}{driver reports a timeout}\\
+reply to an earlier request & x & -- & -- & -- & -- & --\\
+wrong array size & -- & x & n/a & n/a & n/a & n/a\\
+a NaN in one cell & -- & -- & x & -- & -- & x\\
+all values $\times 1.5$ & -- & -- & -- & -- & x & x\\
+all values $+10^{-6}$ & -- & -- & -- & -- & x & x\\
+field transposed (wall in domain) & -- & -- & -- & -- & x & x\\
+field transposed (symmetric domain) & -- & -- & -- & -- & -- & x\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The table has four lessons. A crash and a hang are caught by the driver, and only because the driver has a timeout, since without one the hang would block the whole Blender session. Checks of form, namely identifier, size and finiteness, catch the failures that make the reply unusable and nothing subtler. The bounds check caught none of the injected faults, because the overshoot of a factor of $1.5$ was applied to a field far below the source level, so that it stayed within the bounds. A bounds check is useful only when the field comes near them. The mass check caught the scaling, the tiny constant offset and the transposed field in a domain with a wall, and the last of these only because transposing moved values into cells inside the wall. When the domain was symmetric and the field was transposed, every check except the shadow check passed: the reply was finite, in bounds, of the right size and conserving mass, and wrong. The mass check also applies only to exchanges without a source, and an exchange with a source needs a balance that includes the flux it supplies, which the stand-in solver does not report. The shadow check caught every injected fault that altered the values, and none that altered only the identifier, and it needs an independent implementation, which for an external code of real size is unlikely to exist, and at best a reduced version of it does.
+
+\section{Restart and Replay}
+
+Two properties follow from the structure of the coupling, and both were tested with the exchange interval at $25$ steps and the slow door. The first is restart. The solver process was killed at exchange $40$ of $96$ and started again. In one variant, the driver sent the field it had last received as part of the first request to the new process; in the other, the new process started from zero. With the field restored, the final field was bit-for-bit equal to that of an uninterrupted run, and so was the door's history. Without it, the far sensor ended at $8.34$ against $15.12$ and the total mass at $50309$ against $71446$, but the door's history was still identical, because the door was already fully open and the sensor on the source side was still above its threshold. The door trace was the only quantity that Blender recorded as state, and it showed no sign of the damage. State on the far side of the boundary is lost with the process unless it is checkpointed on this side, and a check on what Blender holds does not reveal its loss.
+
+The second property is replay. In the live run, each exchange was logged with a hash of the mask that was sent and the field that came back. The control loop was then rerun with no solver process and fed from the log. It reproduced the door trace hash and the final field exactly. The cost was the size of the log, which for $96$ exchanges of $48\times 48$ doubles was $1440$ KB after compression, so the full log scales with the number of exchanges times the field size. A replay is valid only for the requests that were logged. When the threshold was changed from $5$ to $6$, the replay raised an error at exchange $11$, since the first mask differed from the logged one, which is the right behaviour, because the log has no answer to a question that was not asked. This continues the history principle of Chapter 24 across the boundary: the solver's answers become part of the log, and what is replayed is Blender's side of the conversation.
+
+\section{What These Experiments Do Not Show}
+
+The solver is a simple explicit scheme written for the purpose, running on the same machine as Blender, and its failures were injected by a switch in its own code, which is a different thing from the failures of an independent program. No real external solver was tried, so launch time, input formats, licensing, units and stability under other time steps are untested. The lag results are for one geometry, one control law and one source, with an error that looks first order but was not tested for order, and the opposite effect, in which the solver advances while the geometry lags, was not examined. The rasterisation study covers boxes only. General meshes need a point-in-mesh test, whose cost and robustness for non-manifold meshes were not examined. Nothing here concerns two-way coupling of forces, in which the solver's output changes the geometry itself and the mask must follow a deformation, or parallel solvers, or a solver that advances in real time while Blender draws. The detection table shows the coverage of the six checks against nine faults of this solver. It does not give the detection rate of any check in practice, which depends on the faults that occur.
+
+\begin{exercise}[27.1: Subcycling]
+Let the solver take $k$ steps per exchange, with the door position interpolated linearly in time from the previous exchange to the current one, which requires the door's target to be known ahead. Compare the far-sensor time with the staggered results for the fast door at intervals $25$, $100$ and $400$.
+\end{exercise}
+
+\begin{exercise}[27.2: Order of the error]
+Run the fast-door experiment at intervals $1$, $2$, $4$, $8$, $16$, $32$ and $64$ and plot the error in the far-sensor time against the interval on logarithmic axes. State the slope with its uncertainty and say whether the data support first order.
+\end{exercise}
+
+\begin{exercise}[27.3: A balance with a source]
+Extend the solver so that it reports the total flux it supplied through the source cells in each exchange, and add a mass check for exchanges with a source. Show that it flags the constant offset of the fault table.
+\end{exercise}
+
+\begin{exercise}[27.4: A mesh obstacle]
+Replace the door's box with a cylinder mesh and write a point-in-mesh test by ray casting against the object's mesh with \texttt{Object.ray\_cast}. Report the area error against the analytic area at four resolutions and the cost per exchange relative to the box test.
+\end{exercise}

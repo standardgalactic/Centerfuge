@@ -1,0 +1,115 @@
+\section{A Family as a Function of Parameters}
+
+A procedural construction can be described as a function. Let $\theta$ denote the list of parameters, such as the count $N$, the module size $s$, and the offsets, and let $\omega$ denote a random seed where randomness is used. The construction is then a map $(\theta,\omega)\mapsto\text{scene}$. Two statements follow at once. If $\omega$ is held fixed, the scene is a deterministic function of $\theta$, so a parameter change has a repeatable effect. If $\theta$ is held fixed and $\omega$ varies, the scenes form a distribution, and any single scene is one sample from it. Keeping these two roles separate is the mathematical content of the advice in Section~5.4 to record seeds and to preserve them when comparing parameters.
+
+Modifier stacks are compositions of such functions. A Bevel followed by an Array is not the same construction as an Array followed by a Bevel: in the first, each module is bevelled and the bevelled module is repeated, while in the second the bevel acts on the array's output. If the copies stay separate the two orders give the same counts, since each copy is bevelled identically either way. If the copies touch and the Array modifier merges their coincident vertices, the orders differ: in a test in Blender 5.2.2 with three unit cubes at relative offset one, Bevel then Array gave $(64,136,76)$ vertices, edges, and faces, and Array then Bevel gave $(40,80,44)$. The stack is evaluated from the top down, so reordering it changes the function being composed. For this reason the order of modifiers should be recorded with the parameters.
+
+For the Array modifier in its simplest use, with $N$ copies of a module of local length $s$ along the offset axis, the centre-to-centre spacing is $\Delta=r\,s+c$, where $r$ is the relative offset factor and $c$ the constant offset. When both offsets are enabled their displacements add; this should be confirmed in the installed build. The whole row then has length
+\[
+  L=(N-1)\,\Delta+s,
+\]
+and the gap between neighbouring modules is $\Delta-s$. For a module of length one with $N=4$ and $r=1.2$, the spacing is $1.2$, the gap is $0.2$, and the total length is $3(1.2)+1=4.6$. A relative factor of exactly $1$ makes neighbours touch, which is the reason a row of cubes with the default factor of one looks like a solid bar. Because offsets are interpreted in local coordinates, scaling the object scales both $\Delta$ and $s$ together, and the ratio of gap to module is preserved.
+
+The mathematics of a Geometry Nodes line is the same. A Mesh Line with $N$ points and a constant offset vector $\mathbf d$ places point $i$ at $i\,\mathbf d$ for $i=0,\dots,N-1$, and an Instance on Points node places a copy of the module at each. The node recipe of Section~5.3 therefore reproduces the Array formula with $\Delta=\|\mathbf d\|$. Which of the two constructions to use is a question about what must remain editable and what is required downstream, not about the picture that results.
+
+\section{Counting Instances Against Realized Geometry}
+
+The advice of Section~5.2 not to realize instances without a reason has a simple quantitative basis. Suppose a module has $V_0$ vertices, $E_0$ edges, and $F_0$ faces, and it is repeated $N$ times. If the copies are realized as separate geometry, the totals are
+\[
+  V=N\,V_0,\qquad E=N\,E_0,\qquad F=N\,F_0,
+\]
+and $\chi=N(V_0-E_0+F_0)$. For a cube, $\chi_0=2$, so a realized row of $N$ unmerged cubes has $\chi=2N$, one for each closed piece. For $N=10{,}000$ cubes the realized mesh has $80{,}000$ vertices, $120{,}000$ edges, and $60{,}000$ faces. As instances, the data contain one cube and $10{,}000$ placements. The placements are what the scene must store and evaluate, and the cube's counts do not multiply.
+
+The Array modifier belongs on the realized side of this comparison, since its evaluated result is a single mesh whose counts are those above, while a node graph that stops at Instance on Points does not realize. The practical rule is to ask which later operation needs actual geometry, as Section~5.2 says, and to realize as late as possible. A merge of touching faces, a Boolean operation, or an export to a format that has no instancing are typical reasons. The counts quantify what that decision costs.
+
+\section{Randomness as a Controlled Input}
+
+Pseudo-random values are produced by a deterministic function of a seed and an index, so the same seed gives the same values every time. This is what makes a random construction reproducible and also what makes it misleading, because one seed yields one tidy scene that can look representative when it is not.
+
+A small model shows the size of the effect, and stating it carefully matters because the result is only as general as its assumptions. Place $N$ modules of length $s$ along a line with nominal spacing $\Delta$, and displace the $i$th centre by an amount $\varepsilon_i$, the $\varepsilon_i$ being independent and uniform on $[-a,a]$ with $a>0$. Two modules whose centres are at $c$ and $c'$ overlap when $|c'-c|<s$. Write $t=\Delta-s$ for the nominal gap. The \emph{signed} gap between neighbours is $t+(\varepsilon_{i+1}-\varepsilon_i)$, and the difference of two independent uniform variables has a triangular distribution on $[-2a,2a]$. The probability that the signed gap falls below zero is therefore
+\[
+  P_{\mathrm{signed}}=\frac{(2a-t)^2}{8a^2}\qquad\text{for }0\le t\le2a,
+\]
+with $P_{\mathrm{signed}}=0$ for $t\ge2a$, since the nominal gap then exceeds the largest possible closing displacement. For $-2a\le t<0$ the value is $1-(2a+t)^2/(8a^2)$, and for $t\le-2a$ it is $1$. A required clearance $\kappa\ge0$ is handled by replacing $t$ with $t-\kappa$, so that the quantity computed is the probability that the signed gap is below $\kappa$.
+
+The signed gap and actual overlap coincide only when centres cannot cross. The offset difference is at most $2a$ in magnitude, so if $2a\le\Delta$ the quantity $\Delta+\varepsilon_{i+1}-\varepsilon_i$ is never negative, the absolute value changes nothing, and $P_{\mathrm{signed}}$ is exactly the probability of overlap. If $2a>\Delta$, a neighbour can jump past its predecessor, and a pair that has swapped order by more than a module length is clear of each other even though its signed gap is negative. With $\Phi$ the cumulative distribution function of the triangular variable, the probability of actual overlap in general is $\Phi(s-\Delta)-\Phi(-s-\Delta)$. For $\Delta=s=1$ and $a=1.5$, the signed-gap expression gives $0.5$, but the actual overlap probability is $0.4444$, and a simulation of $400{,}000$ pairs gave $0.4446$ for the second and $0.5002$ for the first. The numbers in this chapter all satisfy $2a\le\Delta$, so the simple expression applies to them.
+
+A second qualification concerns independence. The overlap events of neighbouring pairs share an offset, since module $i+1$ belongs to both pair $i$ and pair $i+1$, so the events are dependent, and in this model negatively so, because a displacement that closes one gap opens the next. Pairs that do not share a module are independent, so the events are one-dependent. The expected number of overlapping pairs is still the sum of the individual probabilities, $(N-1)P$, because expectation is linear whether or not the events are independent. The variance is not that of a binomial count. With $G=N-1$ gaps, $p$ the single-gap probability, and $q$ the probability that two consecutive gaps both overlap,
+\[
+  \mathrm{Var}=G\,p(1-p)+2(G-1)\,(q-p^2),
+\]
+and the second term is negative here. For modules of length one at spacing $1.5$ with $a=0.4$, we have $t=0.5$ and $2a=0.8$, so $p=(0.8-0.5)^2/(8\cdot0.4^2)=0.09/1.28=0.0703$ per gap. For a row of $N=20$ modules there are $19$ gaps, and the mean number of overlaps is $19(0.0703)=1.34$.
+
+The following table shows how sharply this depends on the jitter. Below the threshold $a=t/2=0.25$ no overlap can occur, and above it the probability rises quickly.
+
+\begin{center}
+\begin{tabular}{@{}cc@{}}
+\toprule
+Jitter $a$ & $P(\text{overlap})$ per gap\\
+\midrule
+0.10 & 0.0000\\
+0.25 & 0.0000\\
+0.40 & 0.0703\\
+0.55 & 0.1488\\
+0.75 & 0.2222\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+A simulation of $200{,}000$ seeds agrees with the analysis: the mean number of overlaps for $a=0.4$ was $1.339$, against the predicted $1.336$, and the standard deviation was $1.031$. Treating the $19$ events as independent would predict a standard deviation of $1.114$, whereas the one-dependent formula, with $q$ computed by numerical integration over the shared offset, gives $1.032$. The dependence is therefore small but detectable, and ignoring it overstates the spread. Individual seeds, however, vary widely. The first eight seeds of the generator used here gave $0,3,1,0,0,2,0,1$ overlaps. A reader who examined only the first would conclude that the arrangement never overlaps, and one who examined only the second would conclude it fails routinely. Both would be describing a single sample. The values come from the Python generator of the accompanying script and not from Blender's Random Value node, whose generator differs, but the argument applies to any seeded source.
+
+The lesson for the experimental record is specific. A claim of the form ``this arrangement keeps passages clear'' should be tested against many seeds, and the statement of the result should give the fraction of seeds that satisfied the criterion or the distribution of the count, not the outcome of one chosen seed.
+
+\section{Designing a Sweep}
+
+A sweep varies parameters in a planned way. With $k$ parameters and $n$ levels each, a full grid has $n^k$ points. Three parameters at four levels give $64$ scenes, and $100$ seeds at each point would give $6{,}400$ evaluations, a number that should be chosen deliberately rather than reached by accident. Varying one parameter at a time costs only $1+k(n-1)$ scenes but cannot show interactions, such as a jitter that matters only when the spacing is tight.
+
+When comparing two parameter settings, it helps to use the \emph{same} seeds for both, so that the settings are compared on the same underlying random draws. Using common seeds removes part of the sampling noise from the difference. In the jittered line, comparing $a=0.3$ with $a=0.4$ over $20{,}000$ seeds gave a mean increase of about $1.07$ overlaps in both designs, but the standard deviation of the difference was about $0.94$ with common seeds and $1.16$ with independent seeds, a reduction in variance of roughly one third. The reduction is modest here, since the overlaps depend on the draws nonlinearly, but it costs nothing. It is a good default whenever the purpose is to isolate the effect of a parameter.
+
+The practical consequence for the saved files of Chapter 3 is that every scene in a sweep should be traceable to its parameters and seed. A small manifest file listing, for each scene, the values of $\theta$, the seed, the Blender build, and the date lets a particular member of the family be rebuilt exactly. Custom properties on the generated objects can carry the same information inside the scene.
+
+\section{Scripts for the Jittered Family}
+
+The accompanying module \texttt{familycheck.py} implements the spacing and length formulas, the jittered positions, the overlap count, the exact overlap probability, and the ensemble and common-seed comparisons, with the printed values recorded in its comments and confirmed by running it.
+
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true]{familycheck.py}
+
+The next script builds a jittered row inside Blender. It creates one cube mesh and $N$ objects that share it, so the copies are linked duplicates in the sense of Section~5.2, each with its own transform. It records its parameters on every object, writes into a new collection, and deletes nothing. It was executed in Blender 5.2.2 during preparation of this manuscript: it produced twenty objects sharing one mesh datablock, the custom properties on each, and the same positions on a second run. It uses Python's generator, not Blender's Random Value node.
+
+\begin{lstlisting}[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true]
+import bpy
+import random
+
+N, SIZE, STEP, JITTER, SEED = 20, 1.0, 1.5, 0.4, 7
+
+coll = bpy.data.collections.new('Cell_Family')
+bpy.context.scene.collection.children.link(coll)
+
+# One shared cube mesh of edge length SIZE, built from primitive data
+h = SIZE / 2
+verts = [(x, y, z) for x in (-h, h) for y in (-h, h) for z in (-h, h)]
+faces = [(0, 1, 3, 2), (4, 6, 7, 5), (0, 4, 5, 1),
+         (2, 3, 7, 6), (0, 2, 6, 4), (1, 5, 7, 3)]
+mesh = bpy.data.meshes.new('Cell_Module_Mesh')
+mesh.from_pydata(verts, [], faces)
+mesh.update()
+
+rng = random.Random(SEED)
+for i in range(N):
+    obj = bpy.data.objects.new(f'Cell_{i:03d}', mesh)   # shared mesh data
+    obj.location = (i * STEP + JITTER * rng.uniform(-1.0, 1.0), 0.0, 0.0)
+    obj['seed'] = SEED
+    obj['jitter'] = JITTER
+    obj['step'] = STEP
+    coll.objects.link(obj)
+\end{lstlisting}
+
+Counting overlaps in the generated row is the same computation as the \texttt{overlaps} function above, applied to the objects' $X$ locations in order and compared against the module size.
+
+\section{Exercise: Seeds and Clearance}
+
+\begin{exercise}[5.10: How many seeds is enough?]
+Build the jittered row, either with the script above or with Geometry Nodes using a Mesh Line, Instance on Points, and a Random Value node feeding a position offset. Fix $N=20$, $s=1$, $\Delta=1.5$, and $a=0.4$. Before measuring, predict the mean number of overlaps, which the analysis above gives as about $1.34$.
+
+Generate at least thirty seeds, record the overlap count for each, and compare the mean with the prediction. Report how many of the seeds produce no overlap at all, and say what a reader who saw only the first seed would have concluded. Then repeat with $a=0.25$ and check that no seed overlaps. Finally, test a property that should not be assumed. In the Geometry Nodes version, change $N$ from $20$ to $25$ without changing the seed, and record whether the first twenty offsets are unchanged. Describe what the result implies for comparing two scenes that differ in count.
+\end{exercise}

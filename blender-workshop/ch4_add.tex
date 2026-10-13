@@ -1,0 +1,84 @@
+\section{Counting a Mesh}
+
+A polygon mesh is a combinatorial object with a geometric realization. Its combinatorial part consists of three finite sets: vertices, edges, and faces. Writing $V$, $E$, and $F$ for their sizes, the single most useful summary is the \emph{Euler characteristic}
+\[
+  \chi=V-E+F.
+\]
+The startup cube has $V=8$, $E=12$, and $F=6$, so $\chi=2$. For a closed, connected surface without holes through it, $\chi=2$ regardless of how the surface is subdivided or deformed. If the surface has $g$ handles, $\chi=2-2g$. A cube with a square hole drilled straight through it, modelled as two annular rings joined by inner and outer walls, has $V=16$, $E=32$, and $F=16$, so $\chi=0$ and $g=1$. The number does not depend on the shape of the hole, only on the fact that the surface has one.
+
+Two further relations hold in any mesh. Every edge borders exactly two face corners, or one if it lies on a boundary, so for a closed mesh the sum of the face sizes equals $2E$. The cube has six faces of four sides each, giving $24=2\cdot12$. Likewise the sum of the vertex degrees equals $2E$. These relations are the mesh version of counting the same edges from two directions, and they are useful as quick consistency checks.
+
+Blender reports these counts in the viewport. The Statistics option among the viewport overlays shows the number of vertices, edges, and faces of the selected or visible geometry, and the same numbers are available from Python. A habit of reading the counts before and after an operation makes many otherwise invisible changes visible.
+
+\section{What Operations Do to the Counts}
+
+Each of the editing operations of Section~4.1 changes the counts in a way that can be predicted in advance. Extruding one face of the cube replaces that face by a new face displaced from it and joined to it by four side faces. The result has four new vertices, eight new edges, and four net new faces, so the counts go from $(8,12,6)$ to $(12,20,10)$. Insetting a single face and then extruding the inset region inward, which is the recess construction of Exercise~4.4, produces the same counts, since the combinatorics are the same and only the positions differ. In every case $\chi=12-20+10=2$.
+
+The table below collects counts for the cube under several standard operations. Subdivision refers to the Catmull--Clark scheme used by the Subdivision Surface modifier, for which a quadrilateral mesh with $V$ vertices, $E$ edges, and $F$ faces becomes a mesh with $V+E+F$ vertices, $2E+4F$ edges, and $4F$ faces. Applying it to the cube gives $(26,48,24)$ at one level and $(98,192,96)$ at two. A bevel of all twelve edges with a single segment replaces each original vertex by a triangle, each edge by a rectangle, and keeps the six original faces, giving $V=24$, $E=48$, $F=26$. Triangulating the six quadrilaterals splits each into two triangles, giving $(8,18,12)$.
+
+\begin{center}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Operation on the cube & $V$ & $E$ & $F$ & $\chi$\\
+\midrule
+Start & 8 & 12 & 6 & 2\\
+Extrude or inset-and-extrude one face & 12 & 20 & 10 & 2\\
+Bevel all edges, one segment & 24 & 48 & 26 & 2\\
+Subdivision, level 1 & 26 & 48 & 24 & 2\\
+Subdivision, level 2 & 98 & 192 & 96 & 2\\
+Triangulate all faces & 8 & 18 & 12 & 2\\
+Delete one face (open box) & 8 & 12 & 5 & 1\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Every row but the last preserves $\chi$, because none of those operations changes how many handles the surface has. Deleting a face leaves a boundary and turns the closed surface into a disk-like one, so $\chi$ drops to $1$. Making a hole through the solid would change $\chi$ again. This is the content of the statement that these operations change the \emph{geometry and connectivity} of a mesh while preserving its \emph{topology} in the coarse sense.
+
+The counts also diagnose the cancellation problem of Section~4.1. After an extrusion is cancelled, the usual behaviour is that the new geometry remains in place with zero displacement. The picture is unchanged, but the counts have risen from $(8,12,6)$ to $(12,20,10)$, because the extruded face and its four side faces now sit on top of the original surface. A count that increased when the shape did not change is evidence of hidden overlapping geometry.
+
+\section{Orientation as Edge Consistency}
+
+A face is stored as a cyclic sequence of vertices, and the direction of the cycle determines which side is its front, that is, the side its normal points toward. For a closed surface to have a well-defined inside and outside, neighbouring faces must agree. The precise condition is that each interior edge be traversed in opposite directions by the two faces that share it. When that holds, the mesh is \emph{consistently oriented}.
+
+Consistency says that the faces agree with each other, not that they point outward. The additional information is the sign of the enclosed volume. For a closed, consistently oriented mesh the signed volume is
+\[
+  \mathrm{Vol}=\frac16\sum_{\text{triangles }(\mathbf a,\mathbf b,\mathbf c)}\mathbf a\cdot(\mathbf b\times\mathbf c),
+\]
+where each polygon is fan-triangulated and the sum runs over all triangles. The volume is positive when the normals point outward and negative when they all point inward. For the cube of side two with outward normals the value is $8$, and with every face reversed it is $-8$. If a single face is reversed, the edge condition fails along that face's four edges, and the formula no longer describes an enclosed region; for the top face reversed it returns $16/3$, which is $8-2\cdot\tfrac43$, since the top face contributes $4/3$ with its sign flipped.
+
+This explains the behaviour of \emph{Recalculate Outside} noted in Section~4.2. For a closed mesh the operation can propagate a consistent orientation and then choose the sign that makes the volume positive. For an open mesh, the volume is undefined, since the surface does not enclose a region, and the operation has no basis for deciding which side is the inside. The cube with one face removed is such a case. Inspection by the user, not a command, supplies the intended orientation.
+
+\section{Topology as an Obligation}
+
+The principle of Section~4.3 asked what a model must preserve before deciding what it may lose. Combinatorial invariants give some of those obligations a precise form. A wall block that will later serve as the operand of a Boolean operation should be a closed, consistently oriented surface, which can be written as the conjunction $\chi=2$, every edge shared by exactly two faces, and positive signed volume. A frame with an opening should have $\chi=0$, and a change that turns it into $\chi=2$ has closed the opening whatever the picture suggests. Writing the obligation as a checkable statement beside the saved version lets a later operation be compared against it.
+
+The same counting also governs the spherical arrangement of Chapter 11. A collection of great circles on a sphere is a mesh on the sphere whose vertices are the intersection points, whose edges are the arcs between them, and whose faces are the resulting regions. Euler's relation $V-E+F=2$ holds for it exactly as for the cube, and the identity $F=2-V+E$ used there is this relation rearranged. For the symmetric example, $54-116+64=2$.
+
+\section{Checking a Mesh by Script}
+
+The following pure Python module implements the counts, the orientation test, and the signed volume described above. It has no dependence on Blender, and its test block builds the cube, a cube with one face reversed, and the open box, with the outputs recorded in the comments. Its results were confirmed by running it.
+
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true]{meshcheck.py}
+
+Inside Blender, the counts of the active object can be read from its mesh data. Run this in Object Mode, since the mesh data of an object in Edit Mode is not synchronized until the mode is left.
+
+\begin{lstlisting}[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true]
+import bpy
+
+obj = bpy.context.active_object
+me = obj.data
+V, E, F = len(me.vertices), len(me.edges), len(me.polygons)
+print(V, E, F, 'chi =', V - E + F)
+print('sum of face sizes =', sum(len(p.vertices) for p in me.polygons),
+      ', 2E =', 2 * E)   # equal for a closed mesh
+\end{lstlisting}
+
+It was executed in Blender 5.2.2 on the default cube and printed $8\ 12\ 6$, $\chi=2$, and $24=24$. The equality of the face-size sum and $2E$ holds exactly when every edge borders two faces: it held for the cube, UV sphere, torus, cone, and cylinder primitives, and failed for Blender's Suzanne mesh, which has 42 edges that do not border exactly two faces, so a mismatch is a finding about the mesh and not an error in the script. A failure to run would most likely come from a non-mesh object being active.
+
+\section{Exercise: Predict the Counts}
+
+\begin{exercise}[4.10: Counts before and after]
+Starting from the startup cube, write down the predicted $(V,E,F,\chi)$ for each of the following before performing it: extruding one face outward, insetting and then extruding one face inward, bevelling all edges with one segment, adding a Subdivision Surface modifier at level one and applying it, and deleting one face. The table in this chapter gives the expected values.
+
+Perform each operation on a fresh copy of the cube, read the counts from the Statistics overlay, and compare. Then cancel an extrusion by pressing \key{Esc} right after \key{E} and read the counts again. Record any case in which your prediction differs from what Blender reports, and decide whether the difference comes from an operation setting such as the bevel segments, from overlapping geometry, or from a misread statistic. Finally, run the Python module above on a mesh you construct by hand and confirm that its orientation test fails when you reverse a single face.
+\end{exercise}

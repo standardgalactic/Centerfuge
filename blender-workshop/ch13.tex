@@ -1,0 +1,115 @@
+\chapter{Spherical Coordinates, Great Circles, and Single Precision}
+
+\section{Coordinates Are a Chart, and Vectors Are the Thing}
+
+Chapter 11 described a point of the sphere by a latitude $\beta$ and a longitude $\lambda$, and a plane through the origin by its unit normal. Those are two descriptions of the same objects, and they have different properties. A pair $(\beta,\lambda)$ is a chart: it covers the sphere except at the poles, where $\lambda$ is undefined and nearby points have very different longitudes. A unit vector $\mathbf x=(\cos\beta\cos\lambda,\cos\beta\sin\lambda,\sin\beta)$ has no singular point, and the distance, the great circle, and the intersection of two circles are each one line of vector algebra. The practice adopted in this chapter is to use coordinates to enter and report positions and vectors to compute with them. The practice also has a numerical reason, because Blender's \texttt{mathutils} vectors, matrices, and quaternions store single-precision numbers, with a relative spacing of about $6\times10^{-8}$, and a computation on them is only as good as its formula is conditioned.
+
+The mesh that Blender calls a UV sphere is the chart made into geometry. Its vertices lie on parallels and meridians, with triangles at the poles, and its faces are therefore far from equal in area. The table gives, for UV spheres of increasing resolution and for icospheres, the vertex and face counts, the surface area and volume as fractions of the sphere's values $4\pi$ and $4\pi/3$, and the ratio of the largest face area to the smallest.
+
+\begin{center}
+\begin{tabular}{lrrrrr}
+\toprule
+Mesh & Vertices & Faces & Area/$4\pi$ & Volume/$\tfrac43\pi$ & Largest/smallest face\\
+\midrule
+UV $16\times8$ & 114 & 128 & 0.9682 & 0.9374 & 5.12\\
+UV $32\times16$ & 482 & 512 & 0.9920 & 0.9840 & 10.20\\
+UV $64\times32$ & 1986 & 2048 & 0.9980 & 0.9960 & 20.38\\
+Ico, 2 subdivisions & 42 & 80 & 0.9284 & 0.8735 & 1.19\\
+Ico, 3 subdivisions & 162 & 320 & 0.9811 & 0.9662 & 1.51\\
+Ico, 4 subdivisions & 642 & 1280 & 0.9952 & 0.9914 & 1.73\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The UV sphere's faces become less uniform as the resolution rises, with the largest-to-smallest ratio doubling each time, because the polar triangles shrink as the cube of the resolution while the equatorial quadrilaterals shrink as its square. The icosphere's ratio stays below two. For a question that depends on sampling the sphere uniformly, such as placing markers, seeding a growth process, or estimating an area fraction by counting faces, the icosphere is the better chart-free choice, and the UV sphere is better when parallels and meridians are wanted as a coordinate grid. The inscribed polyhedra underestimate area and volume by amounts that fall with resolution; the volume is below the sphere's in every row, as it must be for a polyhedron inscribed in a sphere.
+
+\section{Three Formulas for One Angle}
+
+The angular distance between two unit vectors $\mathbf a$ and $\mathbf b$ is the great-circle distance on the unit sphere, and three formulas are in common use. The first is $\arccos(\mathbf a\cdot\mathbf b)$, which is the one \texttt{Vector.angle} implements. The second is the chord form $2\arcsin(|\mathbf a-\mathbf b|/2)$. The third is $\operatorname{atan2}(|\mathbf a\times\mathbf b|,\;\mathbf a\cdot\mathbf b)$. They are equal in exact arithmetic and unequal in floating point. The measurement takes $\mathbf a=(1,0,0)$ and $\mathbf b=(\cos\theta,\sin\theta,0)$ and reports the relative error of each estimate of $\theta$.
+
+\begin{center}
+\begin{tabular}{rrrrrr}
+\toprule
+$\theta$ & acos, f64 & atan2, f64 & acos, f32 & atan2, f32 & \texttt{Vector.angle}\\
+\midrule
+$10^{-1}$ & $5.6\times10^{-15}$ & $1.4\times10^{-16}$ & $1.2\times10^{-6}$ & $6.0\times10^{-8}$ & $1.2\times10^{-6}$\\
+$10^{-2}$ & $1.4\times10^{-13}$ & $0$ & $8.7\times10^{-5}$ & $2.2\times10^{-8}$ & $8.7\times10^{-5}$\\
+$10^{-3}$ & $7.8\times10^{-12}$ & $0$ & $2.3\times10^{-2}$ & $6.9\times10^{-8}$ & $2.3\times10^{-2}$\\
+$10^{-4}$ & $2.6\times10^{-9}$ & $0$ & $1.0$ & $2.5\times10^{-8}$ & $1.0$\\
+$10^{-6}$ & $4.4\times10^{-5}$ & $0$ & $1.0$ & $2.5\times10^{-9}$ & $1.0$\\
+$10^{-8}$ & $1.0$ & $0$ & $1.0$ & $6.1\times10^{-9}$ & $1.0$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The chord form is omitted from the table: it was exact to rounding in double precision, as the atan2 form was, and in single precision its relative error was between $2.5\times10^{-9}$ and $6.9\times10^{-8}$, the same size as the atan2 form's. The arccosine formula loses its small angles. For a small angle $\cos\theta\approx1-\theta^2/2$, and a number near one carries information about $\theta$ only in digits beyond its spacing. In single precision the spacing near one is $6\times10^{-8}$, so angles below about $\sqrt{2\times6\times10^{-8}}\approx3.5\times10^{-4}$ cannot be told from zero, which is what the table shows: a relative error of $2\times10^{-2}$ at $10^{-3}$ and total loss at $10^{-4}$. In double precision the same happens at $\theta\approx10^{-8}$. The values for \texttt{Vector.angle} in the last column match the single-precision arccosine column in every row, to the digits shown, which indicates that it is computed that way in this build. The practical rule is that \texttt{Vector.angle} is reliable for angles above about $0.1$ degree and not below, and that the atan2 form, which uses the cross product's length where the arccosine uses the dot product's closeness to one, is accurate across the whole range. The same argument applies near $\pi$, where $\cos\theta\approx-1$, though that case was not measured here.
+
+\section{The Great Circle Through Two Points}
+
+The plane through the origin and two points $\mathbf a,\mathbf b$ has normal $\mathbf a\times\mathbf b/|\mathbf a\times\mathbf b|$, and the great circle is the intersection of that plane with the sphere. The conditioning of the normal is the conditioning of the cross product: the length $|\mathbf a\times\mathbf b|=\sin\theta$ is the denominator, so an error of size $\epsilon$ in the coordinates of $\mathbf a$ or $\mathbf b$ produces an error in the direction of the normal of about $\epsilon/\sin\theta$. The prediction was tested by rotating the pair $\mathbf a=(1,0,0)$, $\mathbf b=(\cos\theta,\sin\theta,0)$ by $300$ random rotations, which makes the coordinates generic, rounding to single precision, and comparing the computed normal with the rotated $z$ axis.
+
+\begin{center}
+\begin{tabular}{rrrr}
+\toprule
+$\theta$ & f64 throughout & \texttt{mathutils}, f32 & Prediction $6\times10^{-8}/\sin\theta$\\
+\midrule
+$10^{-1}$ & $1.3\times10^{-15}$ & $5.9\times10^{-7}$ & $6.0\times10^{-7}$\\
+$10^{-2}$ & $8.9\times10^{-15}$ & $6.4\times10^{-6}$ & $6.0\times10^{-6}$\\
+$10^{-3}$ & $8.0\times10^{-14}$ & $7.0\times10^{-5}$ & $6.0\times10^{-5}$\\
+$10^{-4}$ & $9.8\times10^{-13}$ & $7.1\times10^{-4}$ & $6.0\times10^{-4}$\\
+$\pi-10^{-2}$ & $9.0\times10^{-15}$ & $6.0\times10^{-6}$ & $6.0\times10^{-6}$\\
+$\pi-10^{-3}$ & $9.1\times10^{-14}$ & $7.0\times10^{-5}$ & $6.0\times10^{-5}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The entries are the largest errors over the $300$ trials, in radians. The errors follow the prediction within a factor of $1.2$ and the amplification is the same for nearly equal points and nearly antipodal points, since $\sin\theta$ is small in both. Most of the error is already present when the coordinates are rounded: computing the cross product in double precision from single-precision coordinates gave errors within about a quarter of those of \texttt{mathutils}, so the loss is in the data and not in the arithmetic. Two consequences follow. A circle through two points $0.01$ radian apart is determined only to $6\times10^{-6}$ radian in single precision, and one through points $10^{-4}$ apart only to $7\times10^{-4}$. And a program that constructs a circle from two points should refuse when $\sin\theta$ is too small, not silently return a normal whose direction is mostly rounding.
+
+\section{Moving Along a Great Circle}
+
+Interpolating between two points on the sphere by the straight line between them and then normalising the result keeps the point on the sphere and does not keep its speed. A uniform step in the interpolation parameter moves the point fast near the middle of the chord and slowly near the ends, and the effect grows with the angle between the endpoints. With $200$ steps the ratio of the largest to the smallest angular step was $1.07$ for endpoints $30^\circ$ apart, $1.99$ for $90^\circ$, $14.8$ for $150^\circ$, $130$ for $170^\circ$, and $9680$ for $179^\circ$. Spherical linear interpolation, which weights the endpoints by $\sin((1-t)\theta)/\sin\theta$ and $\sin(t\theta)/\sin\theta$, gives equal angular steps. The \texttt{Vector.slerp} method of \texttt{mathutils} had a step ratio of $1.0000$ from $30^\circ$ to $170^\circ$ and $1.0015$ at $179^\circ$, with the largest departure of a point's length from one at $10^{-7}$ to $10^{-6}$ up to $170^\circ$ and $5\times10^{-5}$ at $179^\circ$. An animated marker that follows a great circle by normalised linear interpolation therefore appears to dwell at both ends, with a speed that varies by a factor of two at $90^\circ$, and the remedy is slerp or the formula above.
+
+\section{Stable Helpers}
+
+The three results of this chapter can be collected in a few lines. The function \texttt{angle} uses the atan2 form, \texttt{circle\_normal} refuses to return a normal when the points are nearly equal or antipodal, and \texttt{arc\_point} interpolates by the sine weights and falls back to normalised linear interpolation for tiny angles, where the sine weights would divide by a vanishing number.
+
+\Needspace{24\baselineskip}
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true,firstline=10,lastline=29]{sphere_tools.py}
+
+Run against single-precision vectors, \texttt{angle} had a relative error of $3.7\times10^{-8}$ at $\theta=0.1$ and $2.0\times10^{-9}$ at $10^{-6}$, where \texttt{Vector.angle} had $1.2\times10^{-6}$ and $1.0$. The point-by-point steps of \texttt{arc\_point} along $143^\circ$ differed in ratio by $1.4\times10^{-5}$, with lengths within $10^{-7}$ of one. The guard refused the pair $(1,0,0)$ and $(-1,10^{-6},0)$.
+
+\section{Counting From Floats}
+
+Chapter 11 counted the vertices of an arrangement from the circles' normals by computing the cross product of each pair, normalising, and merging points that lie within a tolerance. The counts $26$ and $54$ were computed in double precision with a merge tolerance of $10^{-7}$. Blender stores its rotations and object matrices in single precision, so a count made from the normals as Blender holds them has to be redone with the precision in mind. The normals of the script's arrangement and of the teaching arrangement were passed through \texttt{mathutils} vectors, so that they were rounded to single precision, and the vertices recomputed.
+
+\begin{center}
+\begin{tabular}{rrr}
+\toprule
+Merge tolerance & Script's arrangement (true $26$) & Teaching arrangement (true $54$)\\
+\midrule
+$10^{-9}$ & 40 & 56\\
+$10^{-8}$ & 40 & 56\\
+$10^{-7}$ & 26 & 54\\
+$10^{-6}$ & 26 & 54\\
+$10^{-5}$ & 26 & 54\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The same vertex, computed from two different pairs of circles that pass through it, differs by single-precision rounding, up to $6.7\times10^{-8}$ in the first arrangement and $7.6\times10^{-8}$ in the second, with an amplification of $1/\sin\theta$ of about $1.7$ because the smallest angle between two normals is $35.0^\circ$ and $36.9^\circ$. A tolerance below the rounding splits one vertex into several, and the count is wrong in the direction of inflation: $40$ for $26$ and $56$ for $54$. A tolerance above the rounding gives the right count until it exceeds the smallest true separation between distinct vertices, which is $0.515$ for the first arrangement and $0.259$ for the second. The window in which the count is correct is therefore wide, from a few times $10^{-7}$ to about $0.25$, and the tolerance should be placed well inside it, with a margin of an order of magnitude above the rounding and not at its edge. The tolerance $10^{-7}$ of Chapter 11 worked at the edge of the window for single precision, and the family code runs in double precision, where it has a margin of nine orders of magnitude. The lesson generalises: a count that depends on a tolerance is a function of the tolerance, and the report should state the window in which it is stable.
+
+\begin{exercise}[13.1: Where the angle breaks]
+Using \texttt{Vector.angle} on single-precision vectors, find by bisection the smallest angle with a relative error below $1$ percent, and compare it with $\sqrt{2\epsilon}$. Repeat with the \texttt{angle} function of the chapter and state what limits it.
+\end{exercise}
+
+\begin{exercise}[13.2: A circle through close points]
+Construct the great circle through two points $10^{-3}$ radian apart in single precision, sample $100$ points on it, and measure how far they fall from the true circle. Compare with the prediction of the section and say how many points you would need to place along it for the error to be dominated by the sampling and not by the normal.
+\end{exercise}
+
+\begin{exercise}[13.3: Window for another arrangement]
+Choose an arrangement of the family with $\alpha=5^\circ$ and $\beta=35^\circ$, for which the circles come close to meeting at triple points. Compute the smallest separation between distinct vertices and the smallest angle between normals, and state the window of merge tolerances in which the count is stable in single precision.
+\end{exercise}
+
+\begin{exercise}[13.4: A marker on a circle]
+Animate a marker along a great circle of $150^\circ$ by normalised linear interpolation in $60$ frames and again by slerp. Plot the angular step per frame in both cases and report the ratio of largest to smallest.
+\end{exercise}

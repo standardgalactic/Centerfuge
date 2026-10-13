@@ -1,0 +1,62 @@
+\part{Python and Reproducible Construction}
+
+\chapter{Inspecting a Scene and the Two Ways to Act on It}
+
+\section{Why Python Changes the Kind of Work}
+
+Part V ran every experiment from a script, and the scripts shared habits that were never stated: they built objects from data, they put generated objects in collections of their own, they checked what the scene held, and they could rebuild it from a seed. Part VI states those habits as a method. Blender's Python interface offers two ways to act on a scene that look alike in a short example and behave very differently in a long program. One imitates the interface: an operator such as \texttt{bpy.ops.mesh.primitive\_cube\_add} does what the menu item does, using the current selection, the active object and the active collection. The other edits the data directly: \texttt{bpy.data.objects.new} creates an object and nothing else. This chapter measures the difference, shows what each leaves behind in the scene, and builds two small tools, an inventory of what a scene contains and a way of clearing generated content without touching anything else. All measurements were made in the headless Blender 5.2.2 used throughout, with a factory-reset empty scene at the start of each probe. The scripts are \texttt{scene\_tools.py} and \texttt{ch20\_probe.py}.
+
+\section{Three Parts of the Interface}
+
+The module \texttt{bpy} has three parts that matter here. The first, \texttt{bpy.data}, holds every data-block in the file as named collections: objects, meshes, materials, collections, cameras and so on. It is a database, and it is available whatever the interface is doing. The second, \texttt{bpy.context}, describes the present state of the interface: the active object, the selected objects, the current scene and mode. Its contents change as operators run. The third, \texttt{bpy.ops}, is the set of operators, each a command that reads the context, makes changes and may fail if the context does not suit it. A script that mixes these without noticing which it is using will behave differently when run from a different starting state.
+
+\section{What Each Leaves Behind}
+
+A cube was created by operator in an empty scene and a triangle was created by the data interface, and the scene was examined before, between and after. Before anything, there was no active object, no selection, and no objects or meshes. After \texttt{primitive\_cube\_add}, the new object was active and selected, its mesh was named Cube, and it belonged to the scene's master collection and not to the collection named Generated that the script had made. After the triangle was created with \texttt{bpy.data.meshes.new}, \texttt{from\_pydata} and \texttt{bpy.data.objects.new}, the active object was still the cube, the selection still held one object, and the triangle was in Generated because the script linked it there. The operator therefore changes the interface state and places the result by context, while the data interface changes what it is told to change.
+
+Operators also depend on a context that may be absent. In an empty scene, \texttt{bpy.ops.object.mode\_set(mode='EDIT')} raised a \texttt{RuntimeError} with the message ``Operator bpy.ops.object.mode\_set.poll() Context missing active object'', and after a cube had been added it ran and put the object in edit mode. The failure is a poll failure: each operator first asks whether the context permits it. A script that depends on an active object must establish one, and a script that never uses an operator never meets the question.
+
+\section{What Names Are and Are Not}
+
+A name is a label for a data-block within its collection and it is not a stable identity. Three objects created with the name Wall were named Wall, Wall.001 and Wall.002. When the first was removed and a new object was requested with the name Wall, the new object received the name Wall, the freed name, and the existing objects were Wall, Wall.001 and Wall.002 as before. A record that says ``the object called Wall'' therefore refers to a different object after the sequence than before. A script that must find its own objects later should record something that survives, such as the generated collection they were placed in, a custom property holding an identifier of its own, or the parameters from which they can be rebuilt, which is the approach of Chapters 15 to 19.
+
+\section{Orphans}
+
+Removing an object does not remove its mesh. After a mesh with one user was linked into an object and the object was removed through \texttt{bpy.data.objects.remove}, the mesh was still in \texttt{bpy.data} with zero users. The call \texttt{bpy.data.orphans\_purge(do\_recursive=True)} then removed it, and returned $1$. Whether a zero-user block survives a save is a separate question, and it was tested: a mesh with no users was written to a file and was absent when the file was read back, while a mesh with the fake-user flag survived. An orphan is therefore harmless to a saved file and a nuisance to a running session, where it remains listed in the data and keeps its name in use.
+
+\section{Two Small Tools}
+
+The two tools are short enough to read in full.
+
+\Needspace{30\baselineskip}
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true]{scene_tools.py}
+
+The inventory returns, for eight kinds of data-block, how many exist and how many have no users. It is the first thing to print in a script that misbehaves, and the second is the same inventory after the script has run, because a difference between them is a complete account of what the script changed at the level of data-blocks. The second tool concerns cleanup. The generated collection is the only place the script puts its objects, and the clearing function removes only the objects in that collection and the meshes that no one else uses once they are gone.
+
+The clearing function was tested on a scene with a hand-made object called Mine on a mesh called Keep, outside the generated collection, and fifty generated objects sharing one mesh. Before clearing, the scene held $51$ objects and $2$ meshes. After clearing it held $1$ object and $1$ mesh, Mine and its mesh were intact, and a second call changed nothing. A third case put one generated object and one hand-made object on a common mesh. After clearing, the common mesh was still present, with one user, because the function removes a mesh only when its user count has fallen to zero. This is the property that matters: a cleanup that removes by name or by type would have deleted the hand-made work, and one that removes by collection and by user count cannot.
+
+\section{The Cost of Imitating the Interface}
+
+The two approaches differ in speed as well, and the difference grows. Creating $300$ unit cubes by operator took a median of $2081$ ms over five repetitions, with the repetitions ranging from $2041$ to $2677$ ms, or about $6.9$ ms per cube. Creating $300$ objects that share one mesh through the data interface took a median of $3.9$ ms, with a range from $3.7$ to $4.7$ ms, about $13\ \mu$s per object. The ratio of the medians was about $540$. These timings are from one machine with software rendering and should be read for their order of magnitude, as stated in the scope of the book.
+
+The operator's cost per cube is not constant. For $50$, $100$, $200$ and $400$ cubes the medians of three repetitions were $47$, $190$, $810$ and $4464$ ms, which is $0.94$, $1.9$, $4.1$ and $11.2$ ms per cube. Doubling the number of cubes multiplied the total time by $4.0$ at first and by $5.5$ at the largest step, so the cost of the loop grows faster than the count. The reason was not investigated; a likely cause is that each operator updates the whole scene and so costs more as the scene grows, but that is a guess. The data interface grew far less: for $300$, $1200$ and $4800$ objects the medians were $3.7$, $24$ and $117$ ms, or $12$, $20$ and $24\ \mu$s per object, so the per-object cost rose by a factor of two over a sixteen-fold increase in count. A loop of the size used for the clusters of Chapter 15, which had $3000$ objects, would take at least half a minute by operator even at the per-cube rate measured for $400$ cubes, and the true figure would be larger since the rate rises with count, and about $0.07$ seconds by the data interface at the rate measured for $4800$ objects. The operator figure is an extrapolation and was not run.
+
+\section{What These Experiments Do Not Show}
+
+The measurements are from one build and one machine, in headless mode with no interface drawing. The behaviour of operators in a running interface, where a redraw follows each call, was not measured. The context failure was shown for one operator, and the clear-up tool was tested on three constructed cases and not on a file produced by a long working session. The cause of the growth in operator cost is a guess. Names were shown to be reused in one sequence, and the full rules for name allocation were not studied. Nothing here argues that operators should never be used. Some operations, such as applying a modifier or a boolean operation on selected objects, are most conveniently done by operators, as far as is known here, and the sensible practice is to use the data interface for construction and operators for the few operations that need them, with the context established deliberately.
+
+\begin{exercise}[20.1: Print the difference]
+Run any script of your own between two calls to the inventory and print the difference. List every data-block it created and every orphan it left, and explain each.
+\end{exercise}
+
+\begin{exercise}[20.2: Set the context]
+Make the operator version of the cube loop place its cubes in the generated collection by making that collection the active layer collection before the loop. Check where the cubes land, and say what the data interface needs to do the same.
+\end{exercise}
+
+\begin{exercise}[20.3: A cleaner that fails]
+Write a cleanup that deletes every object whose name starts with the prefix of your generated objects, and construct a scene in which it deletes hand-made work. Then show that the collection-based tool of Section 20.6 survives the same scene.
+\end{exercise}
+
+\begin{exercise}[20.4: Find the growth]
+Measure the operator loop at $25$, $50$, $100$, $200$, $400$ and $800$ cubes and fit a power law to the total time against the count. Report the exponent with the range of values that the repetitions allow, and say what you would test to find the cause.
+\end{exercise}

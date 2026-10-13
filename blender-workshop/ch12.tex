@@ -1,0 +1,106 @@
+\chapter{Curves as Data: Handles, Resolution, and Bevelled Tubes}
+
+\section{A Curve Is a Recipe for Points}
+
+The construction of Chapter 11 drew nine circles as curve objects whose points were computed by a script and stored as a polyline. Blender offers two further ways to store a curve, and the choice among the three is a choice about what is exact and what is approximate. A \emph{poly} spline stores points and joins them by straight segments, so what is stored is already the final shape, and its fidelity to a circle is set by the number of points. A \emph{Bezier} spline stores nodes, each with two handles, and defines a cubic polynomial between consecutive nodes. A \emph{NURBS} spline stores weighted control points and defines a rational curve. The renderer does not draw either of the last two as such. It evaluates them to a polyline whose density is set by the curve's resolution, and the evaluated polyline is what a mesh conversion, a bevel, or a ray test sees. A curve is therefore a recipe for points, and two questions follow: how well do the points lie on the intended shape, and how many are needed?
+
+This chapter measures both for the circle, because the circle is the shape on which every earlier chapter of this part depends, and because a circle has an exact definition against which error can be computed. The measurements were made in Blender 5.2.2 with the script \texttt{curves\_probe.py}. The error reported throughout is the largest deviation from the circle, or from the plane of the circle, over points sampled along every segment of the evaluated polyline, nine per segment, so that the sag of a chord between vertices is counted and not only the position of the vertices.
+
+\section{How Much Circle Is a Bezier Circle?}
+
+A circle cannot be a cubic polynomial, so a Bezier circle is an approximation by construction. The standard construction uses four nodes at the quarter points, with tangent handles of length $\kappa R$, and the value of $\kappa$ that makes each quarter arc pass through the circle at its midpoint is $\tfrac43\tan(\pi/8)=0.552285$. Blender's own Bezier circle primitive uses handles of length $0.552125$, close to this and slightly shorter. A NURBS circle can be exact. Blender's NURBS circle has eight control points of order three with weights alternating between $1$ and $\sqrt2/2=0.7071$, which is the rational form of the conic that is a circle, so its evaluated points lie on the circle to rounding.
+
+\begin{center}
+\begin{tabular}{rrr}
+\toprule
+Resolution & Bezier circle, largest error & NURBS circle, largest error\\
+\midrule
+1 & $2.93\times10^{-1}$ & $2.93\times10^{-1}$\\
+2 & $7.62\times10^{-2}$ & $7.61\times10^{-2}$\\
+4 & $1.98\times10^{-2}$ & $2.08\times10^{-2}$\\
+8 & $5.05\times10^{-3}$ & $5.32\times10^{-3}$\\
+12 (default) & $2.26\times10^{-3}$ & $2.37\times10^{-3}$\\
+24 & $5.90\times10^{-4}$ & $5.95\times10^{-4}$\\
+64 & $2.37\times10^{-4}$ & $8.38\times10^{-5}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The table shows two regimes. At low resolution the error is the sagitta of the chords, and the two curves agree. The evaluated polyline has four times the resolution as many segments in both cases, and for $n$ segments of an exact circle the sag is $R(1-\cos(\pi/n))$, which is $2.9\times10^{-1}$ for $n=4$ and $7.6\times10^{-2}$ for $n=8$, matching the first two rows. The default resolution of $12$ gives a $48$-gon whose error is $2.3\times10^{-3}$ of the radius, a deviation of about a quarter of one percent, which is invisible in most images and is not negligible if the circle is later intersected with another. At high resolution the Bezier circle stops improving, because the curve itself differs from the circle by $2.4\times10^{-4}$ however finely it is evaluated, while the NURBS circle continues down to the chord sag of its $256$ evaluated segments, $7.5\times10^{-5}$. The chord sag, $R(1-\cos(\pi/4r))$ for resolution $r$, exceeds the Bezier floor until about resolution $40$, so the resolution sets the error up to that point and the construction sets it afterwards. For a Bezier circle, a resolution above about $40$ buys nothing, and for a NURBS circle it buys error down to the limit of the chords.
+
+The default handle length matters less than it might appear. The three-decimal agreement of $0.552$ with the ideal value costs less than $10^{-4}$ in radius, which is below the error of the default resolution. The lesson is the order of magnitudes: the resolution of the evaluated polyline is the first choice, and the handle length is a second-order refinement.
+
+\section{Handles Are Not Neutral}
+
+A Bezier node's handles can be set by the user or computed by the interface, and Blender's automatic handle type is the default for new nodes. The automatic rule chooses a smooth direction through each node from its neighbours, which is a sensible rule for freehand curves and is not a rule for circles. To test it, circles were built as closed Bezier splines through $N$ points at equal angles, once with automatic handles and once with tangent handles of the length $h=\tfrac43\tan\bigl(\pi/(2N)\bigr)R$. The error is that of the evaluated polyline at resolution $64$.
+
+\begin{center}
+\begin{tabular}{rrrr}
+\toprule
+$N$ & Automatic & Tangent, length $h$ & Polygon\\
+\midrule
+3 & $6.09\times10^{-2}$ & $1.54\times10^{-3}$ & $5.00\times10^{-1}$\\
+4 & $2.37\times10^{-4}$ & $2.72\times10^{-4}$ & $2.93\times10^{-1}$\\
+6 & $1.24\times10^{-2}$ & $3.48\times10^{-5}$ & $1.34\times10^{-1}$\\
+8 & $9.64\times10^{-3}$ & $1.93\times10^{-5}$ & $7.61\times10^{-2}$\\
+12 & $5.15\times10^{-3}$ & $8.63\times10^{-6}$ & $3.41\times10^{-2}$\\
+16 & $3.07\times10^{-3}$ & $4.87\times10^{-6}$ & $1.92\times10^{-2}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The result is not that automatic handles are poor in general. At $N=4$ they reproduce the quarter-point construction, with an error of $2.4\times10^{-4}$, indeed a little lower than the formula's handles at $2.7\times10^{-4}$. At six and more nodes the automatic handles give errors of about $10^{-2}$ to $3\times10^{-3}$, between $350$ and $630$ times larger than the tangent handles of the formula. Doubling the number of nodes improves the automatic curve by a factor of about three and the tangent-handle curve by a factor of about four, so the gap between them does not close. The reason is that the automatic rule does not know that the nodes lie on a circle, and the tangent-handle rule is told so.
+
+The formula can be derived in four lines. Place the endpoints of one segment symmetrically about the $x$-axis at angles $\pm\theta/2$ with $\theta=2\pi/N$, so $P_0=R(\cos\tfrac\theta2,-\sin\tfrac\theta2)$ and $P_3=R(\cos\tfrac\theta2,\sin\tfrac\theta2)$. The circle's tangent at $P_0$ points along $(\sin\tfrac\theta2,\cos\tfrac\theta2)$, so with handle length $h$ the inner control points are $P_1=P_0+h(\sin\tfrac\theta2,\cos\tfrac\theta2)$ and $P_2=P_3+h(\sin\tfrac\theta2,-\cos\tfrac\theta2)$. The cubic's midpoint is $(P_0+3P_1+3P_2+P_3)/8$, whose $y$-coordinate vanishes by symmetry and whose $x$-coordinate is $R\cos\tfrac\theta2+\tfrac34h\sin\tfrac\theta2$. Requiring this to equal $R$, the circle's value at the midpoint, gives
+\[
+  h=\tfrac43R\,\frac{1-\cos(\theta/2)}{\sin(\theta/2)}=\tfrac43R\tan\frac\theta4=\tfrac43R\tan\frac{\pi}{2N}.
+\]
+For $N=4$ this is $\tfrac43\tan(\pi/8)R=0.5523R$, the familiar value. The rule is a condition at one point per segment, and the measured errors in the table show that it leaves a small residue elsewhere.
+
+\section{Bevelled Tubes and What They Add}
+
+A curve with a bevel depth becomes a tube whose cross-section is a polygon swept along the evaluated path. The tube of Chapter 11 has a radius of $0.025$ on a path of radius $10$, with a bevel resolution of $2$. The number of vertices in each ring of the tube is set by the bevel resolution and not by the geometry: it measured $4$ at resolution $0$ and rose by $2$ for each increase, so $m=4+2r$ for bevel resolution $r$. Along a path of $n=256$ points the tube therefore has $mn$ vertices and $mn$ quadrilateral faces, and the table gives the counts and the surface area measured from the evaluated mesh, against the exact area $4\pi^2Ra=9.8696$ of the torus the tube approximates.
+
+\begin{center}
+\begin{tabular}{rrrrr}
+\toprule
+Bevel resolution & Ring size $m$ & Faces & Area measured & Ratio to exact\\
+\midrule
+0 & 4 & 1024 & 8.8852 & 0.9003\\
+1 & 6 & 1536 & 9.4242 & 0.9549\\
+2 & 8 & 2048 & 9.6173 & 0.9744\\
+3 & 10 & 2560 & 9.7075 & 0.9836\\
+4 & 12 & 3072 & 9.7566 & 0.9886\\
+5 & 14 & 3584 & 9.7864 & 0.9916\\
+6 & 16 & 4096 & 9.8057 & 0.9935\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The area has a closed form. The ring is a regular $m$-gon inscribed in the circle of radius $a$, with perimeter $2ma\sin(\pi/m)$, and each segment of the path has length $2R\sin(\pi/n)$, so the surface area is approximately $2ma\sin(\pi/m)\cdot2nR\sin(\pi/n)$. The prediction agreed with the measured area to within $4\times10^{-5}$ of its value in every row, for instance $9.617642$ against $9.617282$ at resolution $2$. Dividing by the exact area, the ratio is $\tfrac m\pi\sin\tfrac\pi m$ times $\tfrac n\pi\sin\tfrac\pi n$, and the second factor is $0.99998$, so the ratio is the first factor to five digits. The tube of the Chapter 11 listing has a surface $2.6$ percent smaller than the torus it stands for. Its cost is $2048$ faces per circle and $18{,}432$ for the nine circles of the arrangement.
+
+Two consequences follow. A tube's apparent thickness is not constant around its ring: the ring's vertices are at distance $a$ from the path and its edges are at distance $a\cos(\pi/m)$, which is $0.924a$ for the ring of eight, so a rendering that shows the silhouette of the tube shows polygonal thickness. And the cost grows linearly in $m$ while the area error falls as $1/m^2$, since $\tfrac m\pi\sin\tfrac\pi m\approx1-\pi^2/(6m^2)$. Doubling the ring size from $8$ to $16$ doubles the faces and reduces the area error from $2.6$ to $0.65$ percent. Whether that is worth doing depends on what the tube is for. If the tube marks where a circle lies, a thick eight-sided ring is a marker. If the tube is meant to be a solid object whose surface area, volume, or intersection with another solid is measured, the ring size is a source of error with a formula.
+
+\section{Choosing a Representation}
+
+The measurements suggest rules of the following kind, each with its stated cost. When a circle is generated by a script, a poly spline with $N$ computed points places every vertex on the sphere exactly and has a sag of $R(1-\cos(\pi/N))$, so the question is the tolerance of the work. When a circle is drawn by hand, a NURBS circle is exact in its weights and costs only the evaluation resolution. When a Bezier circle is required, because the curve must be edited with handles, four nodes with the default handles give an error floor of $2.4\times10^{-4}$, and a larger number of nodes must be given tangent handles of the stated length or the error will be several hundred times worse than the node count suggests. And when the curve is to be a tube, the ring size is a second approximation that multiplies the first, with the area ratio above.
+
+\section{What Was Measured}
+
+The errors are those of the evaluated polyline of a planar circle of unit radius in Blender 5.2.2, sampled nine times along each segment. Scaling the circle scales the absolute error and leaves the ratios unchanged. The test did not cover non-circular curves, where automatic handles are designed to work and may do well, or curves converted to meshes with the conversion operator, or the curve operations of Geometry Nodes. The tube measurements used a poly path with $256$ points and a round profile. A profile object, caps, or a tapered radius would change the counts and the areas. The ring-size formula $m=4+2r$ was read from the measured counts at $r=0$ to $6$ and not from documentation.
+
+\begin{exercise}[12.1: Predict and measure]
+For a NURBS circle at resolution $16$, predict the largest radial error from the chord-sag formula and compare it with a measurement from the script. State the number of evaluated segments you used in the prediction.
+\end{exercise}
+
+\begin{exercise}[12.2: Handles for an ellipse]
+Take the tangent-handle construction for $N=8$ and scale the nodes and handles by $2$ in $x$ only. State whether the curve is an exact ellipse, measure its largest deviation from the ellipse $(x/2)^2+y^2=1$, and compare it with the circle's $1.9\times10^{-5}$.
+\end{exercise}
+
+\begin{exercise}[12.3: A ring size for a volume]
+The volume of the swept polygonal tube is $\tfrac12m a^2\sin(2\pi/m)\cdot2\pi R$ to first order. Compute the volume error as a function of $m$ and find the smallest ring size at which the volume of the tube of Chapter 11 is within $1$ percent of the exact torus volume $2\pi^2Ra^2$. Check your answer against a mesh volume computed with the formula of Chapter 4.
+\end{exercise}
+
+\begin{exercise}[12.4: A budget for nine circles]
+For the nine circles of the arrangement, choose a path sample count and a ring size so that the surface area is within $1$ percent of exact and the total face count is below $20{,}000$. Report the numbers and state which of the two approximations dominated your choice.
+\end{exercise}

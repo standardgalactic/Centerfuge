@@ -1,0 +1,258 @@
+\setcounter{part}{3}
+\part{First Mathematical Construction: The Nine-Orthodrome Workshop}
+
+\begin{checkpoint}[Numbering]
+Chapters 8 through 10 (shader nodes, cameras, and rendering) are planned in the development plan and not yet written. The chapter below keeps its planned number, 11, so that cross-references to the plan remain stable.
+\end{checkpoint}
+
+\setcounter{chapter}{10}
+\chapter{From Plane Normals to a Spherical Network}
+
+\section{Source and Scope}
+
+This chapter derives its source construction from \emph{Orthodromic Infrastructure Blueprint}, Chapter 3, Sections 3.1 to 3.6, printed pages 13 to 20. Section 3.6 specifies an equator and four polar reference circles, followed by four configurable inclined circles. The worked coordinates below instantiate that family for teaching. They do not resolve the blueprint's question of symmetry versus planetary fit. The corridor definitions of the blueprint's Chapter 2 and the service geometry of its Chapter 4 supply further distinctions introduced here.
+
+The task is to construct nine curves on a common sphere, preserve their mathematical identities, and inspect their intersection graph. This is a geometric model. Its successful construction does not establish the engineering adequacy of a planet-scale infrastructure system.
+
+\section{A Circle as a Plane-Sphere Intersection}
+
+For radius $R>0$ and a unit vector $\mathbf n$, define
+\[
+  S_R^2=\{\mathbf x\in\mathbb R^3:\|\mathbf x\|=R\},\qquad
+  O(\mathbf n)=\{\mathbf x\in S_R^2:\mathbf n\cdot\mathbf x=0\}.
+\]
+The plane passes through the sphere's centre, so its intersection is a great circle. Multiplying the normal by a nonzero scalar leaves the plane unchanged; requiring unit length removes the magnitude ambiguity but leaves $O(\mathbf n)=O(-\mathbf n)$. The space of unoriented plane normals is consequently the real projective plane. A circle's identity must not be inferred from the sign of its normal.
+
+To draw the circle, choose perpendicular unit vectors $\mathbf u$ and $\mathbf v$ spanning its plane. Then
+\[
+  \mathbf x(t)=R(\mathbf u\cos t+\mathbf v\sin t),\qquad 0\le t<2\pi.
+\]
+Since $\mathbf n$ is perpendicular to $\mathbf u$ and $\mathbf v$, $\mathbf n\cdot\mathbf x(t)=0$. Since $\mathbf u$ and $\mathbf v$ are orthonormal, $\|\mathbf x(t)\|^2=R^2(\cos^2t+\sin^2t)=R^2$. These calculations establish that every sampled point lies on the intended circle. They are also useful numerical checks.
+
+Choose a reference vector $\mathbf a$ that is not nearly parallel to $\mathbf n$, and set
+\[
+  \mathbf u=\frac{\mathbf a\times\mathbf n}{\|\mathbf a\times\mathbf n\|},\qquad
+  \mathbf v=\mathbf n\times\mathbf u.
+\]
+Near-parallel vectors make the denominator small, so an implementation must choose a different reference axis in that case. The basis is a drawing convention; rotating $\mathbf u$ and $\mathbf v$ within the plane changes the starting parameter but not the circle.
+
+\section{The Fixed Five}
+
+Take $\mathbf n_E=(0,0,1)$. Choose a reference azimuth $\lambda_0$ and define
+\[
+  \mathbf n_{P,k}=\bigl(\cos(\lambda_0+k\pi/4),\ \sin(\lambda_0+k\pi/4),\ 0\bigr),
+  \qquad k=0,1,2,3.
+\]
+All four polar planes contain the $Z$ axis. They therefore share the north and south poles. Their normals occupy four distinct directions over a half-turn, because a normal's antipode denotes the same plane. A spacing of $\pi/2$ would repeat planes instead of providing four distinct polar circles.
+
+The normal's azimuth is not the longitude of the circle's equatorial intersection. For a horizontal normal of azimuth $\lambda$, the equatorial intersection directions have azimuth $\lambda\pm\pi/2$. This distinction prevents a ninety-degree error when using geographic labels.
+
+For $q$ polar circles plus one equator, the blueprint derives $V=2+2q$, $E=6q$, and $F=4q$. With $q=4$, $V=10$, $E=24$, $F=16$. The two polar intersections are each single vertices of multiplicity four. Counting pairwise circle intersections without merging coincident positions would give an incorrect graph.
+
+\section{The Configurable Four}
+
+The source permits normals
+\[
+  \mathbf n_i=(\cos\beta_i\cos\lambda_i,\ \cos\beta_i\sin\lambda_i,\ \sin\beta_i),
+  \qquad i=6,7,8,9.
+\]
+Here $\beta$ is the latitude of the normal, or pole of the great circle, not the circle's tilt relative to the equatorial plane. The unoriented angle between that plane and the equatorial plane is $\arccos(|\sin\beta|)$. Calling $\beta$ simply ``inclination'' can therefore mislead readers.
+
+For the teaching example choose $\lambda_0=0$, $\beta=\pi/6$, and seed azimuth $\alpha=\pi/8$. Generate four normals using $R_z(\pi/2)$:
+\[
+  R_z(\theta)=\begin{pmatrix}
+    \cos\theta&-\sin\theta&0\\
+    \sin\theta&\cos\theta&0\\
+    0&0&1
+  \end{pmatrix},\qquad
+  \mathbf n_{F,k}=R_z(k\pi/2)
+  \begin{pmatrix}\cos\beta\cos\alpha\\ \cos\beta\sin\alpha\\ \sin\beta\end{pmatrix}.
+\]
+The nonzero seed azimuth is an explicit revision of an earlier provisional $\alpha=0$ example. It moves the equatorial intersections away from the polar family's equatorial vertices. Symmetry still produces other multiway intersections, so this is not a general-position arrangement. The choice of rotation, $\beta$, and $\alpha$ is a teaching example within the family the blueprint describes, and is not an additional specification attributed to the source.
+
+The parameter variation exposes structure. At $\beta=0$, the four flexible normals repeat two polar planes up to sign. At $|\beta|=\pi/2$, they all represent the equator. More generally, $R^4=I$ guarantees orbit closure but does not guarantee four distinct projective normals. Test distinctness with $|\mathbf n_i\cdot\mathbf n_j|$ near one, rather than testing only whether $\mathbf n_i$ and $\mathbf n_j$ are equal.
+
+\section{The Blender Construction Through the Interface}
+
+On a separate saved scene, add a curve circle through \texttt{Add > Curve > Circle}. Set its location to the origin and its rotation to zero. The primitive's default plane is the local $XY$ plane, with normal along local $Z$. Inspect its dimensions and scale it to the desired radius. Use a thin bevel only to make the curve visible as a corridor centreline representation. A built-in curve circle is a convenient visual construction; it should not replace analytic coordinates when numerical accuracy is being evaluated.
+
+Duplicate the circle for each prescribed normal. The following identity supplies explicit Euler angles in Blender's XYZ Euler convention, with the $X$ rotation set to zero:
+\[
+  R_z(\lambda)\,R_y(\pi/2-\beta)\,\mathbf e_z
+  =(\cos\beta\cos\lambda,\ \cos\beta\sin\lambda,\ \sin\beta).
+\]
+Set Euler $X=0$, $Y=90^\circ-\beta$, and $Z=\lambda$ in the object's rotation fields. For the equator use $\beta=90^\circ$; for each polar circle use $\beta=0^\circ$ and $\lambda=0^\circ,45^\circ,90^\circ,135^\circ$. For the flexible four use $\beta=30^\circ$ and $\lambda=22.5^\circ,112.5^\circ,202.5^\circ,292.5^\circ$. Enter these as absolute field values, not as accumulated rotations of an already rotated duplicate. All centres remain at the origin. Name each object by its family and index and place them in a dedicated collection.
+
+\begin{checkpoint}[Orientation table]
+\centering
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Circle & $\beta$ & $\lambda$ & Euler $(X,Y,Z)$\\
+\midrule
+Equator & $90^\circ$ & $0^\circ$ & $(0^\circ,0^\circ,0^\circ)$\\
+Polar $k=0,1,2,3$ & $0^\circ$ & $45^\circ k$ & $(0^\circ,90^\circ,45^\circ k)$\\
+Flexible $k=0,1,2,3$ & $30^\circ$ & $22.5^\circ+90^\circ k$ & $(0^\circ,60^\circ,22.5^\circ+90^\circ k)$\\
+\bottomrule
+\end{tabular}
+\end{checkpoint}
+
+This orientation recipe concerns centreline planes. Inspect the result from several views. Do not use a shaded sphere that conceals the far hemisphere when the immediate task is to read the complete intersection network. Hiding the sphere or switching its display representation can make the arrangement easier to inspect.
+
+\section{A Python Construction in Blender}
+
+The following script uses analytic sampling and direct curve-data construction. Run it in Blender's scripting environment after saving the scene. It creates a new collection on each run and does not erase existing objects. It was executed in Blender 5.2.2 during preparation of this manuscript. It created nine curve objects; every stored sample lay within $2\times10^{-6}$ of radius $10$ and of its plane (Blender stores coordinates in single precision), and a second run added a second collection named \texttt{Orthodrome\_Workshop.001} without erasing the first. The Euler-angle identity above was checked in Blender's own rotation code and agreed to single precision.
+
+\Needspace{48\baselineskip}
+\begin{lstlisting}[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,numbers=left,numberstyle=\tiny,xleftmargin=1.5em,framexleftmargin=1.5em,columns=fullflexible,keepspaces=true]
+import bpy
+import math
+from mathutils import Vector
+
+RADIUS = 10.0
+SAMPLES = 256
+BEVEL = 0.025
+
+if RADIUS <= 0 or SAMPLES < 8:
+    raise ValueError('Require a positive radius and at least eight samples')
+
+collection = bpy.data.collections.new('Orthodrome_Workshop')
+bpy.context.scene.collection.children.link(collection)
+
+def normal(beta, azimuth):
+    return Vector((math.cos(beta) * math.cos(azimuth),
+                   math.cos(beta) * math.sin(azimuth),
+                   math.sin(beta))).normalized()
+
+def circle(name, n):
+    n = Vector(n).normalized()
+    a = Vector((1, 0, 0)) if abs(n.x) < 0.8 else Vector((0, 1, 0))
+    u = a.cross(n).normalized()
+    v = n.cross(u).normalized()
+    data = bpy.data.curves.new(name, 'CURVE')
+    data.dimensions = '3D'
+    data.bevel_depth = BEVEL
+    data.bevel_resolution = 2
+    spline = data.splines.new('POLY')
+    spline.points.add(SAMPLES - 1)
+    spline.use_cyclic_u = True
+    for j, point in enumerate(spline.points):
+        t = 2 * math.pi * j / SAMPLES
+        x = RADIUS * (u * math.cos(t) + v * math.sin(t))
+        point.co = (*x, 1.0)
+    obj = bpy.data.objects.new(name, data)
+    collection.objects.link(obj)
+    obj['unit_normal'] = list(n)
+    obj['reference_radius'] = RADIUS
+    obj['sample_count'] = SAMPLES
+    return obj
+
+normals = [('Equator', Vector((0, 0, 1)))]
+for k in range(4):
+    normals.append((f'Polar_{k}', normal(0, k * math.pi / 4)))
+for k in range(4):
+    normals.append((f'Flexible_{k}',
+                    normal(math.pi / 6, math.pi / 8 + k * math.pi / 2)))
+for name, n in normals:
+    circle(name, n)
+\end{lstlisting}
+
+The sample positions lie on the sphere, but the straight segments between them are chords. Their maximum radial discrepancy from the circular arc is $R\bigl(1-\cos(\pi/N)\bigr)$, where $N$ is the sample count. For $R=10$ and $N=256$ this is about $7.5\times10^{-4}$ units. This provides an explicit resolution criterion. Bevel adds further approximations and a finite geometric thickness. Increase sampling according to the required tolerance rather than assuming that a visually smooth line is exact.
+
+\section{Counting the Actual Arrangement}
+
+For two distinct normals, intersection directions are
+\[
+  \mathbf p_\pm=\pm R\,\frac{\mathbf n_i\times\mathbf n_j}{\|\mathbf n_i\times\mathbf n_j\|}.
+\]
+Merge coincident points before counting vertices. For each unique point $\mathbf p$, count $m(\mathbf p)$, the number of circles satisfying $\mathbf n_i\cdot\mathbf p=0$. The source's incidence formula gives
+\[
+  E=\sum_{\mathbf p}m(\mathbf p),\qquad
+  F=2-V+E=2+\sum_{\mathbf p}\bigl(m(\mathbf p)-1\bigr).
+\]
+
+For the chosen $\alpha=\pi/8$, $\beta=\pi/6$ example, numerical incidence enumeration gives the classification in the table below. Consequently $V=54$, $E=116$, and $F=64$. The general-position values for nine circles, $72$, $144$, and $74$, do not describe this symmetric example. As a consistency check, the 36 pairs of circles each contribute two intersection points, and the multiplicities account for all of them: $48\cdot1+4\cdot3+2\cdot6=72$.
+
+\begin{center}
+\begin{tabular}{@{}cccc@{}}
+\toprule
+Multiplicity $m$ & Vertices & Circle pairs per vertex & Pair-incidences\\
+\midrule
+2 & 48 & 1 & 48\\
+3 & 4 & 3 & 12\\
+4 & 2 & 6 & 12\\
+\midrule
+Total & 54 & & 72\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Numerical grouping requires a declared tolerance. In the check used here, points were merged at $10^{-9}$, and the smallest nonzero $|\mathbf n\cdot\mathbf p|$ over all vertices was about $0.24$, so near-incidences are well separated from true ones. An exact proof of the incidence classification remains a useful further exercise.
+
+\section{A Second Instance: The Repository Script}
+
+The Centerfuge repository contains a script, \texttt{tetraorthodrome.py} at commit \texttt{b0648ff}, that builds nine circles on a sphere. Its construction is an instance of the family treated in this chapter, and the difference between it and the teaching arrangement is instructive precisely because both belong to the same family. The script places one equator, four polar circles whose Euler rotations are $(0^\circ,90^\circ,z)$ for $z=0^\circ,45^\circ,90^\circ,135^\circ$, and four inclined circles whose rotations are $(55^\circ,0^\circ,z)$ for $z=0^\circ,90^\circ,180^\circ,270^\circ$. Each circle is a torus whose axis is local $Z$, so its normal is $R_zR_yR_x\,\hat{\mathbf z}$ under Blender's XYZ Euler convention of Chapter 2. The four polar normals come out horizontal at azimuths $0$, $45^\circ$, $90^\circ$, and $135^\circ$, which is the fixed skeleton of Section 11.3. The four inclined normals are $(0,\mp\sin55^\circ,\cos55^\circ)$ and $(\pm\sin55^\circ,0,\cos55^\circ)$, which sit at elevation $\beta=90^\circ-55^\circ=35^\circ$ and azimuths $\alpha+j\cdot90^\circ$ with $\alpha=0$ modulo $90^\circ$. In the coordinates used here the script is therefore the member of the family with $(\alpha,\beta)=(0,35^\circ)$, whereas the teaching arrangement has $(\alpha,\beta)=(\pi/8,\pi/6)$. A caution about convention is needed: the script's $55^\circ$ is the tilt of the circle's plane from the equatorial plane, and the elevation of its normal is the complement, so any comparison with the blueprint's own parameter names should be made through the normals and not through the numerals. The committed file \texttt{tetraorthodrome.blend} carries nine torus objects with exactly these rotations, which was checked by opening the file with Blender's Python module and reading each object's \texttt{rotation\_euler}.
+
+Whether the phrase ``two tetraorthodromes plus an equator'' denotes exactly this instance is a question of terminology and not of geometry. The script's own comments call the four polar circles the first tetraorthodrome and the four inclined circles the second, so under the script's usage the phrase describes this arrangement. The phrase as used earlier in conversation may have carried further conditions that the script does not state, and this book leaves the denotation to be settled by whoever fixes the term. What can be said without settling it is that the script's arrangement lies inside the fixed-five and flexible-four family, with its flexible parameters chosen on the symmetric lattice described next.
+
+\begin{center}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+ & Repository script & Teaching arrangement\\
+\midrule
+Flexible parameters $(\alpha,\beta)$ & $(0,\,35^\circ)$ & $(\pi/8,\,\pi/6)$\\
+Vertices with $m=2$ & 12 & 48\\
+Vertices with $m=3$ & 8 & 4\\
+Vertices with $m=4$ & 6 & 2\\
+Vertices $V=\sum_{\mathbf p}1$ & 26 & 54\\
+Edges $E=\sum_{\mathbf p}m(\mathbf p)$ & 72 & 116\\
+Faces $F=2-V+E$ & 48 & 64\\
+Faces lost against $74$, $\sum_{\mathbf p}\binom{m-1}{2}$ & 26 & 10\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The two columns differ because of how many circles meet at a point and not because of anything in the definition of the family. Every pair of the nine circles meets in two antipodal points, which makes $9\cdot8=72$ pair-incidences. A point of multiplicity $m$ absorbs $\binom m2$ of them, so $\sum_{\mathbf p}\binom{m(\mathbf p)}{2}=72$ in every arrangement of nine distinct great circles, and both columns satisfy it: $12+3\cdot8+6\cdot6=72$ and $48+3\cdot4+6\cdot2=72$. Writing $F-2=\sum_{\mathbf p}(m-1)$ and using $\binom m2-(m-1)=\binom{m-1}{2}$ gives
+\[
+  F=n^2-n+2-\sum_{\mathbf p}\binom{m(\mathbf p)-1}{2},
+\]
+so each triple point removes one face from the general-position count of $74$ and each quadruple point removes three. The script's arrangement loses $8\cdot1+6\cdot3=26$ faces, and the teaching arrangement loses $4\cdot1+2\cdot3=10$.
+
+Two mechanisms produce the multiple points beyond the two poles, which always have multiplicity four because the four polar circles pass through them. The first concerns opposite flexible circles. Two inclined normals at azimuths $\theta$ and $\theta+\pi$ have the form $(c\cos\theta,c\sin\theta,s)$ and $(-c\cos\theta,-c\sin\theta,s)$, with $c=\cos\beta$ and $s=\sin\beta$, and their cross product is horizontal. The two circles therefore always meet on the equator, at azimuth $\theta-\pi/2$ and its antipode, which makes four points of multiplicity at least three in every member of the family. The equator is also crossed by the polar circles at azimuths that are multiples of $\pi/4$. When $\alpha$ is a multiple of $\pi/4$, the opposite-pair crossings fall on those polar crossings and the multiplicity rises to four. This accounts for four of the six quadruple points in the script's arrangement, and it accounts for the teaching arrangement's four triple points, where the polar circles are not involved. The second mechanism concerns adjacent flexible circles. Two inclined circles whose normals differ by $\pi/2$ meet at an azimuth midway between their normals, and that point lies on a polar circle exactly when the azimuth is a multiple of $\pi/4$. For $\alpha$ off the lattice they miss the polar circles; for $\alpha=0$ the four adjacent pairs contribute eight further triple points. In the script's arrangement the remaining twelve vertices have multiplicity two, namely four equator-polar crossings and eight polar-inclined crossings.
+
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true,firstline=16,lastline=25]{arrangement_family.py}
+
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true,firstline=51,lastline=69]{arrangement_family.py}
+
+The dependence on the parameters can be stated from computation and from the two mechanisms above. Counting with $\beta=35^\circ$ and a sweep of $\alpha$ over $0$, $5^\circ$, $10^\circ$, $15^\circ$, $22.5^\circ$, $30^\circ$, $45^\circ$, $60^\circ$, $67.5^\circ$, and $90^\circ$ gives $V=26$, $E=72$, $F=48$ at $\alpha=0^\circ$, $45^\circ$, and $90^\circ$, and $V=54$, $E=116$, $F=64$ at every other sampled value. Counting with $\alpha=0$ and $\alpha=22.5^\circ$ and $\beta$ over $1^\circ$, $10^\circ$, $20^\circ$, $35^\circ$, $45^\circ$, $60^\circ$, $80^\circ$, and $89^\circ$ (with $30^\circ$ added at $\alpha=22.5^\circ$) gave no change at all, so within those samples the counts are a function of whether $\alpha$ lies on the lattice $\{k\pi/4\}$ and not of $\beta$. The endpoints $\beta=0$ and $\beta=\pi/2$ are excluded, since there the flexible circles coincide with polar circles or with the equator and the circles are no longer distinct. A sampled value is not a proof for the continuum, though the two mechanisms identify the coincidence conditions that the sweep reflects. Four checks agree on the script's counts. The incidence enumeration reads the arrangement from the family formula and again from the script's Euler angles, and both give $26$, $72$, $48$. The identity above reproduces $F=48$. A sampled face count, which classifies two million random points on the sphere by their sign pattern against the nine planes, finds $48$ distinct patterns, and finds $64$ for the teaching arrangement. All four also satisfy $V-E+F=2$.
+
+Geometric margins matter when the circles are materialized. The script's tori have minor radius $0.01$ on major radius $1.03$, an angular half-width of about $0.56^\circ$. The four tubes through a quadruple point are therefore genuinely concurrent and not merely close, since the incidence is exact in the real-number description. Non-incident vertices are far from the other planes: the smallest nonzero value of $|\mathbf n\cdot\mathbf p|$ over all vertices is $0.41$ for the script's arrangement, about $23.9^\circ$ of arc, and $0.24$, about $14.0^\circ$, for the teaching arrangement. A rendered tube arrangement would show a different silhouette at a quadruple point than at a triple point, which is a point that Chapter 7 returns to when it asks how colour and light make multiplicity legible.
+
+The script's own check, which prints that nine toruses and one sphere were created, establishes only that the object count is nine. It does not establish the incidence structure, the vertex counts, or the face count, all of which are properties of the normals and not of the object list. This is an instance of a general distinction: a count of constructed objects is a statement about the construction, while $V$, $E$, and $F$ are statements about the arrangement the construction is meant to realize.
+
+\begin{exercise}[11.10: Off the lattice]
+Take the script's arrangement and change only the azimuth of the four inclined circles from $0$ to $\alpha$. Predict, using the two mechanisms above and without running code, which of the eight triple points and which of the six quadruple points change multiplicity when $\alpha$ moves off a multiple of $\pi/4$, and what $V$, $E$, and $F$ become. Then compute the counts with \texttt{summarize} and compare. Finally, find a value of $\alpha$ for which the answer is not $54$, $116$, and $64$ nor $26$, $72$, and $48$, or explain why none exists for $\beta$ strictly between $0$ and $\pi/2$.
+\end{exercise}
+
+\section{A Surface Band Is Not a Bevelled Tube}
+
+The blueprint's Chapter 2 defines a reserved corridor on the sphere by geodesic half-width $\varepsilon$:
+\[
+  \mathcal T_\varepsilon\bigl(O(\mathbf n)\bigr)=
+  \{\mathbf x\in S_R^2:\ |\mathbf n\cdot\mathbf x|\le R\sin(\varepsilon/R)\}.
+\]
+Its area is $4\pi R^2\sin(\varepsilon/R)$, approximately $4\pi R\varepsilon$ for $\varepsilon$ much smaller than $R$. The source's prose at one point calls $\varepsilon$ an angular half-width, but the displayed bound and division by $R$ identify $\varepsilon$ as a length. This textbook uses $\delta=\varepsilon/R$ for the angular half-width and retains that distinction explicitly.
+
+A bevelled curve produces a three-dimensional tube around a centreline. It does not directly represent this surface reservation. To construct the band, use the same $\mathbf u,\mathbf v,\mathbf n$ basis and sample
+\[
+  \mathbf x(t,\phi)=R\bigl[\cos\phi\,(\mathbf u\cos t+\mathbf v\sin t)+\sin\phi\,\mathbf n\bigr],
+  \qquad -\delta\le\phi\le\delta.
+\]
+These points satisfy $\|\mathbf x\|=R$ and $\mathbf n\cdot\mathbf x=R\sin\phi$. Sampling the two boundary latitudes and joining them around the circle yields a band mesh. A finer latitude grid improves the polygonal surface approximation. Overlapping bands must not have their areas simply added when calculating total reserved land; shared regions would be counted more than once.
+
+\section{The Next Inquiry}
+
+\begin{exercise}[11.9: One flexible normal]
+Preserve the symmetric scene as a baseline. Change one flexible normal, recompute incidences, and observe which triple vertices split. Keep the fixed skeleton unchanged. Record the new vertex, edge, and region counts and confirm that $V-E+F=2$ still holds.
+
+The comparison links geometric construction to the blueprint's research question: symmetry can make replication easier while restricting fit to geography and other requirements. Those competing demands need explicit criteria before any configuration can be called optimal.
+\end{exercise}

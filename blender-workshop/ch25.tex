@@ -1,0 +1,58 @@
+\chapter{Exporting to a Runtime That Is Not Blender}
+
+\section{What an Export Promises}
+
+A world that is meant to be explored, managed or simulated at length may be run by a program other than Blender, and what Blender then supplies is geometry, materials and records. The hand-over is a file, and a file is a contract that neither side states fully. This chapter asks what is in the file. No game engine or viewer was available in the working environment, and none is used. The checks are made instead with a short reader of the binary glTF format, \texttt{glb\_read.py}, which parses the container, the JSON description and the binary buffer without Blender and without any rendering. The reader is an independent check in a limited sense. It can say what was written, and it cannot say what any particular engine will do with it. The experiments were run with Blender 5.2.2 and its bundled glTF exporter, and with its OBJ exporter for comparison.
+
+\Needspace{26\baselineskip}
+\lstinputlisting[language=Python,basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single,columns=fullflexible,keepspaces=true]{glb_read.py}
+
+\section{Axes}
+
+Blender's up axis is $z$. The glTF format has $y$ up. A tetrahedron with vertices $(1,2,3)$, $(4,0,0)$, $(0,5,0)$ and $(0,0,6)$ was exported. The four distinct positions in the file were $(1,3,-2)$, $(4,0,0)$, $(0,0,-5)$ and $(0,6,0)$, so a point $(x,y,z)$ in Blender appears as $(x,z,-y)$. Setting the exporter's option for a $y$-up conversion to false left the positions unchanged. An object placed at $(10,20,30)$ was written as a node with translation $(10,30,-20)$, so glTF keeps the object's transform separate from the mesh. The OBJ exporter, by contrast, wrote the world-space position of every vertex: with the object at $(10,20,30)$ the first vertex, $(1,2,3)$ in the mesh, appeared as $(11,33,-22)$, which is the same axis change applied after the object's location has been added in. Two exporters therefore disagree about where the object's position is recorded, and a runtime that imports one must not be given the other's assumptions.
+
+The file had twelve position entries for four distinct positions. The exporter repeats a vertex wherever the corners of the faces that share it need different normals, which in a flat-shaded tetrahedron is at every corner. The count of vertices in the file is therefore not the count of vertices in the mesh, and a check that compares them would report an error that is not one.
+
+\section{Scale}
+
+The glTF format measures in metres, and Blender has a unit setting that can say a unit is a millimetre. A vertex at $x=1000$ was exported with the scene's unit scale at $1$, $0.001$ and $0.01$, and the position in the file was $1000$ in all three cases. The unit setting is not applied. An object scale of $2$ was written as a node scale of $(2,2,2)$ and the mesh coordinates were not changed. A scene should be built in the unit that the runtime expects, metres for glTF, and the unit setting should be treated as a display preference. Any object scale should be applied before export or recorded, since the runtime will see a mesh and a separate scale.
+
+\section{Instancing and Size}
+
+The staircase family of Chapter 23 with $200$ members and $145$ distinct meshes was exported. The file had $200$ nodes and $145$ meshes, so sharing survived the export, at $517{,}320$ bytes. The same $200$ objects with a separate copy of the mesh for each gave $200$ meshes and $682{,}120$ bytes, about a third larger. Sharing is thus preserved in the file and saves space in proportion to the number of repeated shapes. Whether a particular runtime keeps instances as instances in memory depends on that runtime and was not tested.
+
+\section{What Crosses the Boundary}
+
+Custom properties travel only if asked. With extras disabled, the first node of a five-member family carried none. With extras enabled it carried the constructor name, version, specification text, index and geometry hash, exactly as recorded in Chapter 22. The record of how the object was built thus can cross the boundary, and it does so on request. The hash cannot be recomputed from the exported file without repeating the axis change, the vertex splitting and the triangulation described here, so it is a record of the geometry in Blender's frame and does not serve as a check on the file.
+
+Materials are less faithful. The single material of Chapters 15 to 19, an emission shader fed by an attribute node, was exported as a material with a base colour of black and an emissive factor of $(1,1,1)$, and the mapping from the object's property to a colour was not written at all. A viewer would show every object in white emission. A material built from the Principled shader fared better: a base colour of $(0.8,0.1,0.1)$, roughness $0.35$ and metallic $0$ were written as those values. Data-driven colour must therefore be turned into data the format has a place for before export, and the obvious place is a vertex colour. Of three custom attributes on a mesh, a colour attribute was written as \texttt{COLOR\_0}, and two attributes named \texttt{height} and \texttt{sides} were not written. The same two attributes renamed with a leading underscore, \texttt{\_height} and \texttt{\_sides}, were written as \texttt{\_HEIGHT} and \texttt{\_SIDES}. The format reserves names that begin with an underscore for application-specific data, as recalled and not rechecked, and the exporter followed that convention here; what a runtime does with them is its own matter.
+
+\section{Reading It Back}
+
+The staircase of $12$ steps was exported, imported into a fresh scene, and compared with the original. The importer produced $156$ vertices and $100$ triangles where the original had $52$ vertices and $28$ faces, two of them non-convex $26$-sided caps. The set of distinct positions was the same as the original's, $52$ points equal to $10^{-5}$ after the axis change was undone. The geometry therefore survived, in a different arrangement.
+
+The volume shows how an arrangement can mislead. Summing the signed volumes of the imported triangles in their imported orientation gave $3.071250$, the formula's value. The method of Chapter 21, which recalculates the orientation of every face and then computes the volume, gave $4.803750$ on the imported mesh, which is about $56\%$ too large. The imported mesh has separate vertices for every face, so its faces are not connected to each other, and the recalculation, which chooses the outward side by looking at neighbours, flipped some faces arbitrarily. After the coincident vertices were merged, $156$ to $52$, the same recalculation gave $3.071250$. The result sharpens the caution of Chapter 21: orientation can be recalculated only for a surface whose faces are connected, and a mesh from an importer should be merged before it is trusted.
+
+\section{Collision Proxies}
+
+A runtime that lets a visitor walk or collide needs a simplified shape for the purpose, and the convex hull is the simplest. The hull of the staircase has $10$ vertices and $16$ triangles whatever the number of steps, against $16$ to $164$ vertices for the stair itself at $n=3$ to $40$. Its volume exceeds that of the stair by factors of $1.167$, $1.119$, $1.071$ and $1.024$ for $n=3$, $6$, $12$ and $40$. A hull replaces the steps with a ramp, which is a cheap collider and a poor one for a person walking up, since the visitor would glide over the treads. Whether the discrepancy is acceptable is a decision for the runtime's designer, and the ratio quantifies the cost of making it. A format-level convention for marking a proxy exists in extensions to glTF, as far as is known here, but none was tested here.
+
+\section{What These Experiments Do Not Show}
+
+Nothing was loaded in a game engine or a viewer, so no claim is made about how any runtime draws or collides with the exported files. One exporter version was used for glTF, one for OBJ, and only binary glTF was examined in detail. The axis, unit and attribute results come from small constructed cases, and the family export from one batch. Single precision, the vertex splitting and the triangulation were observed and not studied across meshes with other shading or with modifiers. The collision hull was computed with SciPy on the stair's vertices and was not exported or tested in a physics engine.
+
+\begin{exercise}[25.1: Verify a family file]
+Export a family of your own with extras enabled, and use \texttt{glb\_read.py} to count nodes and meshes, to find the largest coordinate in each axis, and to confirm that every node carries the properties you recorded. List what the file does not carry.
+\end{exercise}
+
+\begin{exercise}[25.2: Bake a colour]
+Write each cell's number of sides of an arrangement from Chapter 18 into vertex colours, export it, and read the colours back from the file. Say what is lost compared with the face attribute and why the baked colours are not editable in the same way.
+\end{exercise}
+
+\begin{exercise}[25.3: Units both ways]
+Set the scene's unit scale to $0.001$, build a one-unit cube, export it, import the file into a fresh scene, and report the size of the imported cube. Repeat for the OBJ exporter and its scale option.
+\end{exercise}
+
+\begin{exercise}[25.4: How far is the ramp]
+For the staircase, compute the largest vertical distance between the hull's upper surface and the tread of each step as a function of $n$, rise and run. State a tolerance for a walking visitor and find the number of steps beyond which a single hull is acceptable.
+\end{exercise}
